@@ -1,0 +1,20 @@
+{
+  "name": "bodega-api",
+  "version": "1.0.0",
+  "description": "Api para acceso a BD Bodega",
+  "main": "server.js",
+  "dependencies": {
+    "bluebird": "^3.5.3",
+    "body-parser": "^1.15.2",
+    "express": "^4.16.0",
+    "mssql": "^3.3.0",
+    "router-express": "^1.5.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "Omar Gomez",
+  "license": "ISC"
+}
