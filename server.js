@@ -251,3 +251,41 @@ app.post("/api/menu/:id", function (req, res) {
         res.send(err);
     });
 });
+
+app.get("/api/user/:rut/discount", function (req, res) {
+    var dbConn = new sql.Connection(dbConfig);
+    dbConn.connect().then(function () {
+        var request = new sql.Request(dbConn);
+        request
+            .input('user', sql.VarChar, req.params.rut)
+            .execute("getDiscountStatus").then(function (recordSet) {
+                dbConn.close();
+                res.send(recordSet[0][0]);
+            }).catch(function (err) {
+                dbConn.close();
+                res.send(err);
+            });
+    }).catch(function (err) {
+        res.send(err);
+    });
+});
+
+app.post("/api/user/:rut/discount", function (req, res) {
+    var dbConn = new sql.Connection(dbConfig);
+    dbConn.connect().then(function () {
+        var request = new sql.Request(dbConn);
+        request
+            .input('user', sql.VarChar, req.body.user)
+            .input('status', sql.Bit, req.body.status)
+            .execute("discountStatus").then(function (recordSet) {
+                dbConn.close();
+                res.send(recordSet);
+            }).catch(function (err) {
+                dbConn.close();
+
+                res.send(err);
+            });
+    }).catch(function (err) {
+        res.send(err);
+    });
+});
