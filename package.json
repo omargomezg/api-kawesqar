@@ -7,7 +7,7 @@
     "bluebird": "^3.5.3",
     "body-parser": "^1.15.2",
     "express": "^4.16.0",
-    "mssql": "^3.3.0",
+    "mssql": "^5.1.0",
     "router-express": "^1.5.2"
   },
   "scripts": {

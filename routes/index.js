@@ -1,6 +1,9 @@
-var express = require('express');
+const routes = require('express').Router();
+const user = require('./user');
+const menu = require('./menu');
 
-var router = express.Router();
+routes
+    .use('/api/user', user)
+    .use('/api/menu', menu);
 
-
-module.exports = router;
+module.exports = routes;

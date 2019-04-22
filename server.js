@@ -1,8 +1,8 @@
 //Initiallising node modules
-const express = require('express');
+const app = require('express')();
 var bodyParser = require("body-parser");
 var sql = require("mssql");
-var app = express();
+const routes = require('./routes/index');
 
 // Body Parser Middleware
 app.use(bodyParser.json());
@@ -16,6 +16,8 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.use('/', routes);
+
 //Setting up server
 var server = app.listen(process.env.PORT || 8088, function () {
     var port = server.address().port;
@@ -23,10 +25,10 @@ var server = app.listen(process.env.PORT || 8088, function () {
 });
 
 //Initiallising connection string
-var dbConfig = {
+const dbConfig = {
     user: 'sa',
     password: 'Kumple22*zu+',
-    server: 'localhost',
+    server: '216.155.90.155',
     database: 'farmacia',
     debug: false,
     port: 1433,
@@ -63,13 +65,13 @@ var executeQuery = function (res, query) {
 }
 //Function to connect to database and execute query 1 row
 var executeQueryGetId = function (res, query) {
-    sql.connect(dbConfig, function (err) {
+    connect(dbConfig, function (err) {
         if (err) {
             console.log("Error while connecting database :- " + err);
             res.send(err);
         }
         else {
-            var request = new sql.Request();
+            var request = new Request();
             request.query(query, function (err, result) {
                 if (err) {
                     console.log("Error while querying database :- " + err);
@@ -84,10 +86,10 @@ var executeQueryGetId = function (res, query) {
 }
 
 //GET API
-app.get("/api/user", function (req, res) {
-    var query = "select * from cs_usuarios";
-    executeQuery(res, query);
-});
+// app.get("/api/user", function (req, res) {
+//     let query = "select * from cs_usuarios";
+//     executeQuery(res, query);
+// });
 
 //POST API
 app.post("/api/user", function (req, res) {
@@ -128,10 +130,10 @@ app.get("/api/sucursal", function (req, res) {
 });
 
 app.get("/api/sucursal/:id", function (req, res) {
-    var dbConn = new sql.Connection(dbConfig);
+    var dbConn = new Connection(dbConfig);
     dbConn.connect().then(function () {
-        var request = new sql.Request(dbConn);
-        request.input('id', sql.TinyInt, req.params.id)
+        var request = new Request(dbConn);
+        request.input('id', TinyInt, req.params.id)
             .execute("PA_GET_SucursalById").then(function (recordSet) {
                 dbConn.close();
                 res.send(recordSet[0][0]);
@@ -215,11 +217,11 @@ app.delete("/api/existencia/:id", function (req, res) {
 });
 
 app.get("/api/header/:rut", function (req, res) {
-    var dbConn = new sql.Connection(dbConfig);
+    var dbConn = new Connection(dbConfig);
     dbConn.connect().then(function () {
-        var request = new sql.Request(dbConn);
+        var request = new Request(dbConn);
         request
-            .input('rut', sql.VarChar, req.params.rut)
+            .input('rut', VarChar, req.params.rut)
             .execute("dataHeaderByRut").then(function (recordSet) {
                 dbConn.close();
                 console.log('RecordSet', recordSet);
@@ -234,12 +236,12 @@ app.get("/api/header/:rut", function (req, res) {
 });
 
 app.post("/api/menu/:id", function (req, res) {
-    var dbConn = new sql.Connection(dbConfig);
+    var dbConn = new Connection(dbConfig);
     dbConn.connect().then(function () {
-        var request = new sql.Request(dbConn);
+        var request = new Request(dbConn);
         request
-            .input('rut', sql.VarChar, req.body.rut)
-            .input('parent', sql.Int, req.params.id)
+            .input('rut', VarChar, req.body.rut)
+            .input('parent', Int, req.params.id)
             .execute("PA_GET_MenuByUser").then(function (recordSet) {
                 dbConn.close();
                 res.send(recordSet[0]);
@@ -253,11 +255,11 @@ app.post("/api/menu/:id", function (req, res) {
 });
 
 app.get("/api/user/:rut/discount", function (req, res) {
-    var dbConn = new sql.Connection(dbConfig);
+    var dbConn = new Connection(dbConfig);
     dbConn.connect().then(function () {
-        var request = new sql.Request(dbConn);
+        var request = new Request(dbConn);
         request
-            .input('user', sql.VarChar, req.params.rut)
+            .input('user', VarChar, req.params.rut)
             .execute("getDiscountStatus").then(function (recordSet) {
                 dbConn.close();
                 res.send(recordSet[0][0]);
@@ -271,12 +273,12 @@ app.get("/api/user/:rut/discount", function (req, res) {
 });
 
 app.post("/api/user/:rut/discount", function (req, res) {
-    var dbConn = new sql.Connection(dbConfig);
+    var dbConn = new Connection(dbConfig);
     dbConn.connect().then(function () {
-        var request = new sql.Request(dbConn);
+        var request = new Request(dbConn);
         request
-            .input('user', sql.VarChar, req.body.user)
-            .input('status', sql.Bit, req.body.status)
+            .input('user', VarChar, req.body.user)
+            .input('status', Bit, req.body.status)
             .execute("discountStatus").then(function (recordSet) {
                 dbConn.close();
                 res.send(recordSet);
