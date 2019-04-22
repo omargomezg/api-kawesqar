@@ -16,5 +16,8 @@
     "dev": "nodemon server.js"
   },
   "author": "Omar Gomez",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.18.11"
+  }
 }
