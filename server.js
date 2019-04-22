@@ -124,26 +124,18 @@ app.put("/api/medida/:id", function (req, res) {
     executeQuery(res, query);
 });
 
+/**
+ * @deprecated was replaced with /api/subsidiary
+ */
 app.get("/api/sucursal", function (req, res) {
-    var query = "EXEC dbo.PA_LIST_Sucursales";
-    executeQuery(res, query);
+    res.redirect('/api/subsidiary/');
 });
 
+/**
+ * @deprecated was replaced with /api/subsidiary/id
+ */
 app.get("/api/sucursal/:id", function (req, res) {
-    var dbConn = new Connection(dbConfig);
-    dbConn.connect().then(function () {
-        var request = new Request(dbConn);
-        request.input('id', TinyInt, req.params.id)
-            .execute("PA_GET_SucursalById").then(function (recordSet) {
-                dbConn.close();
-                res.send(recordSet[0][0]);
-            }).catch(function (err) {
-                dbConn.close();
-                res.send(err);
-            });
-    }).catch(function (err) {
-        res.send(err);
-    });
+    res.redirect('/api/subsidiary/' + req.params.id);
 });
 
 app.put("/api/sucursal/:id", function (req, res) {
