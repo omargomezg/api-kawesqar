@@ -35,24 +35,6 @@ var Menu = {
                 })
         })
     }
-
-    //     var dbConn = new sql.Connection(db.connectionConfig);
-    //     dbConn.connect().then(function () {
-    //         var request = new sql.Request(dbConn);
-    //         request
-    //             .input('rut', sql.VarChar(12), req.params.rut)
-    //             .input('parent', sql.Int, req.params.father)
-    //             .execute(spName).then(function (recordSet) {
-    //                 dbConn.close();
-    //                 res.send(recordSet[0]);
-    //             }).catch(function (err) {
-    //                 dbConn.close();
-    //                 res.send(err);
-    //             });
-    //     }).catch(function (err) {
-    //         res.send(err);
-    //     });
-    // }
 };
 
 module.exports = Menu;

@@ -28,7 +28,7 @@ var server = app.listen(process.env.PORT || 8088, function () {
 const dbConfig = {
     user: 'sa',
     password: 'Kumple22*zu+',
-    server: '216.155.90.155',
+    server: 'localhost',
     database: 'farmacia',
     debug: false,
     port: 1433,
@@ -109,11 +109,6 @@ app.delete("/api/user/:id", function (req, res) {
     executeQuery(res, query);
 });
 
-app.get("/api/medida", function (req, res) {
-    var query = "select IdMedida as id, NomMedida as nombre, nomPlural as nombrePlural, lastupdate from dbo.medidas order by lastupdate desc";
-    executeQuery(res, query);
-});
-
 app.get("/api/medida/:id", function (req, res) {
     var query = "select IdMedida as id, NomMedida as nombre, isnull(nomPlural, '') as nombrePlural from dbo.medidas where IdMedida = " + req.params.id;
     executeQueryGetId(res, query);
@@ -136,30 +131,6 @@ app.get("/api/sucursal", function (req, res) {
  */
 app.get("/api/sucursal/:id", function (req, res) {
     res.redirect('/api/subsidiary/' + req.params.id);
-});
-
-app.put("/api/sucursal/:id", function (req, res) {
-    var query = "EXEC dbo.mantenedorSucursal " +
-        req.body.id + ", '" +
-        req.body.rut + "', '" +
-        req.body.nombre + "', '" +
-        req.body.direccion + "', " +
-        req.body.codigoComuna + ", '" +
-        req.body.telefono + "', '" +
-        req.body.rutRepLegal + "', '" +
-        req.body.nombreRepLegal + "', '" +
-        req.body.fax + "', '" +
-        req.body.giro + "', " +
-        req.body.registroContado + "," +
-        req.body.numInicialRegContado + "";
-    executeQuery(res, query);
-});
-
-app.get("/api/:rut/sucursal", function (req, res) {
-    var query = " SELECT cs_sucursales.idSucursal AS id, cs_sucursales.nombre + ' ' + cs_sucursales.direccion AS descripcion " +
-        "FROM cs_sucursales INNER JOIN cs_relacion_usuarioSucursal ON cs_sucursales.idSucursal = cs_relacion_usuarioSucursal.idSucursal " +
-        "WHERE cs_relacion_usuarioSucursal.rutUsuario = '" + req.params.rut + "' AND cs_relacion_usuarioSucursal.estado = 1 ";
-    executeQuery(res, query);
 });
 
 app.get("/api/ciudad", function (req, res) {
@@ -208,61 +179,23 @@ app.delete("/api/existencia/:id", function (req, res) {
     executeQuery(res, query);
 });
 
-app.get("/api/header/:rut", function (req, res) {
-    var dbConn = new Connection(dbConfig);
-    dbConn.connect().then(function () {
-        var request = new Request(dbConn);
-        request
-            .input('rut', VarChar, req.params.rut)
-            .execute("dataHeaderByRut").then(function (recordSet) {
-                dbConn.close();
-                console.log('RecordSet', recordSet);
-                res.send(recordSet[0][0]);
-            }).catch(function (err) {
-                dbConn.close();
-                res.send(err);
-            });
-    }).catch(function (err) {
-        res.send(err);
-    });
-});
-
-app.post("/api/menu/:id", function (req, res) {
-    var dbConn = new Connection(dbConfig);
-    dbConn.connect().then(function () {
-        var request = new Request(dbConn);
-        request
-            .input('rut', VarChar, req.body.rut)
-            .input('parent', Int, req.params.id)
-            .execute("PA_GET_MenuByUser").then(function (recordSet) {
-                dbConn.close();
-                res.send(recordSet[0]);
-            }).catch(function (err) {
-                dbConn.close();
-                res.send(err);
-            });
-    }).catch(function (err) {
-        res.send(err);
-    });
-});
-
-app.get("/api/user/:rut/discount", function (req, res) {
-    var dbConn = new Connection(dbConfig);
-    dbConn.connect().then(function () {
-        var request = new Request(dbConn);
-        request
-            .input('user', VarChar, req.params.rut)
-            .execute("getDiscountStatus").then(function (recordSet) {
-                dbConn.close();
-                res.send(recordSet[0][0]);
-            }).catch(function (err) {
-                dbConn.close();
-                res.send(err);
-            });
-    }).catch(function (err) {
-        res.send(err);
-    });
-});
+// app.get("/api/user/:rut/discount", function (req, res) {
+//     var dbConn = new Connection(dbConfig);
+//     dbConn.connect().then(function () {
+//         var request = new Request(dbConn);
+//         request
+//             .input('user', VarChar, req.params.rut)
+//             .execute("getDiscountStatus").then(function (recordSet) {
+//                 dbConn.close();
+//                 res.send(recordSet[0][0]);
+//             }).catch(function (err) {
+//                 dbConn.close();
+//                 res.send(err);
+//             });
+//     }).catch(function (err) {
+//         res.send(err);
+//     });
+// });
 
 app.post("/api/user/:rut/discount", function (req, res) {
     var dbConn = new Connection(dbConfig);
