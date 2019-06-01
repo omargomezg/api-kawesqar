@@ -1,18 +1,30 @@
 const db = require('../models/database');
 const sql = require('mssql');
 
-var User = {
+let User = {
+    getAllUsers: function (req, res) {
+    },
     getByRut: function (req, res) {
         db.then((pool) => {
             pool.request()
-                .query(`SELECT nombres, apPaterno, apMaterno, fechaCreacion, estado, userName, fono, eMail, salidaVenta, salidaFactura, salidaEmpleados
-                    , rol = ISNULL((SELECT top 1 rol.idRol FROM cs_rol rol INNER JOIN
-                    cs_relacion_usuarioRol ur ON ur.idRol = rol.idRol
-                    WHERE  ur.rutUsuario = cs_usuarios.rutUsuario and ur.estado = 1
-                    ), rol)
+                .query(`SELECT nombres,
+                                apPaterno,
+                                apMaterno,
+                                fechaCreacion,
+                                estado,
+                                userName,
+                                fono,
+                                eMail,
+                                salidaVenta,
+                                salidaFactura,
+                                salidaEmpleados,
+                                rol = ISNULL((SELECT top 1 rol.idRol FROM cs_rol rol INNER JOIN
+                                    cs_relacion_usuarioRol ur ON ur.idRol = rol.idRol
+                                    WHERE  ur.rutUsuario = cs_usuarios.rutUsuario and ur.estado = 1
+                                    ), rol)
                     FROM cs_usuarios WHERE rutUsuario = dbo.formatearRut('${req.params.rut}')`).then((data) => {
-                    res.send(data.recordset[0]);
-                })
+                res.send(data.recordset[0]);
+            })
         })
     },
     exist: function (req, res) {
@@ -20,16 +32,15 @@ var User = {
             pool.request()
                 .query(`SELECT users = count(1)
                 FROM cs_usuarios WHERE rutUsuario = dbo.formatearRut('${req.params.rut}')`).then((data) => {
-                    res.send({ value: data.recordset[0].users > 0 });
-                })
+                res.send({value: data.recordset[0].users > 0});
+            })
         })
     },
     enabled: function (req, res) {
         db.then((pool) => {
             pool.request()
-                .query(`update cs_usuarios
-                set estado = '${req.body.state}', updated = GETDATE()
-                WHERE rutUsuario = dbo.formatearRut('${req.params.rut}')`).then((data) => {
+                .query(`update cs_usuarios set estado = '${req.body.state}', updated = GETDATE() WHERE rutUsuario = dbo.formatearRut('${req.params.rut}')`)
+                .then(() => {
                     if (err) {
                         res.status(500).send(err);
                     } else {
@@ -67,7 +78,7 @@ var User = {
                 .input('salidaEmpleados', sql.Bit, req.body.salidaEmpleados)
                 .input('idEgresoDefault', sql.Bit, req.body.egreso)
                 .input('rol', sql.Int, req.body.rol)
-                .execute('mantenedorUsuario', (err, result) => {
+                .execute('mantenedorUsuario', (err) => {
                     if (err) {
                         res.status(500).send(err);
                     } else {
@@ -92,7 +103,7 @@ var User = {
                 .input('salidaEmpleados', sql.Bit, req.body.salidaEmpleados)
                 .input('idEgresoDefault', sql.Bit, req.body.egreso)
                 .input('rol', sql.Int, req.body.rol)
-                .execute('mantenedorUsuario', (err, result) => {
+                .execute('mantenedorUsuario', (err) => {
                     if (err) {
                         res.status(500).send(err);
                     } else {
@@ -104,35 +115,33 @@ var User = {
     getAllSuppliers: function (req, res) {
         db.then((pool) => {
             pool.request()
-                .query(`SELECT [rutUsuario]
-                ,[nombres]
-                ,[apPaterno]
-                ,[apMaterno]
-                ,[fechaCreacion]
-                ,[estado]
-                ,[userName]
-                ,[imagenPerfil]
-                ,[imagenTipo]
-                ,[fono]
-                ,[eMail]
-                ,[salidaVenta]
-                ,[salidaFactura]
-                ,[salidaEmpleados]
-                ,[traspaso]
-                ,[credito]
-                ,[discount]
-                ,updated
-                ,DefaultRol = ISNULL((SELECT top 1 rol.titulo FROM cs_rol rol INNER JOIN
-                                                  cs_relacion_usuarioRol ur ON ur.idRol = rol.idRol
-                                                  WHERE  ur.rutUsuario = cs_usuarios.rutUsuario and ur.estado = 1
-                                                  ), (select titulo from cs_rol where idRol = rol))
-            FROM cs_usuarios
-            Order By updated desc
-
-            
-            `).then((data) => {
-                    res.send(data.recordset);
-                })
+                .query(`SELECT rutUsuario,
+                            nombres,
+                            apPaterno,
+                            [apMaterno],
+                            [fechaCreacion],
+                            [estado],
+                            [userName],
+                            [imagenPerfil],
+                            [imagenTipo],
+                            [fono],
+                            [eMail],
+                            [salidaVenta],
+                            [salidaFactura],
+                            [salidaEmpleados],
+                            [traspaso],
+                            [credito],
+                            [discount],
+                            updated,
+                               DefaultRol = ISNULL((SELECT top 1 rol.titulo
+                                                    FROM cs_rol rol
+                                                             INNER JOIN cs_relacion_usuarioRol ur ON ur.idRol = rol.idRol
+                                                    WHERE ur.rutUsuario = cs_usuarios.rutUsuario
+                                                      and ur.estado = 1), (select titulo from cs_rol where idRol = rol))
+                        FROM cs_usuarios
+                        Order By updated desc              `).then((data) => {
+                res.send(data.recordset);
+            })
         })
     },
     getSubsidiary: function (req, res) {
@@ -143,8 +152,8 @@ var User = {
                 FROM cs_sucursales INNER JOIN cs_relacion_usuarioSucursal ON cs_sucursales.idSucursal = cs_relacion_usuarioSucursal.idSucursal
                 WHERE dbo.formatearRut(cs_relacion_usuarioSucursal.rutUsuario) = '${req.params.rut}' AND cs_relacion_usuarioSucursal.estado = 1
             `).then((data) => {
-                    res.send(data.recordset);
-                })
+                res.send(data.recordset);
+            })
         })
     }
 };

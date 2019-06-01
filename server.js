@@ -62,7 +62,7 @@ var executeQuery = function (res, query) {
             });
         }
     });
-}
+};
 //Function to connect to database and execute query 1 row
 var executeQueryGetId = function (res, query) {
     connect(dbConfig, function (err) {
@@ -83,34 +83,15 @@ var executeQueryGetId = function (res, query) {
             });
         }
     });
-}
+};
 
 //GET API
 // app.get("/api/user", function (req, res) {
 //     let query = "select * from cs_usuarios";
 //     executeQuery(res, query);
 // });
-
-//POST API
-app.post("/api/user", function (req, res) {
-    var query = "INSERT INTO [user] (Name,Email,Password) VALUES (req.body.Name,req.body.Email,req.body.Password)";
-    executeQuery(res, query);
-});
-
-//PUT API
-app.put("/api/user/:id", function (req, res) {
-    var query = "UPDATE [user] SET Name= " + req.body.Name + " , Email=  " + req.body.Email + "  WHERE Id= " + req.params.id;
-    executeQuery(res, query);
-});
-
-// DELETE API
-app.delete("/api/user/:id", function (req, res) {
-    var query = "DELETE FROM [user] WHERE Id=" + req.params.id;
-    executeQuery(res, query);
-});
-
-app.get("/api/medida/:id", function (req, res) {
-    var query = "select IdMedida as id, NomMedida as nombre, isnull(nomPlural, '') as nombrePlural from dbo.medidas where IdMedida = " + req.params.id;
+app.get('/api/medida/:id', function (req, res) {
+    var query = `select IdMedida as id, NomMedida as nombre, isnull(nomPlural, '') as nombrePlural from dbo.medidas where IdMedida = ${req.params.id}`;
     executeQueryGetId(res, query);
 });
 
@@ -175,7 +156,7 @@ app.get("/api/existencia/:idExistencia/:idSucursal", function (req, res) {
 });
 
 app.delete("/api/existencia/:id", function (req, res) {
-    var query = "update existencia set estado = 0 where idExistencia = " + req.params.id;
+    let query = `update existencia set estado = 0 where idExistencia = ${req.params.id}`;
     executeQuery(res, query);
 });
 

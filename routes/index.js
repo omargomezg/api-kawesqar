@@ -14,7 +14,7 @@ routes
     .use('/api/menu', menu)
     .use('/api/subsidiary', subsidiary)
     .use('/api/subsidiary2', function (re, res) {
-        res.send({ auto: 'casa' });
+        res.send({auto: 'casa'});
     })
     .use('/api/header', header)
     .use('/api/role', role)

@@ -1,15 +1,15 @@
 const express = require('express');
 const routes = express.Router();
-const userCtrl = require('../controllers/userController');
+const ctrl = require('../controllers/userController');
 
 routes
-    .get('/', userCtrl.getAllUsers)
-    .get('/:rut', userCtrl.getByRut)
-    .get('/:rut/exist', userCtrl.exist)
-    .put('/:rut', userCtrl.updateUser)
-    .post('/:rut', userCtrl.createUser)
-    .get('/:rut/sucursal', userCtrl.getSubsidiary)
-    .get('/:rut/discount', userCtrl.getDiscountStatus)
-    .put('/:rut/enable', userCtrl.enabled);
+    .get('/', ctrl.getAllUsers)
+    .get('/:rut', ctrl.getByRut)
+    .get('/:rut/exist', ctrl.exist)
+    .get('/:rut/sucursal', ctrl.getSubsidiary)
+    .get('/:rut/discount', ctrl.getDiscountStatus)
+    .post('/:rut', ctrl.createUser)
+    .put('/:rut', ctrl.updateUser)
+    .put('/:rut/enable', ctrl.enabled);
 
 module.exports = routes;
