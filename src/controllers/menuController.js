@@ -5,8 +5,8 @@ const spName = 'PA_GET_MenuByUser';
 var Menu = {
     /**
      * Get menu root for specific user
-     * @param {request} req - Value of Request
-     * @param {respnse } res - Value of Response 
+     * @param req Value of Request
+     * @param res Value of Response
      */
     getRoot: function (req, res) {
         db.then((pool) => {
@@ -21,8 +21,8 @@ var Menu = {
     },
     /**
      * Get menu child for specific User and Menu
-     * @param {request} req - Value of Request
-     * @param {respnse } res - Value of Response 
+     * @param req Value of Request
+     * @param res Value of Response
      */
     getChilds: function (req, res) {
         db.then((pool) => {

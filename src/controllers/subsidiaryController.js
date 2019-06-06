@@ -1,9 +1,8 @@
 const db = require('../models/database');
 const sql = require('mssql');
 
-var subsidiary = {
+let subsidiary = {
     getAll: function (req, res) {
-        let subsidiary = [];
         db.then((pool) => {
             pool.request()
                 .query(`SELECT idSucursal as id
@@ -61,7 +60,7 @@ var subsidiary = {
                     .input('giro', sql.NVarChar(250), req.body.giro)
                     .input('registroContado', sql.Bit, req.body.registroContado)
                     .input('numInicialRegContado', sql.Numeric(18, 0), req.body.numInicialRegContado)
-                    .execute('mantenedorSucursal', (err, result) => {
+                    .execute('mantenedorSucursal', (err) => {
                         if (err) {
                             res.status(500).send(err);
                         } else {

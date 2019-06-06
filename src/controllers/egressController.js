@@ -1,6 +1,5 @@
 const db = require('../models/database');
-const sql = require('mssql');
-var Services = {
+let Services = {
     getAllEgressTypes: function (req, res) {
         db.then((pool) => {
             pool.request()
@@ -9,6 +8,6 @@ var Services = {
                 })
         })
     }
-}
+};
 
 module.exports = Services;

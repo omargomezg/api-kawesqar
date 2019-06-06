@@ -1,6 +1,6 @@
 const db = require('../models/database');
 
-var supplier = {
+let supplier = {
     getByRut: function (req, res) {
         db.then((pool) => {
             pool.request()

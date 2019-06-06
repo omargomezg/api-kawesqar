@@ -2,7 +2,7 @@
 const app = require('express')();
 var bodyParser = require("body-parser");
 var sql = require("mssql");
-const routes = require('./routes/index');
+const routes = require('./routes');
 
 // Body Parser Middleware
 app.use(bodyParser.json());
@@ -19,8 +19,8 @@ app.use(function (req, res, next) {
 app.use('/', routes);
 
 //Setting up server
-var server = app.listen(process.env.PORT || 8088, function () {
-    var port = server.address().port;
+let server = app.listen(process.env.PORT || 8088, function () {
+    let port = server.address().port;
     console.log("App now running on port", port);
 });
 
@@ -47,16 +47,14 @@ var executeQuery = function (res, query) {
         if (err) {
             console.log("Error22 while connecting database :- " + err);
             res.send(err);
-        }
-        else {
+        } else {
             var request = new sql.Request();
             request.query(query, function (err, result) {
                 if (err) {
                     console.log(err);
                     console.log("Error while querying database :- " + err);
                     res.send(err);
-                }
-                else {
+                } else {
                     res.send(result);
                 }
             });
@@ -69,15 +67,13 @@ var executeQueryGetId = function (res, query) {
         if (err) {
             console.log("Error while connecting database :- " + err);
             res.send(err);
-        }
-        else {
+        } else {
             var request = new Request();
             request.query(query, function (err, result) {
                 if (err) {
                     console.log("Error while querying database :- " + err);
                     res.send(err);
-                }
-                else {
+                } else {
                     res.send(result[0]);
                 }
             });
@@ -91,7 +87,9 @@ var executeQueryGetId = function (res, query) {
 //     executeQuery(res, query);
 // });
 app.get('/api/medida/:id', function (req, res) {
-    var query = `select IdMedida as id, NomMedida as nombre, isnull(nomPlural, '') as nombrePlural from dbo.medidas where IdMedida = ${req.params.id}`;
+    var query = `select IdMedida as id, NomMedida as nombre, isnull(nomPlural, '') as nombrePlural
+                 from dbo.medidas
+    where IdMedida = ${req.params.id}`;
     executeQueryGetId(res, query);
 });
 
@@ -156,7 +154,9 @@ app.get("/api/existencia/:idExistencia/:idSucursal", function (req, res) {
 });
 
 app.delete("/api/existencia/:id", function (req, res) {
-    let query = `update existencia set estado = 0 where idExistencia = ${req.params.id}`;
+    let query = `update existencia
+                 set estado = 0
+    where idExistencia = ${req.params.id}`;
     executeQuery(res, query);
 });
 
@@ -186,13 +186,13 @@ app.post("/api/user/:rut/discount", function (req, res) {
             .input('user', VarChar, req.body.user)
             .input('status', Bit, req.body.status)
             .execute("discountStatus").then(function (recordSet) {
-                dbConn.close();
-                res.send(recordSet);
-            }).catch(function (err) {
-                dbConn.close();
+            dbConn.close();
+            res.send(recordSet);
+        }).catch(function (err) {
+            dbConn.close();
 
-                res.send(err);
-            });
+            res.send(err);
+        });
     }).catch(function (err) {
         res.send(err);
     });

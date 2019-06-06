@@ -16,11 +16,11 @@ const config = {
 
 // promise style:
 const pool2 = new sql.ConnectionPool(config);
-const pool2Connect = pool2.connect()
+const pool2Connect = pool2.connect();
 
 pool2.on('error', err => {
     // ... error handler
-})
+});
 
 
 module.exports = pool2Connect;
