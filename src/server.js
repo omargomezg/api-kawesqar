@@ -113,43 +113,42 @@ app.get("/api/sucursal/:id", function (req, res) {
 });
 
 app.get("/api/ciudad", function (req, res) {
-    var query = "select codigo, nombre from comunas";
+    let query = `select codigo, nombre from comunas`;
     executeQuery(res, query);
 });
 
 app.post("/api/existencia", function (req, res) {
-    var query = " EXEC listarExistencias '" + req.body.fechaInicio + "', '" + req.body.fechaFin + "'";
+    let query = `EXEC listarExistencias '${req.body.fechaInicio}', '${req.body.fechaFin}'`;
     executeQuery(res, query);
 });
 app.get("/api/existencia/:idExistencia/:idSucursal", function (req, res) {
-    var query = "SELECT	existencia.fecha, " +
-        "existencia.rutUsuario, " +
-        "existencia.idSucursal, " +
-        "existencia.estado, " +
-        "detalleExistencia.idArticulo, " +
-        "detalleExistencia.cantidad, " +
-        "ROUND(detalleExistencia.valorUnitario * 1.19, 0) AS valorUnitario, " +
-        "detalleExistencia.esGranel, " +
-        "detalleExistencia.idbodega, " +
-        "Articulos.nomArticulo, " +
-        "bodega.descripcion, " +
-        "CASE " +
-        "    WHEN detalleExistencia.esGranel = 0 THEN (SELECT	nomMedida " +
-        "                                                FROM	medidas " +
-        "                                                WHERE	idMedida = Articulos.idMedida) " +
-        "    ELSE (	SELECT	nomMedida " +
-        "            FROM	medidas " +
-        "            WHERE	idMedida = Articulos.idMedidaGranel) END AS unMedida, " +
-        "cs_sucursales.nombre AS nombreSucursal, " +
-        "detalleExistencia.cantidad * ROUND(detalleExistencia.valorUnitario * 1.19, 0) AS total " +
-        "FROM existencia INNER JOIN " +
-        "                 detalleExistencia ON existencia.idExistencia = detalleExistencia.idExistencia INNER JOIN " +
-        "                 Articulos ON detalleExistencia.idArticulo = Articulos.idArticulo INNER JOIN " +
-        "                 bodega ON detalleExistencia.idbodega = bodega.idBodega INNER JOIN " +
-        "                 cs_sucursales ON existencia.idSucursal = cs_sucursales.idSucursal " +
-        "WHERE	existencia.idExistencia = " + req.params.idExistencia +
-        "AND existencia.idSucursal= " + req.params.idSucursal +
-        "Order by nomArticulo";
+    let query = `SELECT	existencia.fecha, existencia.rutUsuario, 
+        existencia.idSucursal, 
+        existencia.estado, 
+        detalleExistencia.idArticulo, 
+        detalleExistencia.cantidad,
+        ROUND(detalleExistencia.valorUnitario * 1.19, 0) AS valorUnitario,
+        detalleExistencia.esGranel,
+        detalleExistencia.idbodega,
+        Articulos.nomArticulo,
+        bodega.descripcion,
+        CASE
+            WHEN detalleExistencia.esGranel = 0 THEN (SELECT	nomMedida
+                                                        FROM	medidas
+                                                        WHERE	idMedida = Articulos.idMedida)
+            ELSE (	SELECT	nomMedida
+                    FROM	medidas
+                    WHERE	idMedida = Articulos.idMedidaGranel) END AS unMedida,
+        cs_sucursales.nombre AS nombreSucursal,
+        detalleExistencia.cantidad * ROUND(detalleExistencia.valorUnitario * 1.19, 0) AS total
+        FROM existencia INNER JOIN
+                         detalleExistencia ON existencia.idExistencia = detalleExistencia.idExistencia INNER JOIN
+                         Articulos ON detalleExistencia.idArticulo = Articulos.idArticulo INNER JOIN
+                         bodega ON detalleExistencia.idbodega = bodega.idBodega INNER JOIN
+                         cs_sucursales ON existencia.idSucursal = cs_sucursales.idSucursal
+        WHERE	existencia.idExistencia = ${req.params.idExistencia}
+        AND existencia.idSucursal= ${req.params.idSucursal}
+        Order by nomArticulo`;
     executeQuery(res, query);
 });
 
@@ -160,31 +159,13 @@ app.delete("/api/existencia/:id", function (req, res) {
     executeQuery(res, query);
 });
 
-// app.get("/api/user/:rut/discount", function (req, res) {
-//     var dbConn = new Connection(dbConfig);
-//     dbConn.connect().then(function () {
-//         var request = new Request(dbConn);
-//         request
-//             .input('user', VarChar, req.params.rut)
-//             .execute("getDiscountStatus").then(function (recordSet) {
-//                 dbConn.close();
-//                 res.send(recordSet[0][0]);
-//             }).catch(function (err) {
-//                 dbConn.close();
-//                 res.send(err);
-//             });
-//     }).catch(function (err) {
-//         res.send(err);
-//     });
-// });
-
 app.post("/api/user/:rut/discount", function (req, res) {
-    var dbConn = new Connection(dbConfig);
+    let dbConn = new Connection(dbConfig);
     dbConn.connect().then(function () {
-        var request = new Request(dbConn);
+        let request = new Request(dbConn);
         request
-            .input('user', VarChar, req.body.user)
-            .input('status', Bit, req.body.status)
+            .input('user', sql.VarChar(12), req.body.user)
+            .input('status', sql.Bit(), req.body.status)
             .execute("discountStatus").then(function (recordSet) {
             dbConn.close();
             res.send(recordSet);
