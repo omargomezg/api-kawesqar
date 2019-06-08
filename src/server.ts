@@ -21,7 +21,8 @@ const {PORT = 5000} = process.env;
 
 const app = express();
 app.use(bodyParser.json());
-app.use((req, res, next) => {
+app.use(bodyParser.urlencoded({ extended: true }));
+/*app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS, POST, PUT, DELETE");
     res.header("Access-Control-Allow-Headers",
@@ -30,7 +31,7 @@ app.use((req, res, next) => {
 });
 app.get("/", (req, res) => {
     res.send("Hello World!");
-});
+});*/
 // app.use('/', routes);
 
 useExpressServer(app, {
