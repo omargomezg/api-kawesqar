@@ -1,8 +1,9 @@
 import bodyParser from "body-parser";
 import express from "express";
 import "reflect-metadata";
-import { useExpressServer} from "routing-controllers";
-import { UserController} from "./controllers/UserController";
+import {useExpressServer} from "routing-controllers";
+import {CityController} from "./controllers/CityController";
+import {UserController} from "./controllers/UserController";
 // import routes from './routes/';
 
 process.on("uncaughtException", (e) => {
@@ -35,7 +36,7 @@ app.get("/", (req, res) => {
 // app.use('/', routes);
 
 useExpressServer(app, {
-   controllers: [UserController]
+   controllers: [UserController, CityController]
 });
 
 app.listen(PORT, () =>
