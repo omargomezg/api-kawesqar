@@ -1,9 +1,8 @@
-import {ConnectionPool} from "mssql";
 import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
-import {Conn} from "../models/database";
 import User from "../models/user-model";
+import {UserService} from "../service/user";
 
-@JsonController()
+@JsonController("/api")
 export class UserController {
     private readonly userStore: User[];
 
@@ -17,15 +16,8 @@ export class UserController {
 
     @Get("/users")
     public getAll() {
-        const conn = new Conn();
-        const sql = new ConnectionPool(conn.config);
-        return sql.connect()
-            .then((pool) => {
-                return pool.request().query("select * from cs_usuarios")
-                    .then((r) => {
-                        return r.recordset;
-                    });
-            });
+        const user = new UserService();
+        return user.getAll();
     }
 
     @Get("/users/:id")
@@ -37,8 +29,7 @@ export class UserController {
             new User(3, "Norman", "jcoonce", "norman@none.com")
         ];
 
-        const user = users.find((x) => x.getId() === id);
-        return user;
+        return  users.find((x) => x.getId() === id);
     }
 
     @Post("/users")

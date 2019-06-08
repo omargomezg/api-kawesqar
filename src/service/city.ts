@@ -1,7 +1,7 @@
 import {ConnectionPool} from "mssql";
 import {Conn} from "../models/database";
 
-export class City {
+export class CityService {
     private conn = new Conn();
     private sql = new ConnectionPool(this.conn.config);
 

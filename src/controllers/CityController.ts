@@ -1,8 +1,8 @@
 import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
 import User from "../models/user-model";
-import {City} from "../service/city";
+import {CityService} from "../service/city";
 
-@JsonController()
+@JsonController("/api")
 export class CityController {
     private readonly userStore: User[];
 
@@ -16,21 +16,15 @@ export class CityController {
 
     @Get("/city")
     public getAll() {
-        const city = new City();
+        const city = new CityService();
         return city.getAll();
     }
 
     @Get("/city/:id")
     @OnUndefined(404)
     public getOne(@Param("id") id: number) {
-        const users = [
-            new User(1, "James Coonce", "jcoonce", "james@none.com"),
-            new User(2, "Jim Coonce", "jimcoonce", "jim@none.com"),
-            new User(3, "Norman", "jcoonce", "norman@none.com")
-        ];
-
-        const user = users.find((x) => x.getId() === id);
-        return user;
+        const city = new CityService();
+        return city.getAll();
     }
 
     @Post("/city")
