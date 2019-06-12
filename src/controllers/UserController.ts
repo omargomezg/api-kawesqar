@@ -1,6 +1,6 @@
-import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
+import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put } from "routing-controllers";
 import User from "../models/user-model";
-import {UserService} from "../service/user";
+import { UserService } from "../service/user.service";
 
 @JsonController("/api")
 export class UserController {
@@ -29,7 +29,7 @@ export class UserController {
             new User(3, "Norman", "jcoonce", "norman@none.com")
         ];
 
-        return  users.find((x) => x.getId() === id);
+        return users.find((x) => x.getId() === id);
     }
 
     @Post("/users")

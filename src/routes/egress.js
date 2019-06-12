@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const routes = express.Router();
-const ctrl = require('../controllers/egressController');
+const ctrl = require("../controllers/egressController");
 
 routes
-    .get('/', ctrl.getAllEgressTypes);
+    .get("/", ctrl.getAllEgressTypes);
 
 module.exports = routes;

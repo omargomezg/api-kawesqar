@@ -1,9 +1,15 @@
 import bodyParser from "body-parser";
 import express from "express";
 import "reflect-metadata";
-import {useExpressServer} from "routing-controllers";
-import {CityController} from "./controllers/CityController";
-import {UserController} from "./controllers/UserController";
+import { useExpressServer } from "routing-controllers";
+import { CityController } from "./controllers/CityController";
+import { EgressController } from "./controllers/EgressController";
+import { ExistenceController } from "./controllers/ExistenceController";
+import { FamilyController } from "./controllers/FamilyController";
+import { HeaderController } from "./controllers/HeaderController";
+import { MeasureController } from "./controllers/MeasureController";
+import { SupplierController } from "./controllers/SupplierController";
+import { UserController } from "./controllers/UserController";
 // import routes from './routes/';
 
 process.on("uncaughtException", (e) => {
@@ -18,25 +24,18 @@ process.on("unhandledRejection", (e) => {
     process.exit(1);
 });
 
-const {PORT = 5000} = process.env;
+const { PORT = 5000 } = process.env;
 
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-/*app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS, POST, PUT, DELETE");
-    res.header("Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
-    next();
-});
-app.get("/", (req, res) => {
-    res.send("Hello World!");
-});*/
-// app.use('/', routes);
 
 useExpressServer(app, {
-   controllers: [UserController, CityController]
+    controllers: [UserController, CityController, EgressController, SupplierController, MeasureController,
+        HeaderController,
+        FamilyController,
+        ExistenceController
+    ]
 });
 
 app.listen(PORT, () =>

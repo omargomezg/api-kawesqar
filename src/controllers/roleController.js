@@ -1,7 +1,7 @@
-const db = require('../models/database');
-const sql = require('mssql');
+const db = require("../models/database");
+const sql = require("mssql");
 var Services = {
-    listRoles: function (req, res) {
+    listRoles: function(req, res) {
         db.then((pool) => {
             pool.request()
                 .query(`
@@ -16,9 +16,9 @@ var Services = {
         FROM dbo.cs_rol
             `).then((data) => {
                     res.send(data.recordset);
-                })
-        })
-    }
+                });
+        });
+    },
 };
 
 module.exports = Services;

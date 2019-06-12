@@ -1,4 +1,4 @@
-import {config} from "mssql";
+import { config } from "mssql";
 
 export class Conn {
     public config: config = {
@@ -10,10 +10,10 @@ export class Conn {
             min: 0,
         },
         port: 1433,
-        server: "216.155.90.155",
+        server: "localhost",
         user: "sa",
     };
- public getCOnn() {
-     return this.config;
- }
+    public getCOnn() {
+        return this.config;
+    }
 }
