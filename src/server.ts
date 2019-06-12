@@ -8,6 +8,7 @@ import { ExistenceController } from "./controllers/ExistenceController";
 import { FamilyController } from "./controllers/FamilyController";
 import { HeaderController } from "./controllers/HeaderController";
 import { MeasureController } from "./controllers/MeasureController";
+import { MenuController } from "./controllers/MenuController";
 import { SupplierController } from "./controllers/SupplierController";
 import { UserController } from "./controllers/UserController";
 // import routes from './routes/';
@@ -34,7 +35,8 @@ useExpressServer(app, {
     controllers: [UserController, CityController, EgressController, SupplierController, MeasureController,
         HeaderController,
         FamilyController,
-        ExistenceController
+        ExistenceController,
+        MenuController
     ]
 });
 
