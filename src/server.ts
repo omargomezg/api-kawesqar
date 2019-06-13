@@ -9,9 +9,10 @@ import { FamilyController } from "./controllers/FamilyController";
 import { HeaderController } from "./controllers/HeaderController";
 import { MeasureController } from "./controllers/MeasureController";
 import { MenuController } from "./controllers/MenuController";
+import { RoleController } from "./controllers/RoleController";
+import { SubsidiaryController } from "./controllers/SubsidiaryController";
 import { SupplierController } from "./controllers/SupplierController";
 import { UserController } from "./controllers/UserController";
-// import routes from './routes/';
 
 process.on("uncaughtException", (e) => {
     // tslint:disable-next-line:no-console
@@ -36,7 +37,9 @@ useExpressServer(app, {
         HeaderController,
         FamilyController,
         ExistenceController,
-        MenuController
+        MenuController,
+        RoleController,
+        SubsidiaryController
     ]
 });
 

@@ -10,7 +10,7 @@ export class Conn {
             min: 0,
         },
         port: 1433,
-        server: "localhost",
+        server: "216.155.90.155",
         user: "sa",
     };
     public getCOnn() {

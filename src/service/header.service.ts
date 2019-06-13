@@ -10,6 +10,7 @@ export class HeaderService {
         const r = await pool.request()
             .input("rut", NVarChar(12), rut)
             .execute("dataHeaderByRut");
+        await pool.close;
         return r.recordset[0];
     }
 }
