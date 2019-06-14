@@ -1,58 +1,47 @@
 import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
-import User from "../models/user-model";
+import User from "../models/user.model";
 import {UserService} from "../service/user.service";
 
-@JsonController("/api")
+@JsonController("/api/user")
 export class UserController {
     private user = new UserService();
-    private readonly userStore: User[];
 
-    constructor() {
-        this.userStore = [
-            new User(1, "James Coonce", "jcoonce", "james@none.com"),
-            new User(2, "Jim Coonce", "jimcoonce", "jim@none.com"),
-            new User(3, "Norman", "jcoonce", "norman@none.com")
-        ];
-    }
-
-    @Get("/users")
+    @Get("")
     public getAll() {
         return this.user.getAll();
     }
 
-    @Get("/users/:id")
+    @Get("/:rut")
     @OnUndefined(404)
-    public getOne(@Param("id") id: number) {
-        const users = [
-            new User(1, "James Coonce", "jcoonce", "james@none.com"),
-            new User(2, "Jim Coonce", "jimcoonce", "jim@none.com"),
-            new User(3, "Norman", "jcoonce", "norman@none.com")
-        ];
-
-        return users.find((x) => x.getId() === id);
+    public getOne(@Param("rut") rut: string) {
+        return this.user.getByRut(rut);
     }
 
-    @Get("/user/:rut/sucursal")
+    @Get("/:rut/sucursal")
     @OnUndefined(404)
     public getSubsidiaryForUser(@Param("rut") rut: string) {
         return this.user.getSucursal(rut);
     }
 
-    @Post("/users")
-    public post(@Body() user: any) {
-        const newUser = new User(Math.random(), user.name, user.username, user.email);
-        return newUser;
+    @Get("/:rut/exists")
+    @OnUndefined(404)
+    public getExists(@Param("rut") rut: string) {
+        return this.user.getExists(rut);
+    }
+
+    @Get("/:rut/discount")
+    @OnUndefined(404)
+    public getDiscount(@Param("rut") rut: string) {
+        return this.user.getDiscountUser(rut);
+    }
+
+    @Post("/:rut")
+    public post(@Body() user: User) {
+        return null;
     }
 
     @Put("/users/:id")
     public put(@Param("id") id: number, @Body() user: any) {
-        const currentUser = this.userStore.find((x) => x.getId() === id);
-        if (currentUser !== undefined) {
-            currentUser.setName(user.name);
-            currentUser.setUsername(user.username);
-            currentUser.setEmail(user.email);
-            return currentUser;
-        }
 
         return "No user found";
     }
