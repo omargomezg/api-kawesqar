@@ -26,7 +26,7 @@ process.on("unhandledRejection", (e) => {
     process.exit(1);
 });
 
-const { PORT = 5000 } = process.env;
+const { PORT = 8088 } = process.env;
 
 const app = express();
 app.use(bodyParser.json());

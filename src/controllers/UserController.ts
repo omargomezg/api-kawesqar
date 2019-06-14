@@ -1,9 +1,10 @@
-import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put } from "routing-controllers";
+import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
 import User from "../models/user-model";
-import { UserService } from "../service/user.service";
+import {UserService} from "../service/user.service";
 
 @JsonController("/api")
 export class UserController {
+    private user = new UserService();
     private readonly userStore: User[];
 
     constructor() {
@@ -16,8 +17,7 @@ export class UserController {
 
     @Get("/users")
     public getAll() {
-        const user = new UserService();
-        return user.getAll();
+        return this.user.getAll();
     }
 
     @Get("/users/:id")
@@ -30,6 +30,12 @@ export class UserController {
         ];
 
         return users.find((x) => x.getId() === id);
+    }
+
+    @Get("/user/:rut/sucursal")
+    @OnUndefined(404)
+    public getSubsidiaryForUser(@Param("rut") rut: string) {
+        return this.user.getSucursal(rut);
     }
 
     @Post("/users")

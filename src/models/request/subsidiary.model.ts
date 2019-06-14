@@ -1,17 +1,17 @@
 
 export class ISubsidiaryPostModel {
-    private idSucursal: number;
-    private rutSucursal: string;
-    private nombre: string;
-    private direccion: string;
-    private codigo: number;
-    private telefono: string;
-    private rutRepLegal: string;
-    private nombreRepLegal: string;
-    private fax: string;
-    private giro: string;
-    private registroContado: boolean;
-    private numInicialRegContado: number;
+    public rutSucursal: string;
+    public idSucursal: number;
+    public nombre: string;
+    public direccion: string;
+    public codigo: number;
+    public telefono: string;
+    public rutRepLegal: string;
+    public nombreRepLegal: string;
+    public fax: string;
+    public giro: string;
+    public registroContado: boolean;
+    public numInicialRegContado: number;
 
     constructor(idSucursal: number,
                 rutSucursal: string,

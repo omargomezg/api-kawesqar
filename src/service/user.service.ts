@@ -1,5 +1,5 @@
-import {ConnectionPool} from "mssql";
-import {Conn} from "../models/database";
+import { ConnectionPool } from "mssql";
+import { Conn } from "../models/database";
 
 export class UserService {
     private conn = new Conn();
@@ -37,5 +37,18 @@ export class UserService {
                         return r.recordset;
                     });
             });
+    }
+
+    public async getSucursal(rut: string) {
+        const pool = await this.sql.connect();
+        const r = await pool.request().query(`
+        SELECT cs_sucursales.idSucursal AS id,
+                    cs_sucursales.nombre + ' ' + cs_sucursales.direccion AS descripcion
+                    FROM cs_sucursales INNER JOIN cs_relacion_usuarioSucursal
+                        ON cs_sucursales.idSucursal = cs_relacion_usuarioSucursal.idSucursal
+                    WHERE dbo.formatearRut(cs_relacion_usuarioSucursal.rutUsuario) = '${rut}' AND
+                    cs_relacion_usuarioSucursal.estado = 1`);
+        pool.close();
+        return r.recordset;
     }
 }
