@@ -34,3 +34,5 @@ export class Person {
         this.email = value;
     }
 }
+
+export default Person;

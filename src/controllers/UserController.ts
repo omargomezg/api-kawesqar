@@ -1,5 +1,5 @@
 import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
-import User from "../models/user.model";
+import { CreateUserModel, EnabledUserModel, UpdateUserModel} from "../models/user.index";
 import {UserService} from "../service/user.service";
 
 @JsonController("/api/user")
@@ -35,19 +35,18 @@ export class UserController {
         return this.user.getDiscountUser(rut);
     }
 
-    @Post("/:rut")
-    public post(@Body() user: User) {
+    @Post("/")
+    public post(@Param("rut") rut: string, @Body() user: CreateUserModel) {
         return this.user.create(user);
     }
 
-    @Put("/users/:id")
-    public put(@Param("id") id: number, @Body() user: any) {
-
-        return "No user found";
+    @Put("/:rut")
+    public put(@Param("rut") rut: string, @Body() user: UpdateUserModel) {
+        return this.user.update(user);
     }
 
-    @Delete("/users/:id")
-    public remove(@Param("id") id: number) {
-        return "Removing user...";
+    @Delete("/:rut/enabled")
+    public remove(@Param("rut") rut: string, @Body() model: EnabledUserModel) {
+        return this.user.enabled(rut, model);
     }
 }

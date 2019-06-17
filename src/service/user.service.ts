@@ -1,8 +1,9 @@
-import {Bit, ConnectionPool, Int, NChar, NVarChar, VarChar} from "mssql";
-import {InternalServerError} from "routing-controllers";
-import {Conn} from "../models/database";
-import {UserExistsModel} from "../models/response/user.exists.model";
-import User from "../models/user.model";
+import { Bit, ConnectionPool, Int, NChar, NVarChar, VarChar } from "mssql";
+import { InternalServerError } from "routing-controllers";
+import { Conn } from "../models/database";
+import { UserExistsModel } from "../models/response/user.exists.model";
+import { EnabledUserModel } from "../models/user.index";
+import User from "../models/user/user.model";
 
 export class UserService {
     private conn = new Conn();
@@ -29,7 +30,8 @@ export class UserService {
                 FROM cs_rol rol
                 INNER JOIN cs_relacion_usuarioRol ur ON ur.idRol = rol.idRol
                 WHERE ur.rutUsuario = cs_usuarios.rutUsuario
-                and ur.estado = 1), (select titulo from cs_rol where idRol = rol))\n                FROM cs_usuarios
+                and ur.estado = 1), (select titulo from cs_rol where idRol = rol))
+                FROM cs_usuarios
         Order By updated desc`);
         pool.close();
         return r.recordset;
@@ -110,6 +112,49 @@ export class UserService {
                 .input("rol", Int, user.role)
                 .execute("mantenedorUsuario");
             return r.recordset[0];
+        } catch (err) {
+            throw new InternalServerError(err.message);
+        } finally {
+            await pool.close();
+        }
+    }
+
+    public async update(user: User) {
+        const pool = await this.sql.connect();
+        try {
+            const r = await pool.request()
+                .input("rutUsuario", VarChar(12), user.rut)
+                .input("nombres", NVarChar(256), user.nombre)
+                .input("apPaterno", NVarChar(256), user.paterno)
+                .input("apMaterno", NVarChar(256), user.materno)
+                .input("clave", NVarChar(50), user.password)
+                .input("userName", VarChar(50), user.username)
+                .input("fono", NChar(10), user.telephone)
+                .input("eMail", NVarChar(256), user.email)
+                .input("salidaVenta", Bit, user.allowedServices.sales)
+                .input("salidaFactura", Bit, user.allowedServices.bill)
+                .input("salidaEmpleados", Bit, user.allowedServices.employees)
+                .input("idEgresoDefault", Bit, true)
+                .input("rol", Int, user.role)
+                .execute("mantenedorUsuario");
+            return r.recordset[0];
+        } catch (err) {
+            throw new InternalServerError(err.message);
+        } finally {
+            await pool.close();
+        }
+    }
+
+    public async enabled(rut: string, model: EnabledUserModel) {
+        if (rut !== model.rut) {
+            throw new Error("Las claves no son identicas");
+        }
+        const pool = await this.sql.connect();
+        try {
+            const r = await pool.request().query(`UPDATE cs_usuarios SET updated = GETDATE(),
+            estado = CAST('${model.enabled}' as bit)
+            WHERE rutUsuario = dbo.formatearRut('${rut}')`);
+            return r.rowsAffected;
         } catch (err) {
             throw new InternalServerError(err.message);
         } finally {

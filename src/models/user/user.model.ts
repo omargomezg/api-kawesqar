@@ -1,6 +1,6 @@
-import AllowedDeliveriesModel from "./allowed-deliveries.model";
-import {RolEnum} from "./enum/role.enum";
-import {Person} from "./person.model";
+import AllowedDeliveriesModel from "../allowed-deliveries.model";
+import {RolEnum} from "../enum/role.enum";
+import {Person} from "../person.model";
 
 class User extends Person {
     public username: string;
