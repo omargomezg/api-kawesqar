@@ -1,11 +1,21 @@
 export class Person {
     public rut: string;
     public nombre: string;
+    public paterno: string;
+    public materno: string;
     public email: string;
-    constructor(rut: string, nombre: string, email: string) {
+    public active: boolean;
+    public telephone: string;
+
+    constructor(rut: string, nombre: string, paterno: string,
+                email: string, active: boolean, telephone: string, materno?: string) {
         this.rut = rut;
         this.nombre = nombre;
+        this.paterno = paterno;
+        this.materno = materno == null ? "" : materno;
         this.email = email;
+        this.active = active;
+        this.telephone = telephone;
     }
 
     public getRut(): string {

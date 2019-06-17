@@ -37,7 +37,7 @@ export class UserController {
 
     @Post("/:rut")
     public post(@Body() user: User) {
-        return null;
+        return this.user.create(user);
     }
 
     @Put("/users/:id")

@@ -1,6 +1,7 @@
-import { ConnectionPool, NVarChar } from "mssql";
-import { Conn } from "../models/database";
-import { UserExistsModel } from "../models/response/user.exists.model";
+import {Bit, ConnectionPool, Int, NChar, NVarChar, VarChar} from "mssql";
+import {InternalServerError} from "routing-controllers";
+import {Conn} from "../models/database";
+import {UserExistsModel} from "../models/response/user.exists.model";
 import User from "../models/user.model";
 
 export class UserService {
@@ -92,10 +93,27 @@ export class UserService {
 
     public async create(user: User) {
         const pool = await this.sql.connect();
-        const r = await pool.request()
-            .input("user", NVarChar(12), user.getRut())
-            .execute("mantenedorUsuario");
-        pool.close();
-        return r.recordset[0];
+        try {
+            const r = await pool.request()
+                .input("rutUsuario", VarChar(12), user.rut)
+                .input("nombres", NVarChar(256), user.nombre)
+                .input("apPaterno", NVarChar(256), user.paterno)
+                .input("apMaterno", NVarChar(256), user.materno)
+                .input("clave", NVarChar(50), user.password)
+                .input("userName", VarChar(50), user.username)
+                .input("fono", NChar(10), user.telephone)
+                .input("eMail", NVarChar(256), user.email)
+                .input("salidaVenta", Bit, user.allowedServices.sales)
+                .input("salidaFactura", Bit, user.allowedServices.bill)
+                .input("salidaEmpleados", Bit, user.allowedServices.employees)
+                .input("idEgresoDefault", Bit, true)
+                .input("rol", Int, user.role)
+                .execute("mantenedorUsuario");
+            return r.recordset[0];
+        } catch (err) {
+            throw new InternalServerError(err.message);
+        } finally {
+            await pool.close();
+        }
     }
 }
