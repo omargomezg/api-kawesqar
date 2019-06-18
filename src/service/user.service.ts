@@ -11,12 +11,11 @@ export class UserService {
 
     public async getAll() {
         const pool = await this.sql.connect();
-        const r = await pool.request().query(`SELECT rutUsuario,
+        const r = await pool.request().query(`SELECT rutUsuario as rut,
         nombres, apPaterno, apMaterno,
         fechaCreacion,
         estado,
         userName,
-        imagenPerfil,imagenTipo,
         fono,
         eMail,
         salidaVenta,

@@ -1,7 +1,7 @@
 import bodyParser from "body-parser";
 import express from "express";
 import "reflect-metadata";
-import { useExpressServer } from "routing-controllers";
+import { createExpressServer } from "routing-controllers";
 import { CityController } from "./controllers/CityController";
 import { EgressController } from "./controllers/EgressController";
 import { ExistenceController } from "./controllers/ExistenceController";
@@ -28,11 +28,10 @@ process.on("unhandledRejection", (e) => {
 
 const { PORT = 8088 } = process.env;
 
-const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-useExpressServer(app, {
+// const app = express();
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+const app = createExpressServer({
     controllers: [UserController, CityController, EgressController, SupplierController, MeasureController,
         HeaderController,
         FamilyController,
@@ -40,7 +39,8 @@ useExpressServer(app, {
         MenuController,
         RoleController,
         SubsidiaryController
-    ]
+    ],
+    cors: true
 });
 
 app.listen(PORT, () =>
