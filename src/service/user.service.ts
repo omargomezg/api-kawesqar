@@ -69,23 +69,8 @@ export class UserService {
         const pool = await this.sql.connect();
         try {
             const r = await pool.request()
-                .query(`
-                select nombres,
-                       apPaterno,
-                       apMaterno,
-                       fechaCreacion,
-                       estado,
-                       userName,
-                       fono,
-                       eMail,
-                       salidaVenta,
-                       salidaFactura,
-                       salidaEmpleados,
-                       rol = ISNULL((select top 1 rol.idRol from cs_rol rol inner join
-                           cs_relacion_usuarioRol ur on ur.idRol = rol.idRol
-                       where ur.rutUsuario = cs_usuarios.rutUsuario and ur.estado = 1), rol)
-                from cs_usuarios
-                where rutUsuario = dbo.formatearRut('${rut}')`);
+                .input("rut", NVarChar(12), rut)
+                .execute("userByRut");
             return r.recordset;
         } catch (err) {
             throw new InternalServerError(err.message);

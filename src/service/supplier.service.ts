@@ -12,7 +12,7 @@ export class SupplierService {
             const r = await pool.request()
                 .query(`
                     select ProvRut AS rut,
-                           ProvNombre AS razonSocial
+                           ProvNombre AS businessName
                     from proveedor
                     where ProvRut = dbo.formatearRut('${rut}')`);
             return r.recordset[0];
