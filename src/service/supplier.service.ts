@@ -1,5 +1,6 @@
-import { ConnectionPool } from "mssql";
-import { Conn } from "../models/database";
+import {ConnectionPool} from "mssql";
+import {InternalServerError} from "routing-controllers";
+import {Conn} from "../models/database";
 
 export class SupplierService {
     private conn = new Conn();
@@ -7,10 +8,18 @@ export class SupplierService {
 
     public async getByRut(rut: string) {
         const pool = await this.sql.connect();
-        const r = await pool.request().query(`SELECT ProvRut AS rut,
-        ProvNombre AS razonSocial
-        FROM proveedor
-        WHERE ProvRut = dbo.formatearRut('${rut}')`);
-        return r.recordset[0];
+        try {
+            const r = await pool.request()
+                .query(`
+                    select ProvRut AS rut,
+                           ProvNombre AS razonSocial
+                    from proveedor
+                    where ProvRut = dbo.formatearRut('${rut}')`);
+            return r.recordset[0];
+        } catch (e) {
+            throw new InternalServerError(e.message);
+        } finally {
+            await pool.close();
+        }
     }
 }

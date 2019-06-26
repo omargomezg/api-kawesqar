@@ -1,5 +1,6 @@
-import { ConnectionPool } from "mssql";
-import { Conn } from "../models/database";
+import {ConnectionPool} from "mssql";
+import {InternalServerError} from "routing-controllers";
+import {Conn} from "../models/database";
 
 export class RoleService {
     private conn = new Conn();
@@ -7,18 +8,23 @@ export class RoleService {
 
     public async getList() {
         const pool = await this.sql.connect();
-        const r = await pool.request().query(`
-            SELECT idRol
-                ,titulo
-                ,descripcion
-                ,estado
-                ,accesoVenta
-                ,valorDescuento
-                ,ventAdmin
-                ,isDefault
-            FROM dbo.cs_rol
-        `);
-        pool.close();
-        return r.recordset;
+        try {
+            const r = await pool.request().query(`
+                select idRol,
+                       titulo,
+                       descripcion,
+                       estado,
+                       accesoVenta,
+                       valorDescuento,
+                       ventAdmin,
+                       isDefault
+                FROM dbo.cs_rol
+            `);
+            return r.recordset;
+        } catch (e) {
+            throw new InternalServerError(e.message);
+        } finally {
+            await pool.close();
+        }
     }
 }

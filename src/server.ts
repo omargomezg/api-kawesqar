@@ -32,7 +32,8 @@ const { PORT = 8088 } = process.env;
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
 const app = createExpressServer({
-    controllers: [UserController, CityController, EgressController, SupplierController, MeasureController,
+    controllers: [UserController,
+        CityController, EgressController, SupplierController, MeasureController,
         HeaderController,
         FamilyController,
         ExistenceController,
