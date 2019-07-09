@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import express from "express";
 import "reflect-metadata";
 import { createExpressServer } from "routing-controllers";
+import {ArticleController} from "./controllers/ArticleController";
 import { CityController } from "./controllers/CityController";
 import { EgressController } from "./controllers/EgressController";
 import { ExistenceController } from "./controllers/ExistenceController";
@@ -39,7 +40,8 @@ const app = createExpressServer({
         ExistenceController,
         MenuController,
         RoleController,
-        SubsidiaryController
+        SubsidiaryController,
+        ArticleController
     ],
     cors: true
 });

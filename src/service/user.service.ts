@@ -71,7 +71,7 @@ export class UserService {
             const r = await pool.request()
                 .input("rut", NVarChar(12), rut)
                 .execute("userByRut");
-            return r.recordset;
+            return r.recordset[0];
         } catch (err) {
             throw new InternalServerError(err.message);
         } finally {
