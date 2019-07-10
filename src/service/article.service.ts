@@ -26,12 +26,12 @@ export class ArticleService {
     /**
      * Search a article by sku or description name
      */
-    public async getBySku(searchValue: string, isGranel: boolean, idSubsidiary: number) {
+    public async getBySku(searchValue: string, isBulk: boolean, idSubsidiary: number) {
         const pool = await this.sql.connect();
         try {
             const r = await pool.request()
                 .input("idArticulo", NVarChar(50), searchValue)
-                .input("estado", Bit, isGranel)
+                .input("estado", Bit, isBulk)
                 .input("idSucursal", TinyInt, idSubsidiary)
                 .execute("disponibleVenta");
             return r.recordset[0];
