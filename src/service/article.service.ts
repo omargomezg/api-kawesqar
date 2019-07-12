@@ -1,16 +1,14 @@
-import {Bit, ConnectionPool, NVarChar, TinyInt} from "mssql";
+import {Bit, NVarChar, TinyInt} from "mssql";
 import {InternalServerError} from "routing-controllers";
-import {Conn} from "../models/database";
-
+import { Db } from "../models/db";
 export class ArticleService {
-    private conn = new Conn();
-    private sql = new ConnectionPool(this.conn.config);
+     private db = new Db();
 
     /**
      * Search a article by sku or description name
      */
     public async getBySkuOrName(searchValue: string) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("textSearch", NVarChar(50), searchValue)
@@ -18,8 +16,6 @@ export class ArticleService {
             return r.recordset;
         } catch (err) {
             throw new InternalServerError(err.message);
-        } finally {
-            await pool.close();
         }
     }
 
@@ -27,7 +23,7 @@ export class ArticleService {
      * Search a article by sku or description name
      */
     public async getBySku(searchValue: string, isBulk: boolean, idSubsidiary: number) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("idArticulo", NVarChar(50), searchValue)
