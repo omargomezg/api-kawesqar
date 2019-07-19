@@ -1,13 +1,12 @@
-import {ConnectionPool, Int, NVarChar} from "mssql";
+import {Int, NVarChar} from "mssql";
 import {InternalServerError} from "routing-controllers";
-import {Conn} from "../models/database";
+import {Db} from "../models/db";
 
 export class MenuService {
-    private conn = new Conn();
-    private sql = new ConnectionPool(this.conn.config);
+    private db = new Db();
 
     public async getRoot(rut: string) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("rut", NVarChar(12), rut)
@@ -16,13 +15,11 @@ export class MenuService {
             return r.recordset;
         } catch (e) {
             throw new InternalServerError(e.message);
-        } finally {
-            await pool.close();
         }
     }
 
     public async getChild(rut: string, id: number) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("rut", NVarChar(12), rut)
@@ -31,8 +28,6 @@ export class MenuService {
             return r.recordset;
         } catch (e) {
             throw new InternalServerError(e.message);
-        } finally {
-            await pool.close();
         }
     }
 }

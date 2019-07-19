@@ -17,10 +17,10 @@ export class ArticleController {
         return this.article.getBySkuOrName(key);
     }
 
-    @Get("/sku/:key/:bulk/:subsidiary")
+    @Get("/sku/:key/:bulk/:rut")
     public getByKey(@Param("key") key: string,
-                    @Param("bulk") bulk: boolean,
-                    @Param("subsidiary") subsidiary: number) {
-        return this.article.getBySku(key, bulk, subsidiary);
+                    @Param("bulk") bulk: string,
+                    @Param("rut") rut: string) {
+        return this.article.getBySku(key, bulk === "true", rut);
     }
 }

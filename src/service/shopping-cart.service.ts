@@ -1,13 +1,12 @@
-import {Bit, ConnectionPool, Int, Money, NVarChar, TinyInt} from "mssql";
+import {Bit, Int, Money, NVarChar, TinyInt} from "mssql";
 import {InternalServerError} from "routing-controllers";
-import {Conn} from "../models/database";
+import {Db} from "../models/db";
 
 export class ShoppingCartService {
-    private conn = new Conn();
-    private sql = new ConnectionPool(this.conn.config);
+    private db = new Db();
 
     public async putTemporalCart(req: ITemporalCart) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("rutUsuario", NVarChar(12), req.rut)
@@ -23,8 +22,6 @@ export class ShoppingCartService {
             return r.recordset;
         } catch (e) {
             throw new InternalServerError(e.message);
-        } finally {
-            await pool.close();
         }
     }
 }

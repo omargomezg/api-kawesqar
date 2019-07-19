@@ -16,6 +16,11 @@ export class SubsidiaryController {
         return this.service.getById(id);
     }
 
+    @Get("/user/:rut")
+    public getByUser(@Param("rut") rut: string) {
+        return this.service.getAllByUser(rut);
+    }
+
     @Put("/:id")
     public update(@Param("id") id: number, @Body() data: ISubsidiaryPostModel) {
         return this.service.update(id, data);

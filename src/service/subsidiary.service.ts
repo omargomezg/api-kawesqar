@@ -1,16 +1,33 @@
-import {Bit, ConnectionPool, Int, Numeric, NVarChar, TinyInt, VarChar} from "mssql";
+import {Bit, Int, Numeric, NVarChar, TinyInt, VarChar} from "mssql";
 import {InternalServerError} from "routing-controllers";
-import {Conn} from "../models/database";
+import {Db} from "../models/db";
 import {ISubsidiaryPostModel} from "../models/request/subsidiary.model";
 
 export class SubsidiaryService {
-    private conn = new Conn();
-    private sql = new ConnectionPool(this.conn.config);
+    private db = new Db();
+
+    /**
+     * Get all subsidiary for a user
+     * @param rut
+     */
+    public async getAllByUser(rut: string) {
+        const pool = await this.db.poolPromise();
+        try {
+            const r = await pool.request()
+                .query(`select idRelacion, idSucursal, estado, selected
+                from cs_relacion_usuarioSucursal
+                where rutUsuario = dbo.formatearRut(${rut})`);
+            return await this.setDefault(r.recordset);
+        } catch (err) {
+            throw new InternalServerError(err.message);
+        }
+    }
 
     public async getList() {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
-            const r = await pool.request().query(`
+            const r = await pool.request()
+                .query(`
                 SELECT idSucursal                                                    as id
                      , rutSucursal                                                   as rut
                      , cs_sucursales.nombre                                          as descripcion
@@ -34,13 +51,11 @@ export class SubsidiaryService {
             return r.recordset;
         } catch (e) {
             throw new InternalServerError(e.message);
-        } finally {
-            await pool.close();
         }
     }
 
     public async getById(id: number) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("id", TinyInt, id)
@@ -48,13 +63,11 @@ export class SubsidiaryService {
             return r.recordset[0];
         } catch (e) {
             throw new InternalServerError(e.message);
-        } finally {
-            await pool.close();
         }
     }
 
     public async update(id: number, data: ISubsidiaryPostModel) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("idSucursal", Int, id)
@@ -73,8 +86,24 @@ export class SubsidiaryService {
             return r.recordset;
         } catch (e) {
             throw new InternalServerError(e.message);
-        } finally {
-            await pool.close();
         }
     }
+
+    /**
+     * Validate if any selected is true
+     * @param data
+     */
+    private setDefault(data: any[]): any[] {
+        let status = false;
+        data.forEach((item: any) => {
+            if (item.selected === 0) {
+                status = true;
+            }
+        });
+        if (!status) {
+            data[0].selected = true;
+        }
+        return data;
+    }
+
 }

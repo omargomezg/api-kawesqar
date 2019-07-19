@@ -1,13 +1,11 @@
-import {ConnectionPool} from "mssql";
 import {InternalServerError} from "routing-controllers";
-import {Conn} from "../models/database";
+import {Db} from "../models/db";
 
 export class SupplierService {
-    private conn = new Conn();
-    private sql = new ConnectionPool(this.conn.config);
+    private db = new Db();
 
     public async getByRut(rut: string) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .query(`
@@ -18,8 +16,6 @@ export class SupplierService {
             return r.recordset[0];
         } catch (e) {
             throw new InternalServerError(e.message);
-        } finally {
-            await pool.close();
         }
     }
 }

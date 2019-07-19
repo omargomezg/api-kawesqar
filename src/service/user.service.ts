@@ -1,16 +1,15 @@
-import {Bit, ConnectionPool, Int, NChar, NVarChar, VarChar} from "mssql";
+import {Bit, Int, NChar, NVarChar, VarChar} from "mssql";
 import {InternalServerError} from "routing-controllers";
-import {Conn} from "../models/database";
+import {Db} from "../models/db";
 import {UserExistsModel} from "../models/response/user.exists.model";
 import {EnabledUserModel} from "../models/user.index";
 import User from "../models/user/user.model";
 
 export class UserService {
-    private conn = new Conn();
-    private sql = new ConnectionPool(this.conn.config);
+    private db = new Db();
 
     public async getAll() {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .query(`
@@ -41,13 +40,11 @@ export class UserService {
             return r.recordset;
         } catch (err) {
             throw new InternalServerError(err.message);
-        } finally {
-            await pool.close();
         }
     }
 
     public async getSucursal(rut: string) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .query(`
@@ -60,13 +57,11 @@ export class UserService {
             return r.recordset;
         } catch (err) {
             throw new InternalServerError(err.message);
-        } finally {
-            await pool.close();
         }
     }
 
     public async getByRut(rut: string) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("rut", NVarChar(12), rut)
@@ -74,13 +69,11 @@ export class UserService {
             return r.recordset[0];
         } catch (err) {
             throw new InternalServerError(err.message);
-        } finally {
-            await pool.close();
         }
     }
 
     public async getExists(rut: string) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .query(`
@@ -91,13 +84,11 @@ export class UserService {
             return new UserExistsModel(r.recordset[0].users > 0);
         } catch (err) {
             throw new InternalServerError(err.message);
-        } finally {
-            await pool.close();
         }
     }
 
     public async getDiscountUser(rut: string) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("user", NVarChar(12), rut)
@@ -105,13 +96,11 @@ export class UserService {
             return r.recordset[0];
         } catch (err) {
             throw new InternalServerError(err.message);
-        } finally {
-            await pool.close();
         }
     }
 
     public async create(user: User) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("rutUsuario", VarChar(12), user.rut)
@@ -131,13 +120,11 @@ export class UserService {
             return r.recordset[0];
         } catch (err) {
             throw new InternalServerError(err.message);
-        } finally {
-            await pool.close();
         }
     }
 
     public async update(user: User) {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("rutUsuario", VarChar(12), user.rut)
@@ -157,8 +144,6 @@ export class UserService {
             return r.recordset[0];
         } catch (err) {
             throw new InternalServerError(err.message);
-        } finally {
-            await pool.close();
         }
     }
 
@@ -166,7 +151,7 @@ export class UserService {
         if (rut !== model.rut) {
             throw new Error("Las claves no son identicas");
         }
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request().query(`UPDATE cs_usuarios SET updated = GETDATE(),
             estado = CAST('${model.enabled}' as bit)
@@ -174,8 +159,6 @@ export class UserService {
             return r.rowsAffected;
         } catch (err) {
             throw new InternalServerError(err.message);
-        } finally {
-            await pool.close();
         }
     }
 }

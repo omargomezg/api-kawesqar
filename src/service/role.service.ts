@@ -1,13 +1,11 @@
-import {ConnectionPool} from "mssql";
 import {InternalServerError} from "routing-controllers";
-import {Conn} from "../models/database";
+import {Db} from "../models/db";
 
 export class RoleService {
-    private conn = new Conn();
-    private sql = new ConnectionPool(this.conn.config);
+    private db = new Db();
 
     public async getList() {
-        const pool = await this.sql.connect();
+        const pool = await this.db.poolPromise();
         try {
             const r = await pool.request().query(`
                 select idRol,
@@ -23,8 +21,6 @@ export class RoleService {
             return r.recordset;
         } catch (e) {
             throw new InternalServerError(e.message);
-        } finally {
-            await pool.close();
         }
     }
 }
