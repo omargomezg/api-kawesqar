@@ -11,6 +11,7 @@ import { HeaderController } from "./controllers/HeaderController";
 import { MeasureController } from "./controllers/MeasureController";
 import { MenuController } from "./controllers/MenuController";
 import { RoleController } from "./controllers/RoleController";
+import {ShoppingCartController} from "./controllers/ShoppingCartController";
 import { SubsidiaryController } from "./controllers/SubsidiaryController";
 import { SupplierController } from "./controllers/SupplierController";
 import { UserController } from "./controllers/UserController";
@@ -41,7 +42,8 @@ const app = createExpressServer({
         MenuController,
         RoleController,
         SubsidiaryController,
-        ArticleController
+        ArticleController,
+        ShoppingCartController
     ],
     cors: true
 });

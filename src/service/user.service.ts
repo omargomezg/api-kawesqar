@@ -49,7 +49,8 @@ export class UserService {
             const r = await pool.request()
                 .query(`
                     select cs_sucursales.idSucursal AS id,
-                           cs_sucursales.nombre + ' ' + cs_sucursales.direccion AS descripcion
+                           cs_sucursales.nombre + ' ' + cs_sucursales.direccion AS descripcion,
+                           cs_relacion_usuarioSucursal.selected AS isPrimary
                     from cs_sucursales inner join cs_relacion_usuarioSucursal
                         on cs_sucursales.idSucursal = cs_relacion_usuarioSucursal.idSucursal
                     where dbo.formatearRut(cs_relacion_usuarioSucursal.rutUsuario) = '${rut}'
@@ -91,9 +92,25 @@ export class UserService {
         const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
-                .input("user", NVarChar(12), rut)
+                .input("user.model.ts", NVarChar(12), rut)
                 .execute("getDiscountStatus");
             return r.recordset[0];
+        } catch (err) {
+            throw new InternalServerError(err.message);
+        }
+    }
+
+    public async setDefaultSubsidiaryForUser(data: any) {
+        const pool = await this.db.poolPromise();
+        try {
+            await pool.request()
+                .query(`
+                update cs_relacion_usuarioSucursal set selected = 0
+                where rutUsuario = dbo.formatearRut('${data.rut}');
+                update cs_relacion_usuarioSucursal set selected = 1
+                where rutUsuario = dbo.formatearRut('${data.rut}') and idSucursal = ${data.idSubsidiary};
+        `);
+            return data;
         } catch (err) {
             throw new InternalServerError(err.message);
         }

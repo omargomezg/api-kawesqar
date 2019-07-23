@@ -36,12 +36,17 @@ export class UserController {
     }
 
     @Post("/")
-    public post(@Param("rut") rut: string, @Body() user: CreateUserModel) {
+    public createUser(@Param("rut") rut: string, @Body() user: CreateUserModel) {
         return this.user.create(user);
     }
 
+    @Post("/:rut/default/subsidiary")
+    public setDefaultSubsidiaryForUser(@Param("rut") rut: string, @Body() data: any) {
+        return this.user.setDefaultSubsidiaryForUser(data);
+    }
+
     @Put("/:rut")
-    public put(@Param("rut") rut: string, @Body() user: UpdateUserModel) {
+    public updateUser(@Param("rut") rut: string, @Body() user: UpdateUserModel) {
         return this.user.update(user);
     }
 

@@ -1,6 +1,6 @@
-import { Body, Get, JsonController, Param, Post, Put } from "routing-controllers";
-import { ISubsidiaryPostModel } from "../models/request/subsidiary.model";
-import { SubsidiaryService } from "../service/subsidiary.service";
+import {Body, Get, JsonController, Param, Post, Put} from "routing-controllers";
+import {ISubsidiaryPostModel} from "../models/request/subsidiary.model";
+import {SubsidiaryService} from "../service/subsidiary.service";
 
 @JsonController("/api/subsidiary")
 export class SubsidiaryController {
