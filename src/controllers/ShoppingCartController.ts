@@ -5,9 +5,9 @@ import {ShoppingCartService} from "../service/shopping-cart.service";
 export class ShoppingCartController {
     public cart = new ShoppingCartService();
 
-    @Get("/:id")
-    public get(@Param("id") id: number) {
-        return "hola " + id;
+    @Get("/:id/:rut")
+    public get(@Param("id") id: number, @Param("rut") rut: string) {
+        return this.cart.get(id, rut);
     }
 
     @Put("/:id/:rut")
