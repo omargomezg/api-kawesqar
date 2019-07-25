@@ -1,4 +1,4 @@
-import {ShoppingCartDetail} from "./ShoppingCartDetail.model";
+import {ShoppingCartDetailModel} from "./ShoppingCartDetail.model";
 import {SubsidiaryModel} from "./Subsidiary.model";
 import {UserModel} from "./User.model";
 
@@ -8,5 +8,5 @@ export class ShoppingCartModel {
     public subsidiary: SubsidiaryModel | undefined;
     public created: string | undefined;
     public updated: string | undefined;
-    public detail: ShoppingCartDetail | undefined;
+    public detail: ShoppingCartDetailModel[] = [];
 }
