@@ -44,7 +44,7 @@ export class ArticleService {
         }
     }
 
-    private async getSubsidiary(rut: string) {
+    public async getSubsidiary(rut: string) {
         const ds = new SubsidiaryService();
         let id: number = 0;
         const value = await ds.getAllByUser(rut);
