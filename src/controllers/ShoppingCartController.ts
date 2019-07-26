@@ -1,4 +1,4 @@
-import {Body, Get, JsonController, Param, Put} from "routing-controllers";
+import {Body, Delete, Get, JsonController, Param, Put} from "routing-controllers";
 import {ShoppingCartModel} from "../models/database/ShoppingCart.model";
 import {ShoppingCartService} from "../service/shopping-cart.service";
 
@@ -13,8 +13,13 @@ export class ShoppingCartController {
 
     @Put("/:id/:rut/:sku/:bulk")
     public putTemporalCart(@Param("id") id: number, @Param("rut") rut: string, @Param("sku") sku: string,
-                           @Param("bulk") bulk: string, @Body() req: ShoppingCartModel) {
+                           @Param("bulk") bulk: number, @Body() req: ShoppingCartModel) {
         return this.cart.putTemporalCart(req, rut, id, sku, bulk);
+    }
+
+    @Delete("/:id/:rut/:sku/:bulk")
+    public delItemFromTemporalCart() {
+        return this.cart.delItemFromTemporalCart();
     }
 
     @Put("/branch-transfer")

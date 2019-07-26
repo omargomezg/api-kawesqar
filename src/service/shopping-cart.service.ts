@@ -1,8 +1,9 @@
 import {Bit, Int, Money, NVarChar, TinyInt} from "mssql";
 import {InternalServerError} from "routing-controllers";
-import {isBoolean} from "util";
 import {ShoppingCartDao} from "../dao/ShoppingCartDao";
 import {ShoppingCartModel} from "../models/database/ShoppingCart.model";
+import {ShoppingCartDetailModel} from "../models/database/ShoppingCartDetail.model";
+import {DisponibleVentaModel} from "../models/database/storedprocedure/disponibleVenta.model";
 import {SubsidiaryModel} from "../models/database/Subsidiary.model";
 import {UserModel} from "../models/database/User.model";
 import {Db} from "../models/db";
@@ -19,7 +20,7 @@ export class ShoppingCartService {
         const subsidiary: SubsidiaryModel = new SubsidiaryModel();
         model.id = id;
         model.user = user;
-        model.subsidiary = subsidiary;
+        model.subsidiaryFrom = subsidiary;
         const idSubsidiary: number = await this.articleService.getSubsidiary(rut);
         if (model.id === 0) {
             const savedSC = await shoppingCartDao.save(rut, idSubsidiary);
@@ -29,7 +30,8 @@ export class ShoppingCartService {
         }
         const getSC = await shoppingCartDao.getById(Number(model.id));
         model.user.rut = getSC.recordset[0].rutUsuario;
-        model.subsidiary.id = getSC.recordset[0].idSucursal;
+        model.created = getSC.recordset[0].created;
+        model.updated = getSC.recordset[0].updated;
         return model;
     }
 
@@ -47,44 +49,60 @@ export class ShoppingCartService {
         }
     }
 
+    public async delItemFromTemporalCart() {
+        return await null;
+    }
+
     public async putTemporalCart(cartModel: ShoppingCartModel, rut: string, id: number, sku: string, bulk: number) {
         const isBulk: boolean = bulk === 1;
+        let disponibleVenta: DisponibleVentaModel = new DisponibleVentaModel();
         const quantity: number = 0;
         const pool = await this.db.poolPromise();
-        try {
-            // Get subsidiary
-            const subsidiary: number = await this.articleService.getSubsidiary(rut);
-            if (subsidiary ===  0 ) {
-                throw new EvalError("No subsidiary active");
-            }
-            const availableArticles = await pool.request()
-                .input("idArticulo", NVarChar(50), sku)
-                .input("estado", Bit, isBulk)
-                .input("idSucursal", TinyInt, subsidiary)
-                .execute("disponibleVenta");
-            if (availableArticles.recordset.length === 0 ) {
-                throw new EvalError("No available articles");
-            }
-            if (cartModel.detail.filter((item) => item.id))
-            cartModel.detail.forEach((item) => {
-
-            })
-            cartModel.detail.forEach()
-            return r.recordset.length > 0 ? r.recordset[0] : {};
-            const r = await pool.request()
-                .input("rutUsuario", NVarChar(12), rut)
-                .input("IdArticulo", NVarChar(50), cartModel.sku)
-                .input("Cantidad", Int, cartModel.quantity)
-                .input("total", Money, cartModel.total)
-                .input("id", Int, cartModel.id)
-                .input("idArticuloID", Int, cartModel.idArticuloID)
-                .input("estado", Bit, cartModel.estado)
-                .input("idSucursal", TinyInt, cartModel.idSucursal)
-                .input("idSucursalDestino", TinyInt, cartModel.idSucursalDestino)
-                .execute("ProcTempCarro");
-            return r.recordset;
-        } catch (e) {
-            throw new InternalServerError(e.message);
+        // Get subsidiary
+        const subsidiary: number = await this.articleService.getSubsidiary(rut);
+        if (subsidiary === 0) {
+            throw new EvalError("No subsidiary active");
         }
+        cartModel.subsidiaryFrom.id = subsidiary;
+        const availableArticles = await pool.request()
+            .input("idArticulo", NVarChar(50), sku)
+            .input("estado", Bit, isBulk)
+            .input("idSucursal", TinyInt, subsidiary)
+            .execute("disponibleVenta");
+        if (availableArticles.recordset.length === 0) {
+            throw new EvalError("No available articles");
+        }
+        disponibleVenta = Object.assign(new DisponibleVentaModel(), availableArticles.recordset[0]);
+
+        if (cartModel.detail.filter((item) => item.sku === sku).length === 0) {
+            const newDetail: ShoppingCartDetailModel = new ShoppingCartDetailModel();
+            newDetail.sku = sku;
+            newDetail.id = disponibleVenta.idRegistro;
+            newDetail.amount = disponibleVenta.ValorUnitario;
+            newDetail.name = disponibleVenta.Nombre;
+            cartModel.detail.push(newDetail);
+        }
+        cartModel.detail.forEach((item) => {
+            if (item.sku === sku) {
+                item.quantity++;
+                item.amount = disponibleVenta.ValorUnitario * item.quantity;
+                try {
+                    const r = pool.request()
+                        .input("rutUsuario", NVarChar(12), rut)
+                        .input("IdArticulo", NVarChar(50), item.sku)
+                        .input("Cantidad", Int, item.quantity)
+                        .input("total", Money, item.amount)
+                        .input("id", Int, cartModel.id)
+                        .input("idArticuloID", Int, item.id)
+                        .input("estado", Bit, bulk)
+                        .input("idSucursal", TinyInt, cartModel.subsidiaryFrom.id)
+                        .input("idSucursalDestino", TinyInt, cartModel.subsidiaryTo.id)
+                        .execute("ProcTempCarro");
+                } catch (e) {
+                    throw new InternalServerError(e.message);
+                }
+            }
+        });
+        return cartModel;
     }
 }

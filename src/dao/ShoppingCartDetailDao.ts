@@ -5,7 +5,7 @@ import {Db} from "../models/db";
 export class ShoppingCartDetailDao {
     private db = new Db();
 
-    public async save(data: ShoppingCartDetailModel[]) {
+    /*public async save(data: ShoppingCartDetailModel[]) {
         const pool = await this.db.poolPromise();
         try {
             // TODO Ogomez Crear SP y guardar con un foreach
@@ -19,6 +19,6 @@ export class ShoppingCartDetailDao {
         } catch (e) {
             throw new InternalServerError(e.message);
         }
-    }
+    }*/
 
 }

@@ -1,3 +1,3 @@
 export class SubsidiaryModel {
-    public id: number | undefined;
+    public id: number = 0;
 }
