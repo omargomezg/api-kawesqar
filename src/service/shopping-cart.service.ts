@@ -36,7 +36,6 @@ export class ShoppingCartService {
         model.user.rut = getSC.recordset[0].rutUsuario;
         model.created = getSC.recordset[0].created;
         model.updated = getSC.recordset[0].updated;
-        console.log(model);
         return model;
     }
 
@@ -64,9 +63,11 @@ export class ShoppingCartService {
             .input("id", Int(), id)
             .input("rutUsuario", NVarChar(12), rut)
             .execute("limpiarRegistroCarroVenta");
+        req.detail = req.detail.filter((item) => {
+            return item.id !== id;
+        });
         return req;
         } catch (e) {
-            console.log(e.message);
             throw new InternalServerError(e.message);
         }
     }
