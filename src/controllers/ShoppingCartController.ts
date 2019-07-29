@@ -17,9 +17,9 @@ export class ShoppingCartController {
         return this.cart.putTemporalCart(req, rut, id, sku, bulk);
     }
 
-    @Delete("/:id/:rut/:sku/:bulk")
-    public delItemFromTemporalCart() {
-        return this.cart.delItemFromTemporalCart();
+    @Delete("/:id/:rut")
+    public delItemFromTemporalCart(@Param("id") id: number, @Param("rut") rut: string, @Body() req: ShoppingCartModel) {
+        return this.cart.delItemFromTemporalCart(rut, id, req);
     }
 
     @Put("/branch-transfer")

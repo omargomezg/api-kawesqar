@@ -1,9 +1,24 @@
 import {InternalServerError} from "routing-controllers";
-import {ShoppingCartDetailModel} from "../models/database/ShoppingCartDetail.model";
 import {Db} from "../models/db";
 
 export class ShoppingCartDetailDao {
     private db = new Db();
+
+    public async getByRut(rut: string) {
+        const pool = await this.db.poolPromise();
+        try {
+            const r = await pool.request().query(`
+                select tempCarro.id, tempCarro.idArticulo As sku, cantidad As quantity,
+                nomArticulo As name, valor As amount,
+                'bulk' = tempCarro.estado, idArticuloID
+                from tempCarro inner join articulos on articulos.idArticulo = tempCarro.idArticulo
+                where rutUsuario = dbo.formatearRut('${rut}');
+            `);
+            return r.recordset;
+        } catch (e) {
+            throw new InternalServerError(e.message);
+        }
+    }
 
     /*public async save(data: ShoppingCartDetailModel[]) {
         const pool = await this.db.poolPromise();

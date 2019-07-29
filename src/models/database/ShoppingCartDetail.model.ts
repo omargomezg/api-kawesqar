@@ -4,4 +4,5 @@ export class ShoppingCartDetailModel {
     public name: string = "";
     public quantity: number = 0;
     public amount: number = 0;
+    public bulk: boolean = false;
 }

@@ -1,6 +1,7 @@
 import {Bit, Int, Money, NVarChar, TinyInt} from "mssql";
 import {InternalServerError} from "routing-controllers";
 import {ShoppingCartDao} from "../dao/ShoppingCartDao";
+import {ShoppingCartDetailDao} from "../dao/ShoppingCartDetailDao";
 import {ShoppingCartModel} from "../models/database/ShoppingCart.model";
 import {ShoppingCartDetailModel} from "../models/database/ShoppingCartDetail.model";
 import {DisponibleVentaModel} from "../models/database/storedprocedure/disponibleVenta.model";
@@ -12,6 +13,7 @@ import {ArticleService} from "./article.service";
 export class ShoppingCartService {
     private db = new Db();
     private articleService: ArticleService = new ArticleService();
+    private shoppingCartDetailDao: ShoppingCartDetailDao = new ShoppingCartDetailDao();
 
     public async get(id: number, rut: string) {
         const shoppingCartDao: ShoppingCartDao = new ShoppingCartDao();
@@ -22,16 +24,19 @@ export class ShoppingCartService {
         model.user = user;
         model.subsidiaryFrom = subsidiary;
         const idSubsidiary: number = await this.articleService.getSubsidiary(rut);
+        model.subsidiaryFrom.id = idSubsidiary;
         if (model.id === 0) {
             const savedSC = await shoppingCartDao.save(rut, idSubsidiary);
             model.id = savedSC.recordset[0].id;
         } else {
             model.id = id;
         }
+        model.detail = await this.shoppingCartDetailDao.getByRut(rut);
         const getSC = await shoppingCartDao.getById(Number(model.id));
         model.user.rut = getSC.recordset[0].rutUsuario;
         model.created = getSC.recordset[0].created;
         model.updated = getSC.recordset[0].updated;
+        console.log(model);
         return model;
     }
 
@@ -49,8 +54,21 @@ export class ShoppingCartService {
         }
     }
 
-    public async delItemFromTemporalCart() {
-        return await null;
+    public async delItemFromTemporalCart(rut: string, id: number, req: ShoppingCartModel) {
+        if (req.detail.filter((item) => item.id === id).length === 0) {
+            throw new EvalError("Id is not present");
+        }
+        const pool = await this.db.poolPromise();
+        try {
+        const r = await pool.request()
+            .input("id", Int(), id)
+            .input("rutUsuario", NVarChar(12), rut)
+            .execute("limpiarRegistroCarroVenta");
+        return req;
+        } catch (e) {
+            console.log(e.message);
+            throw new InternalServerError(e.message);
+        }
     }
 
     public async putTemporalCart(cartModel: ShoppingCartModel, rut: string, id: number, sku: string, bulk: number) {
