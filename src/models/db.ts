@@ -1,7 +1,16 @@
 import {ConnectionPool} from "mssql";
 
 export class Db {
-    private  pool: any;
+    private static pool: any;
+
+    static get getPool(): any {
+        return this.pool;
+    }
+
+    static set setPool(value: any) {
+        this.pool = value;
+    }
+
     private config = {
         database: "BExito",
         password: "Kumple22*zu+",
@@ -16,18 +25,17 @@ export class Db {
     };
 
     public poolPromise() {
-        if (this.pool) {
-            return this.pool;
-        }
-        this.pool = new ConnectionPool(this.config)
-            .connect()
-            .then((pool: any) => {
+        if (!Db.getPool) {
+            Db.setPool = new ConnectionPool(this.config)
+                .connect()
+                .then((pool: any) => {
+                    // tslint:disable-next-line:no-console
+                    console.log("Connected to " + this.config.database);
+                    return pool;
+                })
                 // tslint:disable-next-line:no-console
-                console.log("Connected to MSSQL");
-                return pool;
-            })
-            // tslint:disable-next-line:no-console
-            .catch((err: any) => console.log("Database Connection Failed! Bad Config: ", err));
-        return this.pool;
+                .catch((err: any) => console.log("Database Connection Failed! Bad Config: ", err));
+        }
+        return Db.getPool;
     }
 }

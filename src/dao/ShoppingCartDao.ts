@@ -7,7 +7,7 @@ export class ShoppingCartDao {
     public async save(rut: string, subsidiary: number) {
         const pool = await this.db.poolPromise();
         try {
-            const r = await pool.request().query(`
+            await pool.request().query(`
                 insert into shoppingCart (rutUsuario, idSucursal, created, updated)
                 values (dbo.formatearRut('${rut}'), ${subsidiary}, GETDATE(), GETDATE());
             `);

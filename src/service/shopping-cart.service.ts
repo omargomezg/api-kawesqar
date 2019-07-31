@@ -1,5 +1,6 @@
 import {Bit, Int, Money, NVarChar, TinyInt} from "mssql";
 import {InternalServerError} from "routing-controllers";
+import {OutputFlowTypeDao} from "../dao/OutputFlowTypeDao";
 import {ShoppingCartDao} from "../dao/ShoppingCartDao";
 import {ShoppingCartDetailDao} from "../dao/ShoppingCartDetailDao";
 import {ShoppingCartModel} from "../models/database/ShoppingCart.model";
@@ -17,6 +18,7 @@ export class ShoppingCartService {
 
     public async get(id: number, rut: string) {
         const shoppingCartDao: ShoppingCartDao = new ShoppingCartDao();
+        const outputFlowTypeDao: OutputFlowTypeDao = new OutputFlowTypeDao();
         const model: ShoppingCartModel = new ShoppingCartModel();
         const user: UserModel = new UserModel();
         const subsidiary: SubsidiaryModel = new SubsidiaryModel();
@@ -32,6 +34,7 @@ export class ShoppingCartService {
             model.id = id;
         }
         model.detail = await this.shoppingCartDetailDao.getByRut(rut);
+        model.flow = await outputFlowTypeDao.getDefaultFlowByRut(rut);
         const getSC = await shoppingCartDao.getById(Number(model.id));
         model.user.rut = getSC.recordset[0].rutUsuario;
         model.created = getSC.recordset[0].created;

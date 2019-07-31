@@ -1,3 +1,4 @@
+import {OutputFlowTypeModel} from "./OutputFlowType.model";
 import {ShoppingCartDetailModel} from "./ShoppingCartDetail.model";
 import {SubsidiaryModel} from "./Subsidiary.model";
 import {UserModel} from "./User.model";
@@ -10,4 +11,5 @@ export class ShoppingCartModel {
     public created: string | undefined;
     public updated: string | undefined;
     public detail: ShoppingCartDetailModel[] = [];
+    public flow: OutputFlowTypeModel = new OutputFlowTypeModel();
 }
