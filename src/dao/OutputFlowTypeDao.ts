@@ -29,7 +29,7 @@ export class OutputFlowTypeDao {
                 from tipoEgreso inner join tipoEgreso_Usuario tEU on tipoEgreso.idtVenta = tEU.idtVenta
                 where tEU.rutUsuario = dbo.formatearRut(${rut});
             `);
-            output = Object.assign([], r.recordsets);
+            output = Object.assign([], r.recordset);
         } catch (e) {
             throw new InternalServerError(e.message);
         }

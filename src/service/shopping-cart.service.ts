@@ -1,5 +1,6 @@
 import {Bit, Int, Money, NVarChar, TinyInt} from "mssql";
 import {InternalServerError} from "routing-controllers";
+import {CommonController} from "../controllers/CommonController";
 import {OutputFlowTypeDao} from "../dao/OutputFlowTypeDao";
 import {ShoppingCartDao} from "../dao/ShoppingCartDao";
 import {ShoppingCartDetailDao} from "../dao/ShoppingCartDetailDao";
@@ -8,13 +9,13 @@ import {ShoppingCartDetailModel} from "../models/database/ShoppingCartDetail.mod
 import {DisponibleVentaModel} from "../models/database/storedprocedure/disponibleVenta.model";
 import {SubsidiaryModel} from "../models/database/Subsidiary.model";
 import {UserModel} from "../models/database/User.model";
-import {Db} from "../models/db";
 import {ArticleService} from "./article.service";
 
-export class ShoppingCartService {
-    private db = new Db();
+export class ShoppingCartService extends CommonController {
     private articleService: ArticleService = new ArticleService();
     private shoppingCartDetailDao: ShoppingCartDetailDao = new ShoppingCartDetailDao();
+
+    public async finalize() {}
 
     public async get(id: number, rut: string) {
         const shoppingCartDao: ShoppingCartDao = new ShoppingCartDao();
