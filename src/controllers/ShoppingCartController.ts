@@ -13,8 +13,8 @@ export class ShoppingCartController {
 
     @Put("/:id/:rut")
     public save(@Param("id") id: number, @Param("rut") rut: string, @Body() req: ShoppingCartModel) {
- if (req.flow.code) {}
- else {}
+        //  if (req.flow.code) {} else {}
+        return {};
     }
 
     @Put("/:id/:rut/:sku/:bulk")

@@ -11,7 +11,8 @@
     "mssql": "^5.1.0",
     "reflect-metadata": "^0.1.13",
     "router-express": "^1.5.2",
-    "routing-controllers": "^0.7.7"
+    "routing-controllers": "^0.7.7",
+    "typeorm": "^0.2.18"
   },
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",

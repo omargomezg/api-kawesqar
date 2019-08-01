@@ -2,7 +2,9 @@ import bodyParser from "body-parser";
 import express from "express";
 import "reflect-metadata";
 import { createExpressServer } from "routing-controllers";
+import {createConnection} from "typeorm";
 import {ArticleController} from "./controllers/ArticleController";
+import {BankController} from "./controllers/BankController";
 import { CityController } from "./controllers/CityController";
 import { EgressController } from "./controllers/EgressController";
 import { ExistenceController } from "./controllers/ExistenceController";
@@ -33,6 +35,11 @@ const { PORT = 8089 } = process.env;
 // const app = express();
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
+
+createConnection().then((connection) => {
+    console.log("connected to rom");
+}).catch((error) => console.log(error));
+
 const app = createExpressServer({
     controllers: [UserController,
         CityController, EgressController, SupplierController, MeasureController,
@@ -43,7 +50,8 @@ const app = createExpressServer({
         RoleController,
         SubsidiaryController,
         ArticleController,
-        ShoppingCartController
+        ShoppingCartController,
+        BankController
     ],
     cors: true
 });

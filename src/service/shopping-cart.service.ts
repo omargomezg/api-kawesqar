@@ -15,7 +15,9 @@ export class ShoppingCartService extends CommonController {
     private articleService: ArticleService = new ArticleService();
     private shoppingCartDetailDao: ShoppingCartDetailDao = new ShoppingCartDetailDao();
 
-    public async finalize() {}
+    public async finalize() {
+        return null;
+    }
 
     public async get(id: number, rut: string) {
         const shoppingCartDao: ShoppingCartDao = new ShoppingCartDao();
