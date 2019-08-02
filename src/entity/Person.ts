@@ -18,4 +18,16 @@ export class Person {
     public movil: string;
     @Column()
     public email: string;
+
+    constructor(rut: string, firstName: string, lastName: string, secondLastName: string, created: Date,
+                telephone: string, movil: string, email: string) {
+        this.rut = rut;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.secondLastName = secondLastName;
+        this.created = created;
+        this.telephone = telephone;
+        this.movil = movil;
+        this.email = email;
+    }
 }

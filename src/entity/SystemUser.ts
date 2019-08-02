@@ -8,12 +8,24 @@ export class SystemUser extends Person {
     public enabled: boolean;
     @Column()
     public usernMane: string;
-    @ManyToOne(type => Role)
+    @ManyToOne((type: any) => Role)
     @JoinColumn()
     public role: Role;
 
-    constructor(enabled: boolean, usernMane: string, role: Role) {
-        super();
+    constructor(rut: string,
+                firstName: string,
+                lastName: string,
+                secondLastName: string,
+                created: Date,
+                telephone: string, movil: string, email: string,
+                enabled: boolean, usernMane: string, role: Role) {
+        super(rut, firstName,
+            lastName,
+            secondLastName,
+            created,
+            telephone,
+            movil,
+            email);
         this.enabled = enabled;
         this.usernMane = usernMane;
         this.role = role;

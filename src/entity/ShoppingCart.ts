@@ -1,4 +1,5 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from "typeorm";
+import {SystemUser} from "./SystemUser";
 
 @Entity()
 export class ShoppingCart {
@@ -6,7 +7,13 @@ export class ShoppingCart {
     public id: number;
     @Column()
     public rut: string;
-    @ManyToOne()
-    public public;
+    @OneToOne((type: any) => SystemUser)
+    @JoinColumn()
+    public user: SystemUser;
 
+    constructor(id: number, rut: string, user: SystemUser) {
+        this.id = id;
+        this.rut = rut;
+        this.user = user;
+    }
 }
