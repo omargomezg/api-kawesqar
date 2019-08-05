@@ -6,7 +6,8 @@
   "password": "Kumple22*zu+",
   "database": "BExito",
   "entities": [
-    "build/entity/*.js"
+    "src/entities/*.ts"
   ],
+  "logging": true,
   "synchronize": false
 }

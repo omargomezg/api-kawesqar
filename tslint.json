@@ -7,7 +7,9 @@
   "rules": {
     "trailing-comma": [ false ],
     "max-classes-per-file": [true, 8, "exclude-class-expressions"],
-    "no-console": false
+    "no-console": false,
+    "member-access": false,
+    "import-name": false
   },
   "rulesDirectory": []
 }

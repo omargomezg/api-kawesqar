@@ -15,19 +15,19 @@ export class Person {
     @Column()
     public telephone: string;
     @Column()
-    public movil: string;
+    public mobile: string;
     @Column()
     public email: string;
 
     constructor(rut: string, firstName: string, lastName: string, secondLastName: string, created: Date,
-                telephone: string, movil: string, email: string) {
+                telephone: string, mobile: string, email: string) {
         this.rut = rut;
         this.firstName = firstName;
         this.lastName = lastName;
         this.secondLastName = secondLastName;
         this.created = created;
         this.telephone = telephone;
-        this.movil = movil;
+        this.mobile = mobile;
         this.email = email;
     }
 }

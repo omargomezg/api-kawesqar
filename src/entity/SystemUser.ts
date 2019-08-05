@@ -17,17 +17,17 @@ export class SystemUser extends Person {
                 lastName: string,
                 secondLastName: string,
                 created: Date,
-                telephone: string, movil: string, email: string,
-                enabled: boolean, usernMane: string, role: Role) {
+                telephone: string, mobile: string, email: string,
+                enabled: boolean, userNane: string, role: Role) {
         super(rut, firstName,
             lastName,
             secondLastName,
             created,
             telephone,
-            movil,
+            mobile,
             email);
         this.enabled = enabled;
-        this.usernMane = usernMane;
+        this.usernMane = userNane;
         this.role = role;
     }
 }
