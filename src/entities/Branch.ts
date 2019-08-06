@@ -3,7 +3,7 @@ import {Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, Prima
 import {bodega_sucursal} from "./bodega_sucursal";
 import {Commune} from "./Commune";
 import {comprobanteEgreso} from "./comprobanteEgreso";
-import {cs_relacion_usuarioSucursal} from "./cs_relacion_usuarioSucursal";
+import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
 import {DesgloseArticulo} from "./DesgloseArticulo";
 import {facturas} from "./facturas";
 import {ShoppingCartContent} from "./ShoppingCartContent";
@@ -110,8 +110,8 @@ export class Branch {
     @OneToMany(type => comprobanteEgreso, comprobanteEgreso => comprobanteEgreso.idSucursal)
     comprobanteEgresos: comprobanteEgreso[];
 
-    @OneToMany(type => cs_relacion_usuarioSucursal, cs_relacion_usuarioSucursal => cs_relacion_usuarioSucursal.idSucursal)
-    csRelacionUsuarioSucursals: cs_relacion_usuarioSucursal[];
+    @OneToMany(type => RelationSystemUserBranch, cs_relacion_usuarioSucursal => cs_relacion_usuarioSucursal.branch)
+    csRelacionUsuarioSucursals: RelationSystemUserBranch[];
 
     @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.idSucursal)
     desgloseArticulos: DesgloseArticulo[];

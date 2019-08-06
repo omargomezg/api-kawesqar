@@ -1,5 +1,8 @@
-import {CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {CreateDateColumn, Entity, OneToMany,
+    OneToOne,
+    PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 import {ShoppingCartContent} from "./ShoppingCartContent";
+import {SystemUser} from "./SystemUser";
 
 @Entity()
 export class ShoppingCart {
@@ -10,4 +13,8 @@ export class ShoppingCart {
         (type: ShoppingCartContent) => ShoppingCartContent,
         (shoppingCartContent: ShoppingCartContent) => shoppingCartContent.content)
     contents: ShoppingCartContent[];
+    @OneToOne(
+        (type: SystemUser) => SystemUser,
+        (systemUser: SystemUser) => systemUser.shoppingCart)
+    systemUser: SystemUser;
 }

@@ -1,16 +1,16 @@
-import { Length } from "class-validator";
-import { Column, Entity, OneToMany, OneToOne } from "typeorm";
-import { Branch } from "./Branch";
-import { cs_relacion_usuarioRol } from "./cs_relacion_usuarioRol";
-import { cs_relacion_usuarioSucursal } from "./cs_relacion_usuarioSucursal";
-import { DesgloseArticulo } from "./DesgloseArticulo";
-import { eliminaVenta } from "./eliminaVenta";
-import { facturas } from "./facturas";
-import { UserMenu } from "./UserMenu";
-import { tipoEgreso_Usuario } from "./tipoEgreso_Usuario";
-import { Person } from "./Person";
+import {Column, Entity, OneToMany, OneToOne} from "typeorm";
+import {Branch} from "./Branch";
+import {cs_relacion_usuarioRol} from "./cs_relacion_usuarioRol";
+import {DesgloseArticulo} from "./DesgloseArticulo";
+import {eliminaVenta} from "./eliminaVenta";
+import {facturas} from "./facturas";
+import {Person} from "./Person";
+import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
+import {ShoppingCart} from "./ShoppingCart";
+import {tipoEgreso_Usuario} from "./tipoEgreso_Usuario";
+import {UserMenu} from "./UserMenu";
 
-@Entity("cs_usuarios", { schema: "dbo" })
+@Entity("cs_usuarios", {schema: "dbo"})
 export class SystemUser extends Person {
 
     @Column("bit", {
@@ -88,15 +88,21 @@ export class SystemUser extends Person {
     @OneToOne(type => Branch, branch => branch.legalRepresentative)
     branch: Branch;
 
+    @OneToOne(
+        (type: ShoppingCart) => ShoppingCart,
+        (shoppingCart: ShoppingCart) => shoppingCart.systemUser)
+    shoppingCart: ShoppingCart;
+
     @OneToMany(type => cs_relacion_usuarioRol, cs_relacion_usuarioRol => cs_relacion_usuarioRol.user)
     csRelacionUsuarioRols: cs_relacion_usuarioRol[];
 
     @OneToMany(
-        (type: cs_relacion_usuarioSucursal) => cs_relacion_usuarioSucursal,
-            (cs_relacion_usuarioSucursal: cs_relacion_usuarioSucursal) => cs_relacion_usuarioSucursal.rutUsuario)
-    csRelacionUsuarioSucursals: cs_relacion_usuarioSucursal[];
+        (type: RelationSystemUserBranch) => RelationSystemUserBranch,
+        (userBranch: RelationSystemUserBranch) => userBranch.systemUser)
+    csRelacionUsuarioSucursals: RelationSystemUserBranch[];
 
-    @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.rutUsuario)
+    @OneToMany((type: DesgloseArticulo) => DesgloseArticulo,
+        (desgloseArticulo: DesgloseArticulo) => desgloseArticulo.rutUsuario)
     desgloseArticulos: DesgloseArticulo[];
 
     @OneToMany(type => eliminaVenta, eliminaVenta => eliminaVenta.rutUsuario)
