@@ -1,20 +1,13 @@
 import {InternalServerError} from "routing-controllers";
+import {getCustomRepository} from "typeorm";
 import {Db} from "../models/db";
+import {CommuneRepository} from "../repository/CommuneRepository";
 
 export class CityService {
     private db = new Db();
 
     public async getAll() {
-        const pool = await this.db.poolPromise();
-        try {
-            const r = await pool
-                .request()
-                .query(`
-                    select codigo, nombre
-                    from comunas`);
-            return r.recordset;
-        } catch (e) {
-            throw new InternalServerError(e.message);
-        }
+        const repo = new CommuneRepository();
+        return repo.getCommune();
     }
 }

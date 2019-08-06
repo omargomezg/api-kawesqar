@@ -1,7 +1,7 @@
 import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {comprobanteEgreso} from "./comprobanteEgreso";
 import {facturas} from "./facturas";
-import {Products} from "./Products";
+import {Product} from "./Product";
 
 @Entity("histArticulos", {schema: "dbo"})
 export class HistArticulos {
@@ -10,9 +10,9 @@ export class HistArticulos {
     @JoinColumn({name: 'IdFolio'})
     idFolio: comprobanteEgreso | null;
 
-    @ManyToOne(type => Products, articulos => articulos.histArticuloss, {nullable: false,})
+    @ManyToOne(type => Product, articulos => articulos.histArticuloss, {nullable: false,})
     @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
-    idArticulo: Products | null;
+    idArticulo: Product | null;
 
     @Column("int", {
         nullable: false,

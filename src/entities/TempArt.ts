@@ -13,7 +13,7 @@ import {
     PrimaryGeneratedColumn,
     RelationId
 } from "typeorm";
-import {Products} from "./Products";
+import {Product} from "./Product";
 import {facturas} from "./facturas";
 import {Branch} from "./Branch";
 import {Store} from "./Store";
@@ -27,9 +27,9 @@ export class TempArt {
     })
     ID: number;
 
-    @ManyToOne(type => Products, articulos => articulos.tempArts, {nullable: false,})
+    @ManyToOne(type => Product, articulos => articulos.tempArts, {nullable: false,})
     @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
-    idArticulo: Products | null;
+    idArticulo: Product | null;
 
     @Column("datetime", {
         nullable: false,
@@ -50,7 +50,7 @@ export class TempArt {
     ArtCantidad: number;
 
     @ManyToOne(type => facturas, facturas => facturas.tempArts, {nullable: false,})
-    @JoinColumn({name: 'IdFact'})
+    @JoinColumn({name: "IdFact"})
     idFact: facturas | null;
 
     @Column("datetime", {
@@ -59,12 +59,12 @@ export class TempArt {
     })
     Vencimiento: Date | null;
 
-    @ManyToOne(type => Branch, cs_sucursales => cs_sucursales.tempArts, {nullable: false,})
-    @JoinColumn({name: 'idSucursal'})
+    @ManyToOne(type => Branch, branch => branch.tempArts, {nullable: false,})
+    @JoinColumn({name: "idSucursal"})
     idSucursal: Branch | null;
 
-    @ManyToOne(type => Store, bodega => bodega.tempArts, {nullable: false,})
-    @JoinColumn({name: 'idBodega'})
+    @ManyToOne(type => Store, store => store.tempArts, {nullable: false,})
+    @JoinColumn({name: "idBodega"})
     idBodega: Store | null;
 
 }

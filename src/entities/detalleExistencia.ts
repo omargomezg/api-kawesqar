@@ -1,6 +1,6 @@
 import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
 import {existencia} from "./existencia";
-import {Products} from "./Products";
+import {Product} from "./Product";
 import {Store} from "./Store";
 
 
@@ -21,9 +21,9 @@ export class detalleExistencia {
 
 
    
-    @ManyToOne(type=>Products, articulos=>articulos.detalleExistencias,{  nullable:false, })
+    @ManyToOne(type=>Product, articulos=>articulos.detalleExistencias,{  nullable:false, })
     @JoinColumn({ name: "article_id", referencedColumnName: "idArticulo"})
-    idArticulo:Products | null;
+    idArticulo:Product | null;
 
 
     @Column("int",{ 

@@ -3,6 +3,7 @@ import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {bodega_sucursal} from "./bodega_sucursal";
 import {DesgloseArticulo} from "./DesgloseArticulo";
 import {detalleExistencia} from "./detalleExistencia";
+import {ShoppingCartContent} from "./ShoppingCartContent";
 import {TempArt} from "./TempArt";
 
 @Entity("bodega", {schema: "dbo"})
@@ -33,5 +34,9 @@ export class Store {
 
     @OneToMany(type => TempArt, tempArt => tempArt.idBodega)
     tempArts: TempArt[];
+
+    @OneToMany((type: ShoppingCartContent) => ShoppingCartContent,
+            (shoppingCartContent) => shoppingCartContent.content)
+    content: ShoppingCartContent[];
 
 }

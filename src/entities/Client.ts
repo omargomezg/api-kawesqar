@@ -1,11 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import { cartola } from "./cartola";
-import { Commune } from "./Commune";
-import { comprobanteEgreso } from "./comprobanteEgreso";
-import { Person } from "./Person";
-import { tipoCliente } from "./tipoCliente";
+import {Column, Entity, JoinColumn, ManyToOne, OneToMany} from "typeorm";
+import {cartola} from "./cartola";
+import {Commune} from "./Commune";
+import {comprobanteEgreso} from "./comprobanteEgreso";
+import {Person} from "./Person";
+import {ClientType} from "./ClientType";
 
-@Entity("clientes", { schema: "dbo" })
+@Entity("clientes", {schema: "dbo"})
 export class Client extends Person {
 
     @Column("varchar", {
@@ -58,9 +58,11 @@ export class Client extends Person {
     })
     fantasyName: string | null;
 
-    @ManyToOne(type => Commune, comunas => comunas.clientess, {})
-    @JoinColumn({ name: "codigo" })
-    codigo: Commune | null;
+    @ManyToOne(
+        (type: Commune) => Commune,
+        (isCommune: Commune) => isCommune.clientess, {})
+    @JoinColumn({name: "codigo"})
+    commune: Commune | null;
 
     @Column("nvarchar", {
         name: "giro",
@@ -68,9 +70,11 @@ export class Client extends Person {
     })
     giro: string | null;
 
-    @ManyToOne(type => tipoCliente, tipoCliente => tipoCliente.clientess, {})
-    @JoinColumn({ name: "idTcliente" })
-    typeOfClient: tipoCliente | null;
+    @ManyToOne(
+        (type: ClientType) => ClientType,
+            (clientType: ClientType) => clientType.clients, {})
+    @JoinColumn({name: "idTcliente"})
+    typeOfClient: ClientType | null;
 
     @OneToMany(type => cartola, cartola => cartola.rutCliente)
     cartolas: cartola[];

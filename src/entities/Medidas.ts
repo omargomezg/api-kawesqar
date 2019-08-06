@@ -1,5 +1,5 @@
 import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {Products} from "./Products";
+import {Product} from "./Product";
 
 
 @Entity("Medidas",{schema:"dbo" } )
@@ -37,12 +37,12 @@ export class Medidas {
         
 
    
-    @OneToMany(type=>Products, articulos=>articulos.idMedida)
-    articuloss:Products[];
+    @OneToMany(type=>Product, articulos=>articulos.idMedida)
+    articuloss:Product[];
     
 
    
-    @OneToMany(type=>Products, articulos=>articulos.idMedidaGranel)
-    articuloss2:Products[];
+    @OneToMany(type=>Product, articulos=>articulos.idMedidaGranel)
+    articuloss2:Product[];
     
 }

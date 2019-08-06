@@ -14,7 +14,7 @@ import {
     RelationId
 } from "typeorm";
 import {comprobanteEgreso} from "./comprobanteEgreso";
-import {Products} from "./Products";
+import {Product} from "./Product";
 
 @Entity("detalleVenta", {schema: "dbo"})
 export class detalleVenta {
@@ -35,9 +35,9 @@ export class detalleVenta {
     })
     cantidad: number;
 
-    @ManyToOne(type => Products, articulos => articulos.detalleVentas, {nullable: false,})
+    @ManyToOne(type => Product, articulos => articulos.detalleVentas, {nullable: false,})
     @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
-    idArticulo: Products | null;
+    idArticulo: Product | null;
 
     @Column("money", {
         nullable: false,

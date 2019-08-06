@@ -6,7 +6,7 @@ import { cs_relacion_usuarioSucursal } from "./cs_relacion_usuarioSucursal";
 import { DesgloseArticulo } from "./DesgloseArticulo";
 import { eliminaVenta } from "./eliminaVenta";
 import { facturas } from "./facturas";
-import { menuUsuario } from "./menuUsuario";
+import { UserMenu } from "./UserMenu";
 import { tipoEgreso_Usuario } from "./tipoEgreso_Usuario";
 import { Person } from "./Person";
 
@@ -28,8 +28,8 @@ export class SystemUser extends Person {
 
     @Column("varchar", {
         length: 50,
+        name: "userName",
         nullable: false,
-        name: "userName"
     })
     userName: string;
 
@@ -91,7 +91,9 @@ export class SystemUser extends Person {
     @OneToMany(type => cs_relacion_usuarioRol, cs_relacion_usuarioRol => cs_relacion_usuarioRol.user)
     csRelacionUsuarioRols: cs_relacion_usuarioRol[];
 
-    @OneToMany(type => cs_relacion_usuarioSucursal, cs_relacion_usuarioSucursal => cs_relacion_usuarioSucursal.rutUsuario)
+    @OneToMany(
+        (type: cs_relacion_usuarioSucursal) => cs_relacion_usuarioSucursal,
+            (cs_relacion_usuarioSucursal: cs_relacion_usuarioSucursal) => cs_relacion_usuarioSucursal.rutUsuario)
     csRelacionUsuarioSucursals: cs_relacion_usuarioSucursal[];
 
     @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.rutUsuario)
@@ -106,8 +108,8 @@ export class SystemUser extends Person {
     @OneToMany(type => facturas, facturas => facturas.rutUsuario)
     facturass: facturas[];
 
-    @OneToMany(type => menuUsuario, menuUsuario => menuUsuario.rutUsuario)
-    menuUsuarios: menuUsuario[];
+    @OneToMany(type => UserMenu, menuUsuario => menuUsuario.systemUser)
+    menuUsuarios: UserMenu[];
 
     @OneToMany(type => tipoEgreso_Usuario, tipoEgreso_Usuario => tipoEgreso_Usuario.rutUsuario)
     tipoEgresoUsuarios: tipoEgreso_Usuario[];

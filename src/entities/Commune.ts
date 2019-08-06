@@ -23,7 +23,7 @@ export class Commune {
     })
     name: string;
 
-    @OneToMany(type => Client, clientes => clientes.codigo)
+    @OneToMany(type => Client, clientes => clientes.commune)
     clientess: Client[];
 
     @OneToMany(type => Branch, cs_sucursales => cs_sucursales.commune)

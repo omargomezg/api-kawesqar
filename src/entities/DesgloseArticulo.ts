@@ -13,7 +13,7 @@ import {
     PrimaryGeneratedColumn,
     RelationId
 } from "typeorm";
-import {Products} from "./Products";
+import {Product} from "./Product";
 import {facturas} from "./facturas";
 import {Branch} from "./Branch";
 import {SystemUser} from "./SystemUser";
@@ -22,9 +22,9 @@ import {Store} from "./Store";
 @Entity("DesgloseArticulo", {schema: "dbo"})
 export class DesgloseArticulo {
 
-    @ManyToOne(type => Products, articulos => articulos.desgloseArticulos, {nullable: false,})
+    @ManyToOne(type => Product, articulos => articulos.desgloseArticulos, {nullable: false,})
     @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
-    idArticulo: Products | null;
+    idArticulo: Product | null;
 
     @PrimaryGeneratedColumn({
         type: "int",

@@ -1,6 +1,6 @@
 import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {facturas} from "./facturas";
-import {Products} from "./Products";
+import {Product} from "./Product";
 
 @Entity("detalleFactura", {schema: "dbo"})
 export class detalleFactura {
@@ -15,9 +15,9 @@ export class detalleFactura {
     @JoinColumn({name: 'idFact'})
     idFact: facturas | null;
 
-    @ManyToOne(type => Products, articulos => articulos.detalleFacturas, {nullable: false,})
+    @ManyToOne(type => Product, articulos => articulos.detalleFacturas, {nullable: false,})
     @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
-    idArticulo: Products | null;
+    idArticulo: Product | null;
 
     @Column("money", {
         nullable: false,

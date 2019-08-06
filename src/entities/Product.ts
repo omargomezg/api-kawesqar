@@ -1,17 +1,17 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
-import { cartolaProducto } from "./cartolaProducto";
-import { DesgloseArticulo } from "./DesgloseArticulo";
-import { detalleExistencia } from "./detalleExistencia";
-import { detalleFactura } from "./detalleFactura";
-import { detalleVenta } from "./detalleVenta";
-import { familia } from "./familia";
-import { HistArticulos } from "./HistArticulos";
-import { Medidas } from "./Medidas";
-import { TempArt } from "./TempArt";
-import { ShoppingCartContent } from "./ShoppingCartContent";
+import {Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
+import {cartolaProducto} from "./cartolaProducto";
+import {DesgloseArticulo} from "./DesgloseArticulo";
+import {detalleExistencia} from "./detalleExistencia";
+import {detalleFactura} from "./detalleFactura";
+import {detalleVenta} from "./detalleVenta";
+import {familia} from "./familia";
+import {HistArticulos} from "./HistArticulos";
+import {Medidas} from "./Medidas";
+import {ShoppingCartContent} from "./ShoppingCartContent";
+import {TempArt} from "./TempArt";
 
-@Entity("Articulos", { schema: "dbo" })
-export class Products {
+@Entity("Articulos", {schema: "dbo"})
+export class Product {
 
     @PrimaryColumn("nvarchar", {
         length: 50,
@@ -30,7 +30,7 @@ export class Products {
     nomArticulo: string;
 
     @ManyToOne(type => Medidas, medidas => medidas.articuloss, {})
-    @JoinColumn({ name: 'idMedida' })
+    @JoinColumn({name: 'idMedida'})
     idMedida: Medidas | null;
 
     @Column("bit", {
@@ -75,7 +75,7 @@ export class Products {
     ganancia: number | null;
 
     @ManyToOne(type => familia, familia => familia.articuloss, {})
-    @JoinColumn({ name: 'idFamilia' })
+    @JoinColumn({name: "idFamilia"})
     idFamilia: familia | null;
 
     @Column("smallmoney", {
@@ -86,7 +86,7 @@ export class Products {
     precioGranel: number | null;
 
     @ManyToOne(type => Medidas, medidas => medidas.articuloss2, {})
-    @JoinColumn({ name: 'idMedidaGranel' })
+    @JoinColumn({name: "idMedidaGranel"})
     idMedidaGranel: Medidas | null;
 
     @Column("bit", {
@@ -136,7 +136,7 @@ export class Products {
     @OneToMany(type => TempArt, tempArt => tempArt.idArticulo)
     tempArts: TempArt[];
 
-    @OneToMany(type => ShoppingCartContent, tempCarro => tempCarro.idArticulo)
+    @OneToMany(type => ShoppingCartContent, shoppingCartContent => shoppingCartContent.idArticulo)
     tempCarros: ShoppingCartContent[];
 
 }

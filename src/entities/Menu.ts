@@ -13,10 +13,10 @@ import {
     PrimaryGeneratedColumn,
     RelationId
 } from "typeorm";
-import {menuUsuario} from "./menuUsuario";
+import {UserMenu} from "./UserMenu";
 
 @Entity("menu", {schema: "dbo"})
-export class menu {
+export class Menu {
 
     @PrimaryGeneratedColumn({
         type: "int",
@@ -43,7 +43,7 @@ export class menu {
     })
     url: string;
 
-    @OneToMany(type => menuUsuario, menuUsuario => menuUsuario.menu)
-    menuUsuarios: menuUsuario[];
+    @OneToMany(type => UserMenu, menuUsuario => menuUsuario.menu)
+    menuUsuarios: UserMenu[];
 
 }

@@ -13,7 +13,7 @@ import {
     PrimaryGeneratedColumn,
     RelationId
 } from "typeorm";
-import {Products} from "./Products";
+import {Product} from "./Product";
 import {movimientoArticulo} from "./movimientoArticulo";
 
 @Entity("cartolaProducto", {schema: "dbo"})
@@ -25,9 +25,9 @@ export class cartolaProducto {
     })
     idCP: number;
 
-    @ManyToOne(type => Products, articulos => articulos.cartolaProductos, {nullable: false,})
+    @ManyToOne(type => Product, articulos => articulos.cartolaProductos, {nullable: false,})
     @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
-    idArticulo: Products | null;
+    idArticulo: Product | null;
 
     @Column("datetime", {
         nullable: false,
