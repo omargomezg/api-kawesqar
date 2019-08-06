@@ -1,59 +1,24 @@
-import {Length} from "class-validator";
-import {Column, Entity, OneToMany, OneToOne} from "typeorm";
-import {Branch} from "./Branch";
-import {cs_relacion_usuarioRol} from "./cs_relacion_usuarioRol";
-import {cs_relacion_usuarioSucursal} from "./cs_relacion_usuarioSucursal";
-import {DesgloseArticulo} from "./DesgloseArticulo";
-import {eliminaVenta} from "./eliminaVenta";
-import {facturas} from "./facturas";
-import {menuUsuario} from "./menuUsuario";
-import {tipoEgreso_Usuario} from "./tipoEgreso_Usuario";
+import { Length } from "class-validator";
+import { Column, Entity, OneToMany, OneToOne } from "typeorm";
+import { Branch } from "./Branch";
+import { cs_relacion_usuarioRol } from "./cs_relacion_usuarioRol";
+import { cs_relacion_usuarioSucursal } from "./cs_relacion_usuarioSucursal";
+import { DesgloseArticulo } from "./DesgloseArticulo";
+import { eliminaVenta } from "./eliminaVenta";
+import { facturas } from "./facturas";
+import { menuUsuario } from "./menuUsuario";
+import { tipoEgreso_Usuario } from "./tipoEgreso_Usuario";
+import { Person } from "./Person";
 
-@Entity("cs_usuarios", {schema: "dbo"})
-export class SystemUser {
-
-    @Column("varchar", {
-        length: 12,
-        name: "rutUsuario",
-        nullable: false,
-        primary: true,
-    })
-    rutUsuario: string;
-
-    @Column("nvarchar", {
-        length: 256,
-        name: "nombres",
-        nullable: false
-    })
-    nombres: string;
-
-    @Column("nvarchar", {
-        length: 256,
-        name: "apPaterno",
-        nullable: false,
-    })
-    @Length(0, 256)
-    apPaterno: string;
-
-    @Column("nvarchar", {
-        length: 256,
-        name: "apMaterno",
-        nullable: true
-    })
-    apMaterno: string | null;
-
-    @Column("datetime", {
-        name: "fechaCreacion",
-        nullable: true
-    })
-    fechaCreacion: Date | null;
+@Entity("cs_usuarios", { schema: "dbo" })
+export class SystemUser extends Person {
 
     @Column("bit", {
         default: () => "(1)",
         name: "estado",
         nullable: true
     })
-    estado: boolean | null;
+    isActive: boolean | null;
 
     @Column("varbinary", {
         name: "clave",
@@ -79,21 +44,6 @@ export class SystemUser {
         nullable: true
     })
     imagenTipo: string | null;
-
-    @Column("nchar", {
-        length: 10,
-        name: "fono",
-        nullable: true,
-    })
-    fono: string | null;
-
-    @Column("nvarchar", {
-        length: 256,
-        name: "eMail",
-        nullable: true
-    })
-    @Length(0, 256)
-    eMail: string | null;
 
     @Column("bit", {
         default: () => "(0)",
@@ -138,7 +88,7 @@ export class SystemUser {
     @OneToOne(type => Branch, branch => branch.legalRepresentative)
     branch: Branch;
 
-    @OneToMany(type => cs_relacion_usuarioRol, cs_relacion_usuarioRol => cs_relacion_usuarioRol.rutUsuario)
+    @OneToMany(type => cs_relacion_usuarioRol, cs_relacion_usuarioRol => cs_relacion_usuarioRol.user)
     csRelacionUsuarioRols: cs_relacion_usuarioRol[];
 
     @OneToMany(type => cs_relacion_usuarioSucursal, cs_relacion_usuarioSucursal => cs_relacion_usuarioSucursal.rutUsuario)

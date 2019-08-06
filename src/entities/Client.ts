@@ -1,47 +1,12 @@
-import {Column, Entity, JoinColumn, ManyToOne, OneToMany} from "typeorm";
-import {cartola} from "./cartola";
-import {comprobanteEgreso} from "./comprobanteEgreso";
-import {Commune} from "./Commune";
-import {tipoCliente} from "./tipoCliente";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { cartola } from "./cartola";
+import { Commune } from "./Commune";
+import { comprobanteEgreso } from "./comprobanteEgreso";
+import { Person } from "./Person";
+import { tipoCliente } from "./tipoCliente";
 
-@Entity("clientes", {schema: "dbo"})
-export class Client {
-
-    @Column("nvarchar", {
-        length: 13,
-        name: "rutCliente",
-        nullable: false,
-        primary: true,
-    })
-    rut: string;
-
-    @Column("varchar", {
-        length: 50,
-        name: "Nombres_cli",
-        nullable: false
-    })
-    firstName: string;
-
-    @Column("nvarchar", {
-        length: 50,
-        name: "ApPaterno_cli",
-        nullable: false
-    })
-    lastName: string;
-
-    @Column("nvarchar", {
-        length: 50,
-        name: "ApMaterno_cli",
-        nullable: true
-    })
-    secondLastName: string | null;
-
-    @Column("varchar", {
-        length: 15,
-        name: "Fono",
-        nullable: true,
-    })
-    telephone: string | null;
+@Entity("clientes", { schema: "dbo" })
+export class Client extends Person {
 
     @Column("varchar", {
         length: 15,
@@ -63,19 +28,6 @@ export class Client {
         nullable: true,
     })
     address: string | null;
-
-    @Column("varchar", {
-        length: 120,
-        name: "Email",
-        nullable: true,
-    })
-    Email: string | null;
-
-    @Column("datetime", {
-        name: "Fingreso",
-        nullable: false
-    })
-    created: Date;
 
     @Column("numeric", {
         default: () => "(0)",
@@ -107,7 +59,7 @@ export class Client {
     fantasyName: string | null;
 
     @ManyToOne(type => Commune, comunas => comunas.clientess, {})
-    @JoinColumn({name: 'codigo'})
+    @JoinColumn({ name: "codigo" })
     codigo: Commune | null;
 
     @Column("nvarchar", {
@@ -117,7 +69,7 @@ export class Client {
     giro: string | null;
 
     @ManyToOne(type => tipoCliente, tipoCliente => tipoCliente.clientess, {})
-    @JoinColumn({name: 'idTcliente'})
+    @JoinColumn({ name: "idTcliente" })
     typeOfClient: tipoCliente | null;
 
     @OneToMany(type => cartola, cartola => cartola.rutCliente)

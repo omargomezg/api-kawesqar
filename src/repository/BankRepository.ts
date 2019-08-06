@@ -1,5 +1,5 @@
-import {getManager} from "typeorm";
-import {Bank} from "../entity/Bank";
+import { getManager } from "typeorm";
+import { Bank } from "../entities/Bank";
 
 export class BankRepository {
     public createBank(bank: Bank): Promise<Bank> {

@@ -4,10 +4,10 @@
   "port": 1433,
   "username": "sa",
   "password": "Kumple22*zu+",
-  "database": "BExito",
+  "database": "ormBodega",
   "entities": [
     "src/entities/*.ts"
   ],
   "logging": true,
-  "synchronize": false
+  "synchronize": true
 }

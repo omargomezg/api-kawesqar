@@ -1,17 +1,17 @@
-import {Length} from "class-validator";
-import {Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn} from "typeorm";
-import {SystemUser} from "./SystemUser";
-import {bodega_sucursal} from "./bodega_sucursal";
-import {Commune} from "./Commune";
-import {comprobanteEgreso} from "./comprobanteEgreso";
-import {cs_relacion_usuarioSucursal} from "./cs_relacion_usuarioSucursal";
-import {DesgloseArticulo} from "./DesgloseArticulo";
-import {facturas} from "./facturas";
-import {sucursalAsociada} from "./sucursalAsociada";
-import {TempArt} from "./TempArt";
-import {TempCarro} from "./TempCarro";
+import { Length } from "class-validator";
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { SystemUser } from "./SystemUser";
+import { bodega_sucursal } from "./bodega_sucursal";
+import { Commune } from "./Commune";
+import { comprobanteEgreso } from "./comprobanteEgreso";
+import { cs_relacion_usuarioSucursal } from "./cs_relacion_usuarioSucursal";
+import { DesgloseArticulo } from "./DesgloseArticulo";
+import { facturas } from "./facturas";
+import { sucursalAsociada } from "./sucursalAsociada";
+import { TempArt } from "./TempArt";
+import { ShoppingCartContent } from "./ShoppingCartContent";
 
-@Entity("cs_sucursales", {schema: "dbo"})
+@Entity("cs_sucursales", { schema: "dbo" })
 export class Branch {
 
     @PrimaryGeneratedColumn({
@@ -42,8 +42,8 @@ export class Branch {
     })
     address: string | null;
 
-    @ManyToOne(type => Commune, comunas => comunas.branches, {nullable: false,})
-    @JoinColumn({name: 'codigo'})
+    @ManyToOne(type => Commune, comunas => comunas.branches, { nullable: false, })
+    @JoinColumn({ name: 'codigo' })
     commune: Commune | null;
 
     @Column("varchar", {
@@ -125,7 +125,7 @@ export class Branch {
     @OneToMany(type => TempArt, tempArt => tempArt.idSucursal)
     tempArts: TempArt[];
 
-    @OneToMany(type => TempCarro, tempCarro => tempCarro.idSucursal)
-    tempCarros: TempCarro[];
+    @OneToMany(type => ShoppingCartContent, tempCarro => tempCarro.idSucursal)
+    tempCarros: ShoppingCartContent[];
 
 }
