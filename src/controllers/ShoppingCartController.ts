@@ -8,7 +8,8 @@ export class ShoppingCartController {
 
     @Get("/:id/:rut")
     public get(@Param("id") id: number, @Param("rut") rut: string) {
-        return this.cart.get(id, rut);
+        //  return this.cart.get(id, rut);
+        return this.cart.getorm(id, rut);
     }
 
     @Put("/:id/:rut")

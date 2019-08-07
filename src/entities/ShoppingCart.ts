@@ -1,6 +1,12 @@
-import {CreateDateColumn, Entity, OneToMany,
+import {
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    OneToMany,
     OneToOne,
-    PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
+} from "typeorm";
 import {ShoppingCartContent} from "./ShoppingCartContent";
 import {SystemUser} from "./SystemUser";
 
@@ -12,9 +18,11 @@ export class ShoppingCart {
     @OneToMany(
         (type: ShoppingCartContent) => ShoppingCartContent,
         (shoppingCartContent: ShoppingCartContent) => shoppingCartContent.content)
+    @JoinColumn()
     contents: ShoppingCartContent[];
     @OneToOne(
         (type: SystemUser) => SystemUser,
         (systemUser: SystemUser) => systemUser.shoppingCart)
+    @JoinColumn()
     systemUser: SystemUser;
 }

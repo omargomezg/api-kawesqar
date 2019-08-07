@@ -4,19 +4,42 @@ import {CommonController} from "../controllers/CommonController";
 import {OutputFlowTypeDao} from "../dao/OutputFlowTypeDao";
 import {ShoppingCartDao} from "../dao/ShoppingCartDao";
 import {ShoppingCartDetailDao} from "../dao/ShoppingCartDetailDao";
+import {ShoppingCart} from "../entities/ShoppingCart";
+import {SystemUser} from "../entities/SystemUser";
 import {ShoppingCartModel} from "../models/database/ShoppingCart.model";
 import {ShoppingCartDetailModel} from "../models/database/ShoppingCartDetail.model";
 import {DisponibleVentaModel} from "../models/database/storedprocedure/disponibleVenta.model";
 import {SubsidiaryModel} from "../models/database/Subsidiary.model";
 import {UserModel} from "../models/database/User.model";
+import {ShoppingCartRepository} from "../repository/ShoppingCartRepository";
+import {SystemUserRepository} from "../repository/SystemUserRepository";
 import {ArticleService} from "./article.service";
 
 export class ShoppingCartService extends CommonController {
     private articleService: ArticleService = new ArticleService();
     private shoppingCartDetailDao: ShoppingCartDetailDao = new ShoppingCartDetailDao();
+    private userService: SystemUserRepository = new SystemUserRepository();
 
     public async finalize() {
         return null;
+    }
+
+    public async getorm(id: number, rut: string) {
+        const user: SystemUser =
+        const scr = new ShoppingCartRepository();
+        const user = new SystemUserRepository();
+        let obj: ShoppingCart;
+        scr.getByUser(rut).then((data) => {
+            obj = data !== undefined ? data : []; });
+        if (obj.length > 0) {
+            return obj;
+        } else {
+            await scr.create(rut).then((result) => {
+                console.log(result);
+                return scr.getByUser(rut).then((data) => obj = data);
+            });
+            return obj;
+        }
     }
 
     public async get(id: number, rut: string) {
@@ -65,14 +88,14 @@ export class ShoppingCartService extends CommonController {
         }
         const pool = await this.db.poolPromise();
         try {
-        const r = await pool.request()
-            .input("id", Int(), id)
-            .input("rutUsuario", NVarChar(12), rut)
-            .execute("limpiarRegistroCarroVenta");
-        req.detail = req.detail.filter((item) => {
-            return item.id !== id;
-        });
-        return req;
+            const r = await pool.request()
+                .input("id", Int(), id)
+                .input("rutUsuario", NVarChar(12), rut)
+                .execute("limpiarRegistroCarroVenta");
+            req.detail = req.detail.filter((item) => {
+                return item.id !== id;
+            });
+            return req;
         } catch (e) {
             throw new InternalServerError(e.message);
         }

@@ -1,4 +1,4 @@
-import {Column, Entity, OneToMany, OneToOne} from "typeorm";
+import {Column, Entity, JoinColumn, OneToMany, OneToOne} from "typeorm";
 import {Branch} from "./Branch";
 import {cs_relacion_usuarioRol} from "./cs_relacion_usuarioRol";
 import {DesgloseArticulo} from "./DesgloseArticulo";
