@@ -6,8 +6,8 @@ import {eliminaVenta} from "./eliminaVenta";
 import {facturas} from "./facturas";
 import {Person} from "./Person";
 import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
+import {RelationSystemUserOutputType} from "./RelationSystemUserOutputType";
 import {ShoppingCart} from "./ShoppingCart";
-import {tipoEgreso_Usuario} from "./tipoEgreso_Usuario";
 import {UserMenu} from "./UserMenu";
 
 @Entity("cs_usuarios", {schema: "dbo"})
@@ -117,7 +117,7 @@ export class SystemUser extends Person {
     @OneToMany(type => UserMenu, menuUsuario => menuUsuario.systemUser)
     menuUsuarios: UserMenu[];
 
-    @OneToMany(type => tipoEgreso_Usuario, tipoEgreso_Usuario => tipoEgreso_Usuario.rutUsuario)
-    tipoEgresoUsuarios: tipoEgreso_Usuario[];
+    @OneToMany(type => RelationSystemUserOutputType, tipoEgreso_Usuario => tipoEgreso_Usuario.systemUser)
+    tipoEgresoUsuarios: RelationSystemUserOutputType[];
 
 }

@@ -1,5 +1,9 @@
+import {throws} from "assert";
 import {Bit, Int, NChar, NVarChar, VarChar} from "mssql";
 import {InternalServerError} from "routing-controllers";
+import {OutputType} from "../entities/OutputType";
+import {RelationSystemUserOutputType} from "../entities/RelationSystemUserOutputType";
+import {SystemUser} from "../entities/SystemUser";
 import {Db} from "../models/db";
 import {UserExistsModel} from "../models/response/user.exists.model";
 import {EnabledUserModel} from "../models/user.index";
@@ -116,8 +120,16 @@ export class UserService {
         }
     }
 
-    public async create(user: User) {
-        const pool = await this.db.poolPromise();
+    public async create(user: SystemUser) {
+        await SystemUser.create(user);
+        // TODO poblar relationSystemUserOutputType y setear opción por defecto
+        const relation: RelationSystemUserOutputType[] = [];
+        const outputType = await OutputType.find();
+        if (outputType === undefined) {
+            throw new Error("Outpiut is undefined");
+        }
+        outputType.forEach((item) => console.log(item));
+        /*const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("rutUsuario", VarChar(12), user.rut)
@@ -137,7 +149,7 @@ export class UserService {
             return r.recordset[0];
         } catch (err) {
             throw new InternalServerError(err.message);
-        }
+        }*/
     }
 
     public async update(user: User) {

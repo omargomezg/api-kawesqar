@@ -1,3 +1,4 @@
+import {UnauthorizedError} from "routing-controllers";
 import {SystemUser} from "../entities/SystemUser";
 import {Db} from "../models/db";
 
@@ -9,7 +10,7 @@ export class CommonController {
     protected async getUser(rut: string) {
         const user: SystemUser | undefined = await SystemUser.findOne(rut);
         if (user === undefined) {
-            throw new Error("User not exists");
+            throw new UnauthorizedError("User not exists");
         }
         return user;
     }

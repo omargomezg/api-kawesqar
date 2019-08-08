@@ -14,34 +14,37 @@ import {
     RelationId
 } from "typeorm";
 import {SystemUser} from "./SystemUser";
-import {tipoEgreso} from "./tipoEgreso";
+import {OutputType} from "./OutputType";
 
+/**
+ * Relation between SystemUser and OutputType
+ */
 @Entity("tipoEgreso_Usuario", {schema: "dbo"})
-export class tipoEgreso_Usuario {
+export class RelationSystemUserOutputType extends BaseEntity {
 
-    @ManyToOne(type => tipoEgreso, tipoEgreso => tipoEgreso.tipoEgresoUsuarios, {nullable: false,})
-    @JoinColumn({name: 'idtVenta'})
-    idtVenta: tipoEgreso | null;
+    @ManyToOne(type => OutputType, tipoEgreso => tipoEgreso.tipoEgresoUsuarios, {nullable: false,})
+    @JoinColumn({name: "idtVenta"})
+    idtVenta: OutputType | null;
 
     @ManyToOne(type => SystemUser, cs_usuarios => cs_usuarios.tipoEgresoUsuarios, {nullable: false,})
-    @JoinColumn({name: 'rutUsuario'})
-    rutUsuario: SystemUser | null;
+    @JoinColumn({name: "rutUsuario"})
+    systemUser: SystemUser | null;
 
     @Column("bit", {
+        name: "estado",
         nullable: false,
-        name: "estado"
     })
-    estado: boolean;
+    isActive: boolean;
 
     @Column("bit", {
+        name: "selDefault",
         nullable: true,
-        name: "selDefault"
     })
-    selDefault: boolean | null;
+    isDefault: boolean | null;
 
     @PrimaryGeneratedColumn({
+        name: "id",
         type: "numeric",
-        name: "id"
     })
     id: number;
 

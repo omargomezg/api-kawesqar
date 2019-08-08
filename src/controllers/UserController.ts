@@ -1,4 +1,7 @@
 import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
+import {OutputType} from "../entities/OutputType";
+import {RelationSystemUserOutputType} from "../entities/RelationSystemUserOutputType";
+import {SystemUser} from "../entities/SystemUser";
 import { CreateUserModel, EnabledUserModel, UpdateUserModel} from "../models/user.index";
 import {UserService} from "../service/user.service";
 
@@ -35,9 +38,20 @@ export class UserController {
         return this.user.getDiscountUser(rut);
     }
 
-    @Post("/")
-    public createUser(@Param("rut") rut: string, @Body() user: CreateUserModel) {
-        return this.user.create(user);
+    @Post("/:rut")
+    public createUser(@Param("rut") rut: string, @Body() user: SystemUser) {
+        const userSystem = new SystemUser();
+        userSystem.rut = rut;
+        userSystem.credito = false;
+        userSystem.discount = false;
+        const initialRelation: OutputType.
+        const relation = new RelationSystemUserOutputType();
+
+        realtion.push(new RelationSystemUserOutputType());
+        realtion.push(new RelationSystemUserOutputType());
+        userSystem.tipoEgresoUsuarios = relations;
+        return userSystem;
+        // return this.user.create(user);
     }
 
     @Post("/:rut/default/subsidiary")
