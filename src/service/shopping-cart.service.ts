@@ -1,5 +1,6 @@
 import {Bit, Int, Money, NVarChar, TinyInt} from "mssql";
 import {InternalServerError} from "routing-controllers";
+import {FindConditions} from "typeorm";
 import {CommonController} from "../controllers/CommonController";
 import {OutputFlowTypeDao} from "../dao/OutputFlowTypeDao";
 import {ShoppingCartDao} from "../dao/ShoppingCartDao";
@@ -11,7 +12,6 @@ import {ShoppingCartDetailModel} from "../models/database/ShoppingCartDetail.mod
 import {DisponibleVentaModel} from "../models/database/storedprocedure/disponibleVenta.model";
 import {SubsidiaryModel} from "../models/database/Subsidiary.model";
 import {UserModel} from "../models/database/User.model";
-import {ShoppingCartRepository} from "../repository/ShoppingCartRepository";
 import {SystemUserRepository} from "../repository/SystemUserRepository";
 import {ArticleService} from "./article.service";
 
@@ -25,12 +25,23 @@ export class ShoppingCartService extends CommonController {
     }
 
     public async getorm(id: number, rut: string) {
-        const user: SystemUser =
-        const scr = new ShoppingCartRepository();
+        const user = this.getUser(rut);
+        /*const shopp = new ShoppingCart();
+        const param: FindConditions<ShoppingCart> = new ShoppingCart();
+        const user: SystemUser = new SystemUser();
+        user.rut = rut;
+        param.systemUser = user;
+        return await ShoppingCart.findOne(param);*/
+        /*await getConnection().transaction(tranEntityManager => {
+            const data = await ShoppingCart.findOne(1);
+            return data;
+        });*/
+        /*const scr = new ShoppingCartRepository();
         const user = new SystemUserRepository();
         let obj: ShoppingCart;
         scr.getByUser(rut).then((data) => {
-            obj = data !== undefined ? data : []; });
+            obj = data !== undefined ? data : [];
+        });
         if (obj.length > 0) {
             return obj;
         } else {
@@ -39,7 +50,8 @@ export class ShoppingCartService extends CommonController {
                 return scr.getByUser(rut).then((data) => obj = data);
             });
             return obj;
-        }
+        }*/
+        return user;
     }
 
     public async get(id: number, rut: string) {

@@ -1,4 +1,5 @@
 import {
+    BaseEntity,
     CreateDateColumn,
     Entity,
     JoinColumn,
@@ -11,7 +12,7 @@ import {ShoppingCartContent} from "./ShoppingCartContent";
 import {SystemUser} from "./SystemUser";
 
 @Entity()
-export class ShoppingCart {
+export class ShoppingCart extends BaseEntity {
     @PrimaryGeneratedColumn() id: number;
     @CreateDateColumn() created: Date;
     @UpdateDateColumn() updated: Date;

@@ -1,6 +1,6 @@
-import {Column, PrimaryColumn} from "typeorm";
+import {BaseEntity, Column, PrimaryColumn} from "typeorm";
 
-export abstract class Person {
+export abstract class Person extends BaseEntity {
     @PrimaryColumn("nvarchar", {
         length: 12,
         nullable: false,
