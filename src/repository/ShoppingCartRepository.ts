@@ -1,13 +1,24 @@
-import {getManager} from "typeorm";
-import {Product} from "../entities/Product";
-import {ShoppingCart} from "../entities/ShoppingCart";
+import { EntityManager, EntityRepository, getManager } from "typeorm";
+import { ShoppingCart } from "../entities/ShoppingCart";
 
+@EntityRepository(ShoppingCart)
 export class ShoppingCartRepository {
-    public getByUser(rut: string): Promise<Product> {
+    constructor(private manager: EntityManager) {
+    }
+    public async getByUser(rut: string) {
+        const param = {
+            rut
+        };
+        return this.manager
+            .createQueryBuilder(ShoppingCart, "shoppingCart")
+            .where("shoppingCart.systemUserRut = :rut", param)
+            .getOne();
+    }
+
+    public create(shoppingCart: ShoppingCart) {
         return getManager()
             .getRepository(ShoppingCart)
-            .createQueryBuilder("shopping_cart")
-            .where("shopping_cart.")
-            .getMany();
+            .save(shoppingCart);
     }
+
 }

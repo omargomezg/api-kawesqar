@@ -1,15 +1,17 @@
-import {Bit, Int, Money, NVarChar, TinyInt} from "mssql";
-import {InternalServerError} from "routing-controllers";
-import {CommonController} from "../controllers/CommonController";
-import {OutputFlowTypeDao} from "../dao/OutputFlowTypeDao";
-import {ShoppingCartDao} from "../dao/ShoppingCartDao";
-import {ShoppingCartDetailDao} from "../dao/ShoppingCartDetailDao";
-import {ShoppingCartModel} from "../models/database/ShoppingCart.model";
-import {ShoppingCartDetailModel} from "../models/database/ShoppingCartDetail.model";
-import {DisponibleVentaModel} from "../models/database/storedprocedure/disponibleVenta.model";
-import {SubsidiaryModel} from "../models/database/Subsidiary.model";
-import {UserModel} from "../models/database/User.model";
-import {ArticleService} from "./article.service";
+import { Bit, Int, Money, NVarChar, TinyInt } from "mssql";
+import { InternalServerError } from "routing-controllers";
+import { CommonController } from "../controllers/CommonController";
+import { OutputFlowTypeDao } from "../dao/OutputFlowTypeDao";
+import { ShoppingCartDao } from "../dao/ShoppingCartDao";
+import { ShoppingCartDetailDao } from "../dao/ShoppingCartDetailDao";
+import { ShoppingCart } from "../entities/ShoppingCart";
+import { ShoppingCartModel } from "../models/database/ShoppingCart.model";
+import { ShoppingCartDetailModel } from "../models/database/ShoppingCartDetail.model";
+import { DisponibleVentaModel } from "../models/database/storedprocedure/disponibleVenta.model";
+import { SubsidiaryModel } from "../models/database/Subsidiary.model";
+import { UserModel } from "../models/database/User.model";
+import { ShoppingCartRepository } from "../repository/ShoppingCartRepository";
+import { ArticleService } from "./article.service";
 
 export class ShoppingCartService extends CommonController {
     private articleService: ArticleService = new ArticleService();
@@ -17,6 +19,15 @@ export class ShoppingCartService extends CommonController {
 
     public async finalize() {
         return null;
+    }
+
+    public async get2(id: number, rut: string) {
+        let model: ShoppingCart;
+        const shopp = new ShoppingCartRepository();
+        await shopp.getByUser(rut)
+            .then((result) => {
+                model = result;
+            });
     }
 
     public async get(id: number, rut: string) {
@@ -65,14 +76,14 @@ export class ShoppingCartService extends CommonController {
         }
         const pool = await this.db.poolPromise();
         try {
-        const r = await pool.request()
-            .input("id", Int(), id)
-            .input("rutUsuario", NVarChar(12), rut)
-            .execute("limpiarRegistroCarroVenta");
-        req.detail = req.detail.filter((item) => {
-            return item.id !== id;
-        });
-        return req;
+            const r = await pool.request()
+                .input("id", Int(), id)
+                .input("rutUsuario", NVarChar(12), rut)
+                .execute("limpiarRegistroCarroVenta");
+            req.detail = req.detail.filter((item) => {
+                return item.id !== id;
+            });
+            return req;
         } catch (e) {
             throw new InternalServerError(e.message);
         }

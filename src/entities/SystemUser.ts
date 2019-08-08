@@ -1,16 +1,16 @@
-import {Column, Entity, OneToMany, OneToOne} from "typeorm";
-import {Branch} from "./Branch";
-import {cs_relacion_usuarioRol} from "./cs_relacion_usuarioRol";
-import {DesgloseArticulo} from "./DesgloseArticulo";
-import {eliminaVenta} from "./eliminaVenta";
-import {facturas} from "./facturas";
-import {Person} from "./Person";
-import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
-import {ShoppingCart} from "./ShoppingCart";
-import {tipoEgreso_Usuario} from "./tipoEgreso_Usuario";
-import {UserMenu} from "./UserMenu";
+import { Column, Entity, OneToMany, OneToOne } from "typeorm";
+import { Branch } from "./Branch";
+import { cs_relacion_usuarioRol } from "./cs_relacion_usuarioRol";
+import { DesgloseArticulo } from "./DesgloseArticulo";
+import { eliminaVenta } from "./eliminaVenta";
+import { facturas } from "./facturas";
+import { Person } from "./Person";
+import { RelationSystemUserBranch } from "./RelationSystemUserBranch";
+import { ShoppingCart } from "./ShoppingCart";
+import { tipoEgreso_Usuario } from "./tipoEgreso_Usuario";
+import { UserMenu } from "./UserMenu";
 
-@Entity("cs_usuarios", {schema: "dbo"})
+@Entity("cs_usuarios", { schema: "dbo" })
 export class SystemUser extends Person {
 
     @Column("bit", {
@@ -85,7 +85,9 @@ export class SystemUser extends Person {
     })
     discount: boolean | null;
 
-    @OneToOne(type => Branch, branch => branch.legalRepresentative)
+    @OneToOne(
+        (type: Branch) => Branch,
+        (branch: Branch) => branch.legalRepresentative)
     branch: Branch;
 
     @OneToOne(
