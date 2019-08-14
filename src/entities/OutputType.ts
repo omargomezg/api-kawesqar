@@ -24,14 +24,16 @@ export class OutputType extends BaseEntity {
     })
     codigo: string;
 
-    @OneToMany(type => RelationSystemUserOutputType, tipoEgreso_Usuario => tipoEgreso_Usuario.idtVenta)
+    @OneToMany(
+        (type: RelationSystemUserOutputType) => RelationSystemUserOutputType,
+        (tipoEgresoUsuario: RelationSystemUserOutputType) => tipoEgresoUsuario.idtVenta)
     tipoEgresoUsuarios: RelationSystemUserOutputType[];
 
     public BasicList() {
         const list: OutputType[] = [];
         const first = new OutputType();
         first.name = "Venta Contado";
-        list.push(first)
+        list.push(first);
         return list;
     }
 

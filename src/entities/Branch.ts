@@ -1,18 +1,28 @@
 import {Length} from "class-validator";
-import {Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn} from "typeorm";
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    Index,
+    JoinColumn,
+    ManyToOne,
+    OneToMany,
+    OneToOne,
+    PrimaryGeneratedColumn
+} from "typeorm";
 import {bodega_sucursal} from "./bodega_sucursal";
 import {Commune} from "./Commune";
 import {comprobanteEgreso} from "./comprobanteEgreso";
-import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
 import {DesgloseArticulo} from "./DesgloseArticulo";
 import {facturas} from "./facturas";
+import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
 import {ShoppingCartContent} from "./ShoppingCartContent";
 import {sucursalAsociada} from "./sucursalAsociada";
 import {SystemUser} from "./SystemUser";
 import {TempArt} from "./TempArt";
 
 @Entity("cs_sucursales", {schema: "dbo"})
-export class Branch {
+export class Branch extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idSucursal",
@@ -42,7 +52,9 @@ export class Branch {
     })
     address: string | null;
 
-    @ManyToOne(type => Commune, comunas => comunas.branches, {nullable: false,})
+    @ManyToOne(
+        (type: Commune) => Commune,
+        (comunas: Commune) => comunas.branches, {nullable: false})
     @JoinColumn({name: "codigo"})
     commune: Commune | null;
 
@@ -100,8 +112,10 @@ export class Branch {
     })
     numInicialRegContado: number | null;
 
-    @OneToOne(type => SystemUser, systemUser => systemUser)
-    @JoinColumn()
+    @OneToOne(
+        (type: SystemUser) => SystemUser,
+            (systemUser: SystemUser) => systemUser)
+    @JoinColumn({name: "rutRepLegal"})
     legalRepresentative: SystemUser;
 
     @OneToMany(type => bodega_sucursal, bodega_sucursal => bodega_sucursal.idSucursal)

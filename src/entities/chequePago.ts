@@ -18,7 +18,7 @@ export class chequePago {
     })
     numero: number;
 
-    @ManyToOne((type: Bank) => Bank, bancos => bancos.chequePagos, {nullable: false,})
+    @ManyToOne((type: Bank) => Bank, (bancos: Bank) => bancos.cheques, {nullable: false,})
     @JoinColumn({name: "idBanco"})
     idBanco: Bank | null;
 

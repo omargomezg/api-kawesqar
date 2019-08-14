@@ -17,7 +17,7 @@ export class UserService {
         try {
             const r = await pool.request()
                 .query(`
-                    select rutUsuario as rut,
+                    select rut as rut,
                            nombres,
                            apPaterno,
                            apMaterno,
@@ -37,7 +37,7 @@ export class UserService {
                                select top 1 rol.titulo
                                from cs_rol rol
                                    inner join cs_relacion_usuarioRol ur ON ur.idRol = rol.idRol
-                               where ur.rutUsuario = cs_usuarios.rutUsuario and ur.estado = 1), (
+                               where ur.rutUsuario = cs_usuarios.rut and ur.estado = 1), (
                                    select titulo from cs_rol where idRol = rol))
                     from cs_usuarios
                     Order By updated desc`);
@@ -84,7 +84,7 @@ export class UserService {
                 .query(`
                     select users = count(1)
                     from cs_usuarios
-                    where rutUsuario = dbo.formatearRut('${rut}')
+                    where rut = dbo.formatearRut('${rut}')
         `);
             return new UserExistsModel(r.recordset[0].users > 0);
         } catch (err) {
@@ -184,7 +184,7 @@ export class UserService {
         try {
             const r = await pool.request().query(`UPDATE cs_usuarios SET updated = GETDATE(),
             estado = CAST('${model.enabled}' as bit)
-            WHERE rutUsuario = dbo.formatearRut('${rut}')`);
+            WHERE rut = dbo.formatearRut('${rut}')`);
             return r.rowsAffected;
         } catch (err) {
             throw new InternalServerError(err.message);

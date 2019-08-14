@@ -8,23 +8,23 @@ export class Bank {
         name: "idBanco",
         type: "int"
     })
-    idBanco: number;
+    id: number;
 
     @Column("varchar", {
         length: 60,
         name: "descripcion",
         nullable: false
     })
-    descripcion: string;
+    name: string;
 
     @Column("bit", {
         default: () => "(1)",
         name: "estado",
         nullable: true
     })
-    estado: boolean | null;
+    isActive: boolean | null;
 
-    @OneToMany((type: any) => chequePago, (chequePago: chequePago) => chequePago.idBanco)
-    chequePagos: chequePago[];
+    @OneToMany((type: chequePago) => chequePago, (cheque: chequePago) => cheque.idBanco)
+    cheques: chequePago[];
 
 }

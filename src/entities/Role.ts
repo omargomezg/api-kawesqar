@@ -1,64 +1,57 @@
-import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from "typeorm";
-import { cs_relacion_usuarioRol } from "./cs_relacion_usuarioRol";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {RelacionUsuarioRol} from "./RelacionUsuarioRol";
 
-@Entity("cs_rol", { schema: "dbo" })
-export class role {
+@Entity("cs_rol", {schema: "dbo"})
+export class Role {
 
     @PrimaryGeneratedColumn({
+        name: "idRol",
         type: "int",
-        name: "idRol"
     })
     idRol: number;
 
-
     @Column("nvarchar", {
-        nullable: false,
         length: 50,
-        name: "titulo"
+        name: "titulo",
+        nullable: false,
     })
     titulo: string;
 
-
     @Column("nvarchar", {
-        nullable: true,
         length: 256,
-        name: "descripcion"
+        name: "descripcion",
+        nullable: true,
     })
     descripcion: string | null;
 
-
     @Column("bit", {
-        nullable: true,
         default: () => "(0)",
-        name: "estado"
+        name: "estado",
+        nullable: true,
     })
     isActive: boolean | null;
 
-
     @Column("bit", {
+        name: "accesoVenta",
         nullable: false,
-        name: "accesoVenta"
     })
     accesoVenta: boolean;
 
-
     @Column("int", {
+        name: "valorDescuento",
         nullable: false,
-        name: "valorDescuento"
     })
     valorDescuento: number;
 
-
     @Column("bit", {
-        nullable: false,
         default: () => "(0)",
-        name: "ventAdmin"
+        name: "ventAdmin",
+        nullable: false,
     })
     ventAdmin: boolean;
 
-
-
-    @OneToMany(type => cs_relacion_usuarioRol, cs_relacion_usuarioRol => cs_relacion_usuarioRol.idRol)
-    csRelacionUsuarioRols: cs_relacion_usuarioRol[];
+    @OneToMany((type: RelacionUsuarioRol) => RelacionUsuarioRol,
+        (relacionusuarioRol: RelacionUsuarioRol) => relacionusuarioRol.idRol)
+    csRelacionUsuarioRols: RelacionUsuarioRol[];
 
 }
