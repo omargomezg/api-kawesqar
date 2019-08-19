@@ -5,6 +5,7 @@ import { createExpressServer } from "routing-controllers";
 import {createConnection} from "typeorm";
 import {ArticleController} from "./controllers/ArticleController";
 import {BankController} from "./controllers/BankController";
+import {BranchController} from "./controllers/BranchController";
 import { CityController } from "./controllers/CityController";
 import { EgressController } from "./controllers/EgressController";
 import { ExistenceController } from "./controllers/ExistenceController";
@@ -42,6 +43,7 @@ createConnection().then((connection) => {
 
 const app = createExpressServer({
     controllers: [UserController,
+        BranchController,
         CityController, EgressController, SupplierController, MeasureController,
         HeaderController,
         FamilyController,
