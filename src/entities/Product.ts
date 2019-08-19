@@ -4,7 +4,7 @@ import {DesgloseArticulo} from "./DesgloseArticulo";
 import {detalleExistencia} from "./detalleExistencia";
 import {detalleFactura} from "./detalleFactura";
 import {detalleVenta} from "./detalleVenta";
-import {familia} from "./familia";
+import {Family} from "./Family";
 import {HistArticulos} from "./HistArticulos";
 import {Medidas} from "./Medidas";
 import {ShoppingCartContent} from "./ShoppingCartContent";
@@ -34,16 +34,16 @@ export class Product {
     idMedida: Medidas | null;
 
     @Column("bit", {
-        nullable: true,
         default: () => "(1)",
-        name: "estado"
+        name: "estado",
+        nullable: true,
     })
     estado: boolean | null;
 
     @Column("int", {
-        nullable: true,
         default: () => "(0)",
-        name: "Alerta"
+        name: "Alerta",
+        nullable: true
     })
     Alerta: number | null;
 
@@ -74,9 +74,11 @@ export class Product {
     })
     ganancia: number | null;
 
-    @ManyToOne(type => familia, familia => familia.articuloss, {})
+    @ManyToOne(
+        (type: Family) => Family,
+            (family: Family) => family.products, {})
     @JoinColumn({name: "idFamilia"})
-    idFamilia: familia | null;
+    family: Family | null;
 
     @Column("smallmoney", {
         default: () => "(0)",

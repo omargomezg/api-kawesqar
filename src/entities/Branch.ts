@@ -10,14 +10,14 @@ import {
     OneToOne,
     PrimaryGeneratedColumn
 } from "typeorm";
-import {bodega_sucursal} from "./bodega_sucursal";
+import { RelationStoreBranch} from "./RelationStoreBranch";
 import {Commune} from "./Commune";
 import {comprobanteEgreso} from "./comprobanteEgreso";
 import {DesgloseArticulo} from "./DesgloseArticulo";
 import {facturas} from "./facturas";
 import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
 import {ShoppingCartContent} from "./ShoppingCartContent";
-import {sucursalAsociada} from "./sucursalAsociada";
+import {RelationFamilyBranch} from "./RelationFamilyBranch";
 import {SystemUser} from "./SystemUser";
 import {TempArt} from "./TempArt";
 
@@ -118,8 +118,10 @@ export class Branch extends BaseEntity {
     @JoinColumn({name: "rutRepLegal"})
     legalRepresentative: SystemUser;
 
-    @OneToMany(type => bodega_sucursal, bodega_sucursal => bodega_sucursal.idSucursal)
-    bodegaSucursals: bodega_sucursal[];
+    @OneToMany(
+        (type: RelationStoreBranch) => RelationStoreBranch,
+        (relationStoreBranch: RelationStoreBranch) => relationStoreBranch.branch)
+    stores: RelationStoreBranch[];
 
     @OneToMany(type => comprobanteEgreso, comprobanteEgreso => comprobanteEgreso.idSucursal)
     comprobanteEgresos: comprobanteEgreso[];
@@ -133,8 +135,10 @@ export class Branch extends BaseEntity {
     @OneToMany(type => facturas, facturas => facturas.sucursal)
     facturass: facturas[];
 
-    @OneToMany(type => sucursalAsociada, sucursalAsociada => sucursalAsociada.idSucursal)
-    sucursalAsociadas: sucursalAsociada[];
+    @OneToMany(
+        (type: RelationFamilyBranch) => RelationFamilyBranch,
+            (relationFamilyBranch: RelationFamilyBranch) => relationFamilyBranch.id)
+    branches: RelationFamilyBranch[];
 
     @OneToMany(type => TempArt, tempArt => tempArt.idSucursal)
     tempArts: TempArt[];

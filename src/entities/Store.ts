@@ -1,6 +1,6 @@
 import {Length} from "class-validator";
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {bodega_sucursal} from "./bodega_sucursal";
+import {RelationStoreBranch} from "./RelationStoreBranch";
 import {DesgloseArticulo} from "./DesgloseArticulo";
 import {detalleExistencia} from "./detalleExistencia";
 import {ShoppingCartContent} from "./ShoppingCartContent";
@@ -23,8 +23,10 @@ export class Store {
     @Length(0, 200)
     descripcion: string;
 
-    @OneToMany(type => bodega_sucursal, bodega_sucursal => bodega_sucursal.idBodega)
-    bodegaSucursals: bodega_sucursal[];
+    @OneToMany(
+        (type: RelationStoreBranch) => RelationStoreBranch,
+            (brnaches: RelationStoreBranch) => brnaches.store)
+    branches: RelationStoreBranch[];
 
     @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.idBodega)
     desgloseArticulos: DesgloseArticulo[];

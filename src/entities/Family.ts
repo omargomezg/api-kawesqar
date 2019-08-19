@@ -1,10 +1,10 @@
 import {Length} from "class-validator";
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {Product} from "./Product";
-import {sucursalAsociada} from "./sucursalAsociada";
+import {RelationFamilyBranch} from "./RelationFamilyBranch";
 
 @Entity("familia", {schema: "dbo"})
-export class familia {
+export class Family {
 
     @PrimaryGeneratedColumn({
         name: "idFamilia",
@@ -26,10 +26,12 @@ export class familia {
     })
     isActive: boolean | null;
 
-    @OneToMany(type => Product, articulos => articulos.idFamilia)
-    articuloss: Product[];
+    @OneToMany(
+        (type: Product) => Product, (product: Product) => product.family)
+    products: Product[];
 
-    @OneToMany(type => sucursalAsociada, sucursalAsociada => sucursalAsociada.idFamilia)
-    sucursalAsociadas: sucursalAsociada[];
+    @OneToMany((type: RelationFamilyBranch) => RelationFamilyBranch,
+        (relationFamilyBranch: RelationFamilyBranch) => relationFamilyBranch.id)
+    branches: RelationFamilyBranch[];
 
 }
