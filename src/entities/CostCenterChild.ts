@@ -11,9 +11,11 @@ export class CostCenterChild {
     })
     id: number;
 
-    @ManyToOne(type => CostCenter, grupo => grupo.subGrupos, {nullable: false,})
-    @JoinColumn({name: 'padre'})
-    father: CostCenter | null;
+    @ManyToOne(
+        (type: CostCenter) => CostCenter,
+        (costCenter: CostCenter) => costCenter.child, {nullable: false})
+    @JoinColumn({name: "padre"})
+    costCenter: CostCenter | null;
 
     @Column("nvarchar", {
         name: "descripcion",
