@@ -1,17 +1,17 @@
-import {Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
-import {cartolaProducto} from "./cartolaProducto";
-import {DesgloseArticulo} from "./DesgloseArticulo";
-import {detalleExistencia} from "./detalleExistencia";
-import {detalleFactura} from "./detalleFactura";
-import {detalleVenta} from "./detalleVenta";
-import {Family} from "./Family";
-import {HistArticulos} from "./HistArticulos";
-import {Medidas} from "./Medidas";
-import {ShoppingCartContent} from "./ShoppingCartContent";
-import {TempArt} from "./TempArt";
+import { BaseEntity, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { cartolaProducto } from "./cartolaProducto";
+import { DesgloseArticulo } from "./DesgloseArticulo";
+import { detalleExistencia } from "./detalleExistencia";
+import { detalleFactura } from "./detalleFactura";
+import { detalleVenta } from "./detalleVenta";
+import { Family } from "./Family";
+import { HistArticulos } from "./HistArticulos";
+import { Medidas } from "./Medidas";
+import { ShoppingCartContent } from "./ShoppingCartContent";
+import { TempArt } from "./TempArt";
 
-@Entity("Articulos", {schema: "dbo"})
-export class Product {
+@Entity("Articulos", { schema: "dbo" })
+export class Product extends BaseEntity {
 
     @PrimaryColumn("nvarchar", {
         length: 50,
@@ -30,7 +30,7 @@ export class Product {
     nomArticulo: string;
 
     @ManyToOne(type => Medidas, medidas => medidas.articuloss, {})
-    @JoinColumn({name: 'idMedida'})
+    @JoinColumn({ name: 'idMedida' })
     idMedida: Medidas | null;
 
     @Column("bit", {
@@ -76,8 +76,8 @@ export class Product {
 
     @ManyToOne(
         (type: Family) => Family,
-            (family: Family) => family.products, {})
-    @JoinColumn({name: "idFamilia"})
+        (family: Family) => family.products, {})
+    @JoinColumn({ name: "idFamilia" })
     family: Family | null;
 
     @Column("smallmoney", {
@@ -88,7 +88,7 @@ export class Product {
     precioGranel: number | null;
 
     @ManyToOne(type => Medidas, medidas => medidas.articuloss2, {})
-    @JoinColumn({name: "idMedidaGranel"})
+    @JoinColumn({ name: "idMedidaGranel" })
     idMedidaGranel: Medidas | null;
 
     @Column("bit", {
