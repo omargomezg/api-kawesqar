@@ -1,55 +1,49 @@
-import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {movimientos} from "./movimientos";
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Client} from "./Client";
-import {comprobanteEgreso} from "./comprobanteEgreso";
+import {ProofOfPurchase} from "./ProofOfPurchase";
+import {movimientos} from "./movimientos";
 
-
-@Entity("cartola",{schema:"dbo" } )
+@Entity("cartola", {schema: "dbo"})
 export class cartola {
 
     @PrimaryGeneratedColumn({
-        type:"int", 
-        name:"idCartola"
-        })
-    idCartola:number;
-        
+        name: "idCartola",
+        type: "int",
+    })
+    id: number;
 
-   
-    @ManyToOne(type=>movimientos, movimientos=>movimientos.cartolas,{  nullable:false, })
-    @JoinColumn({ name:'idMovimiento'})
-    idMovimiento:movimientos | null;
+    @Column("money", {
+        name: "valor",
+        nullable: false,
+    })
+    valor: number;
 
+    @Column("datetime", {
+        name: "fecha",
+        nullable: false,
+    })
+    fecha: Date;
 
-    @Column("money",{ 
-        nullable:false,
-        name:"valor"
-        })
-    valor:number;
-        
+    @Column("money", {
+        name: "saldo",
+        nullable: false,
+    })
+    saldo: number;
 
-    @Column("datetime",{ 
-        nullable:false,
-        name:"fecha"
-        })
-    fecha:Date;
-        
+    @ManyToOne(type => movimientos, movimientos => movimientos.cartolas, {nullable: false,})
+    @JoinColumn({name: "idMovimiento"})
+    idMovimiento: movimientos | null;
 
-    @Column("money",{ 
-        nullable:false,
-        name:"saldo"
-        })
-    saldo:number;
-        
+    @ManyToOne(
+        (type: Client) => Client,
+            (client: Client) => client.cartolas, {nullable: false})
+    @JoinColumn({name: "rutCliente"})
+    client: Client | null;
 
-   
-    @ManyToOne(type=>Client, clientes=>clientes.cartolas,{  nullable:false, })
-    @JoinColumn({ name:'rutCliente'})
-    rutCliente:Client | null;
-
-
-   
-    @ManyToOne(type=>comprobanteEgreso, comprobanteEgreso=>comprobanteEgreso.cartolas,{  })
-    @JoinColumn({ name:'idFolio'})
-    idFolio:comprobanteEgreso | null;
+    @ManyToOne(
+        (type: ProofOfPurchase) => ProofOfPurchase,
+            (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.cartolas)
+    @JoinColumn({name: "idFolio"})
+    idFolio: ProofOfPurchase | null;
 
 }

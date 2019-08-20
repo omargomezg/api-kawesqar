@@ -1,20 +1,6 @@
-import {
-    BaseEntity,
-    Column,
-    Entity,
-    Index,
-    JoinColumn,
-    JoinTable,
-    ManyToMany,
-    ManyToOne,
-    OneToMany,
-    OneToOne,
-    PrimaryColumn,
-    PrimaryGeneratedColumn,
-    RelationId
-} from "typeorm";
-import {SystemUser} from "./SystemUser";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {OutputType} from "./OutputType";
+import {SystemUser} from "./SystemUser";
 
 /**
  * Relation between SystemUser and OutputType
@@ -22,11 +8,23 @@ import {OutputType} from "./OutputType";
 @Entity("tipoEgreso_Usuario", {schema: "dbo"})
 export class RelationSystemUserOutputType extends BaseEntity {
 
-    @ManyToOne(type => OutputType, tipoEgreso => tipoEgreso.tipoEgresoUsuarios, {nullable: false,})
-    @JoinColumn({name: "idtVenta"})
-    idtVenta: OutputType | null;
+    @PrimaryGeneratedColumn({
+        name: "id",
+        type: "numeric",
+    })
+    id: number;
 
-    @ManyToOne(type => SystemUser, cs_usuarios => cs_usuarios.tipoEgresoUsuarios, {nullable: false,})
+    @ManyToOne(
+        (type: OutputType) => OutputType,
+        (tipoEgreso: OutputType) => tipoEgreso.userOutputTypes,
+        {nullable: false})
+    @JoinColumn({name: "idtVenta"})
+    outputType: OutputType | null;
+
+    @ManyToOne(
+        (type: SystemUser) => SystemUser,
+        (systemUser: SystemUser) => systemUser.tipoEgresoUsuarios,
+        {nullable: false})
     @JoinColumn({name: "rutUsuario"})
     systemUser: SystemUser | null;
 
@@ -41,11 +39,5 @@ export class RelationSystemUserOutputType extends BaseEntity {
         nullable: true,
     })
     isDefault: boolean | null;
-
-    @PrimaryGeneratedColumn({
-        name: "id",
-        type: "numeric",
-    })
-    id: number;
 
 }

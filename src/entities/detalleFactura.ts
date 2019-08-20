@@ -12,12 +12,15 @@ export class detalleFactura {
     idDetalle: number;
 
     @ManyToOne(type => facturas, facturas => facturas.detalleFacturas, {nullable: false,})
-    @JoinColumn({name: 'idFact'})
+    @JoinColumn({name: "idFact"})
     idFact: facturas | null;
 
-    @ManyToOne(type => Product, articulos => articulos.detalleFacturas, {nullable: false,})
-    @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
-    idArticulo: Product | null;
+    @ManyToOne(
+        (type: Product) => Product,
+            (product: Product) => product.detalleFacturas,
+        {nullable: false})
+    @JoinColumn({name: "id", referencedColumnName: "id"})
+    product: Product | null;
 
     @Column("money", {
         nullable: false,

@@ -28,7 +28,7 @@ export class TempArt {
     ID: number;
 
     @ManyToOne(type => Product, articulos => articulos.tempArts, {nullable: false,})
-    @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
+    @JoinColumn({name: "article_id", referencedColumnName: "id"})
     idArticulo: Product | null;
 
     @Column("datetime", {

@@ -1,43 +1,40 @@
-import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {comprobanteEgreso} from "./comprobanteEgreso";
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {ProofOfPurchase} from "./ProofOfPurchase";
 
-
-@Entity("ingresoContado",{schema:"dbo" } )
+@Entity("ingresoContado", {schema: "dbo"})
 export class ingresoContado {
 
     @PrimaryGeneratedColumn({
-        type:"int", 
-        name:"idIngresoContado"
-        })
-    idIngresoContado:number;
-        
+        name: "idIngresoContado",
+        type: "int"
+    })
+    idIngresoContado: number;
 
-   
-    @ManyToOne(type=>comprobanteEgreso, comprobanteEgreso=>comprobanteEgreso.ingresoContados,{  nullable:false, })
-    @JoinColumn({ name:'idFolio'})
-    idFolio:comprobanteEgreso | null;
+    @ManyToOne(
+        (type: ProofOfPurchase) => ProofOfPurchase,
+        (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.ingresoContados,
+        {nullable: false})
+    @JoinColumn({name: "idFolio"})
+    proofOfPurchase: ProofOfPurchase | null;
 
+    @Column("nvarchar", {
+        length: 50,
+        name: "nombreComprador",
+        nullable: false
+    })
+    nombreComprador: string;
 
-    @Column("nvarchar",{ 
-        nullable:false,
-        length:50,
-        name:"nombreComprador"
-        })
-    nombreComprador:string;
-        
+    @Column("numeric", {
+        name: "numCorrelativo",
+        nullable: false,
+        scale: 0
+    })
+    numCorrelativo: number;
 
-    @Column("numeric",{ 
-        nullable:false,
-        scale:0,
-        name:"numCorrelativo"
-        })
-    numCorrelativo:number;
-        
+    @Column("int", {
+        name: "idSucursal",
+        nullable: false
+    })
+    idSucursal: number;
 
-    @Column("int",{ 
-        nullable:false,
-        name:"idSucursal"
-        })
-    idSucursal:number;
-        
 }

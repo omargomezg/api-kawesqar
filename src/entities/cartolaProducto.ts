@@ -26,7 +26,7 @@ export class cartolaProducto {
     idCP: number;
 
     @ManyToOne(type => Product, articulos => articulos.cartolaProductos, {nullable: false,})
-    @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
+    @JoinColumn({name: "article_id", referencedColumnName: "id"})
     idArticulo: Product | null;
 
     @Column("datetime", {

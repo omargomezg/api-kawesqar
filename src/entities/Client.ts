@@ -1,7 +1,7 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany} from "typeorm";
 import {cartola} from "./cartola";
 import {Commune} from "./Commune";
-import {comprobanteEgreso} from "./comprobanteEgreso";
+import {ProofOfPurchase} from "./ProofOfPurchase";
 import {Person} from "./Person";
 import {ClientType} from "./ClientType";
 
@@ -76,10 +76,12 @@ export class Client extends Person {
     @JoinColumn({name: "idTcliente"})
     typeOfClient: ClientType | null;
 
-    @OneToMany(type => cartola, cartola => cartola.rutCliente)
+    @OneToMany(type => cartola, cartola => cartola.client)
     cartolas: cartola[];
 
-    @OneToMany(type => comprobanteEgreso, comprobanteEgreso => comprobanteEgreso.rutCli)
-    comprobanteEgresos: comprobanteEgreso[];
+    @OneToMany(
+        (type: ProofOfPurchase) => ProofOfPurchase,
+            (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.client)
+    proofOfPurchase: ProofOfPurchase[];
 
 }

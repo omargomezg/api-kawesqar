@@ -13,7 +13,7 @@ import {
     PrimaryGeneratedColumn,
     RelationId
 } from "typeorm";
-import {comprobanteEgreso} from "./comprobanteEgreso";
+import {ProofOfPurchase} from "./ProofOfPurchase";
 import {SystemUser} from "./SystemUser";
 
 @Entity("eliminaVenta", {schema: "dbo"})
@@ -25,9 +25,12 @@ export class eliminaVenta {
     })
     id: number;
 
-    @ManyToOne(type => comprobanteEgreso, comprobanteEgreso => comprobanteEgreso.eliminaVentas, {nullable: false,})
-    @JoinColumn({name: 'idFolio'})
-    idFolio: comprobanteEgreso | null;
+    @ManyToOne(
+        (type: ProofOfPurchase) => ProofOfPurchase,
+            (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.eliminaVentas,
+        {nullable: false})
+    @JoinColumn({name: "idFolio"})
+    idFolio: ProofOfPurchase | null;
 
     @Column("datetime", {
         nullable: false,

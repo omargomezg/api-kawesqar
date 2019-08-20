@@ -23,7 +23,7 @@ import {Store} from "./Store";
 export class DesgloseArticulo {
 
     @ManyToOne(type => Product, articulos => articulos.desgloseArticulos, {nullable: false,})
-    @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
+    @JoinColumn({name: "article_id", referencedColumnName: "id"})
     idArticulo: Product | null;
 
     @PrimaryGeneratedColumn({

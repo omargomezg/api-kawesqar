@@ -31,7 +31,7 @@ export class Store {
     @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.idBodega)
     desgloseArticulos: DesgloseArticulo[];
 
-    @OneToMany(type => detalleExistencia, detalleExistencia => detalleExistencia.idbodega)
+    @OneToMany(type => detalleExistencia, detalleExistencia => detalleExistencia.store)
     detalleExistencias: detalleExistencia[];
 
     @OneToMany(type => TempArt, tempArt => tempArt.idBodega)

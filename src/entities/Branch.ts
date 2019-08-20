@@ -12,7 +12,7 @@ import {
 } from "typeorm";
 import { RelationStoreBranch} from "./RelationStoreBranch";
 import {Commune} from "./Commune";
-import {comprobanteEgreso} from "./comprobanteEgreso";
+import {ProofOfPurchase} from "./ProofOfPurchase";
 import {DesgloseArticulo} from "./DesgloseArticulo";
 import {facturas} from "./facturas";
 import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
@@ -123,11 +123,15 @@ export class Branch extends BaseEntity {
         (relationStoreBranch: RelationStoreBranch) => relationStoreBranch.branch)
     stores: RelationStoreBranch[];
 
-    @OneToMany(type => comprobanteEgreso, comprobanteEgreso => comprobanteEgreso.idSucursal)
-    comprobanteEgresos: comprobanteEgreso[];
+    @OneToMany(
+        (type: ProofOfPurchase) => ProofOfPurchase,
+        (comprobanteEgreso: ProofOfPurchase) => comprobanteEgreso.branch)
+    proofOfPurchase: ProofOfPurchase[];
 
-    @OneToMany(type => RelationSystemUserBranch, cs_relacion_usuarioSucursal => cs_relacion_usuarioSucursal.branch)
-    csRelacionUsuarioSucursals: RelationSystemUserBranch[];
+    @OneToMany(
+        (type: RelationSystemUserBranch) => RelationSystemUserBranch,
+            (relationSystemUserBranch: RelationSystemUserBranch) => relationSystemUserBranch.branch)
+    relationSystemUserBranch: RelationSystemUserBranch[];
 
     @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.idSucursal)
     desgloseArticulos: DesgloseArticulo[];
@@ -138,7 +142,7 @@ export class Branch extends BaseEntity {
     @OneToMany(
         (type: RelationFamilyBranch) => RelationFamilyBranch,
             (relationFamilyBranch: RelationFamilyBranch) => relationFamilyBranch.id)
-    branches: RelationFamilyBranch[];
+    relationFamilyBranches: RelationFamilyBranch[];
 
     @OneToMany(type => TempArt, tempArt => tempArt.idSucursal)
     tempArts: TempArt[];

@@ -1,5 +1,6 @@
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {chequePago} from "./chequePago";
+import {FormsOfPayment} from "./FormsOfPayment";
 
 @Entity("bancos", {schema: "dbo"})
 export class Bank {
@@ -26,5 +27,11 @@ export class Bank {
 
     @OneToMany((type: chequePago) => chequePago, (cheque: chequePago) => cheque.idBanco)
     cheques: chequePago[];
+
+    @OneToMany(
+        (type: FormsOfPayment) => FormsOfPayment,
+        (formsOfPayment: FormsOfPayment) => formsOfPayment.bank
+    )
+    formsOfPayment: FormsOfPayment[];
 
 }

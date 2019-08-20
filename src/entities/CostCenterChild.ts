@@ -1,5 +1,5 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {comprobanteEgreso} from "./comprobanteEgreso";
+import {ProofOfPurchase} from "./ProofOfPurchase";
 import {CostCenter} from "./CostCenter";
 
 @Entity("subGrupo", {schema: "dbo"})
@@ -30,7 +30,9 @@ export class CostCenterChild {
     })
     isActive: boolean;
 
-    @OneToMany(type => comprobanteEgreso, comprobanteEgreso => comprobanteEgreso.idSubGrupo)
-    comprobanteEgresos: comprobanteEgreso[];
+    @OneToMany(
+        (type: ProofOfPurchase) => ProofOfPurchase,
+            (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.idSubGrupo)
+    proofOfPurchase: ProofOfPurchase[];
 
 }

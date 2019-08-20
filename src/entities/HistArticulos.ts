@@ -1,17 +1,20 @@
 import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {comprobanteEgreso} from "./comprobanteEgreso";
 import {facturas} from "./facturas";
 import {Product} from "./Product";
+import {ProofOfPurchase} from "./ProofOfPurchase";
 
 @Entity("histArticulos", {schema: "dbo"})
 export class HistArticulos {
 
-    @ManyToOne(type => comprobanteEgreso, comprobanteEgreso => comprobanteEgreso.histArticuloss, {nullable: false,})
-    @JoinColumn({name: 'IdFolio'})
-    idFolio: comprobanteEgreso | null;
+    @ManyToOne(
+        (type: ProofOfPurchase) => ProofOfPurchase,
+        (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.histArticuloss,
+        {nullable: false})
+    @JoinColumn({name: "IdFolio"})
+    proofOfPurchase: ProofOfPurchase | null;
 
     @ManyToOne(type => Product, articulos => articulos.histArticuloss, {nullable: false,})
-    @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
+    @JoinColumn({name: "article_id", referencedColumnName: "id"})
     idArticulo: Product | null;
 
     @Column("int", {

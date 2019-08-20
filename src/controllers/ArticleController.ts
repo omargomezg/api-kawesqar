@@ -1,6 +1,6 @@
-import { Get, JsonController, Param } from "routing-controllers";
-import { Product } from "../entities/Product";
-import { ArticleService } from "../service/article.service";
+import {Get, JsonController, Param} from "routing-controllers";
+import {Product} from "../entities/Product";
+import {ArticleService} from "../service/article.service";
 
 @JsonController("/api/article")
 export class ArticleController {
@@ -18,8 +18,8 @@ export class ArticleController {
 
     @Get("/sku/:key/:bulk/:rut")
     public getByKey(@Param("key") key: string,
-        @Param("bulk") bulk: string,
-        @Param("rut") rut: string) {
+                    @Param("bulk") bulk: string,
+                    @Param("rut") rut: string) {
         return this.article.getBySku(key, bulk === "true", rut);
     }
 }

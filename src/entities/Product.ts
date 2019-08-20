@@ -1,16 +1,16 @@
-import { BaseEntity, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
-import { cartolaProducto } from "./cartolaProducto";
-import { DesgloseArticulo } from "./DesgloseArticulo";
-import { detalleExistencia } from "./detalleExistencia";
-import { detalleFactura } from "./detalleFactura";
-import { detalleVenta } from "./detalleVenta";
-import { Family } from "./Family";
-import { HistArticulos } from "./HistArticulos";
-import { Medidas } from "./Medidas";
-import { ShoppingCartContent } from "./ShoppingCartContent";
-import { TempArt } from "./TempArt";
+import {BaseEntity, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
+import {cartolaProducto} from "./cartolaProducto";
+import {DesgloseArticulo} from "./DesgloseArticulo";
+import {detalleExistencia} from "./detalleExistencia";
+import {detalleFactura} from "./detalleFactura";
+import {ProofOfPurchaseDetail} from "./ProofOfPurchaseDetail";
+import {Family} from "./Family";
+import {HistArticulos} from "./HistArticulos";
+import {Measure} from "./Measure";
+import {ShoppingCartContent} from "./ShoppingCartContent";
+import {TempArt} from "./TempArt";
 
-@Entity("Articulos", { schema: "dbo" })
+@Entity("Articulos", {schema: "dbo"})
 export class Product extends BaseEntity {
 
     @PrimaryColumn("nvarchar", {
@@ -20,25 +20,14 @@ export class Product extends BaseEntity {
         primary: true,
     })
     @Index()
-    idArticulo: string;
-
-    @Column("nvarchar", {
-        length: 50,
-        name: "nomArticulo",
-        nullable: false
-    })
-    nomArticulo: string;
-
-    @ManyToOne(type => Medidas, medidas => medidas.articuloss, {})
-    @JoinColumn({ name: 'idMedida' })
-    idMedida: Medidas | null;
+    id: string;
 
     @Column("bit", {
         default: () => "(1)",
         name: "estado",
         nullable: true,
     })
-    estado: boolean | null;
+    isActive: boolean | null;
 
     @Column("int", {
         default: () => "(0)",
@@ -74,12 +63,6 @@ export class Product extends BaseEntity {
     })
     ganancia: number | null;
 
-    @ManyToOne(
-        (type: Family) => Family,
-        (family: Family) => family.products, {})
-    @JoinColumn({ name: "idFamilia" })
-    family: Family | null;
-
     @Column("smallmoney", {
         default: () => "(0)",
         name: "precioGranel",
@@ -87,9 +70,12 @@ export class Product extends BaseEntity {
     })
     precioGranel: number | null;
 
-    @ManyToOne(type => Medidas, medidas => medidas.articuloss2, {})
-    @JoinColumn({ name: "idMedidaGranel" })
-    idMedidaGranel: Medidas | null;
+    @Column("nvarchar", {
+        length: 50,
+        name: "nomArticulo",
+        nullable: false
+    })
+    name: string;
 
     @Column("bit", {
         default: () => "(1)",
@@ -109,13 +95,31 @@ export class Product extends BaseEntity {
         name: "img_file",
         nullable: true,
     })
-    img_file: Buffer | null;
+    imgFile: Buffer | null;
 
     @Column("varchar", {
         name: "img_content_type",
         nullable: true,
     })
-    img_content_type: string | null;
+    imgContentType: string | null;
+
+    @ManyToOne(
+        (type: Family) => Family,
+        (family: Family) => family.products)
+    @JoinColumn({name: "idFamilia"})
+    family: Family | null;
+
+    @ManyToOne(
+        (type: Measure) => Measure,
+        (measure: Measure) => measure.products)
+    @JoinColumn({name: "idMedida"})
+    measure: Measure | null;
+
+    @ManyToOne(
+        (type: Measure) => Measure,
+            (measure: Measure) => measure.articuloss2)
+    @JoinColumn({name: "idMedidaGranel"})
+    idMedidaGranel: Measure | null;
 
     @OneToMany(type => cartolaProducto, cartolaProducto => cartolaProducto.idArticulo)
     cartolaProductos: cartolaProducto[];
@@ -126,11 +130,13 @@ export class Product extends BaseEntity {
     @OneToMany(type => detalleExistencia, detalleExistencia => detalleExistencia.idArticulo)
     detalleExistencias: detalleExistencia[];
 
-    @OneToMany(type => detalleFactura, detalleFactura => detalleFactura.idArticulo)
+    @OneToMany(type => detalleFactura, detalleFactura => detalleFactura.product)
     detalleFacturas: detalleFactura[];
 
-    @OneToMany(type => detalleVenta, detalleVenta => detalleVenta.idArticulo)
-    detalleVentas: detalleVenta[];
+    @OneToMany(
+        (type: ProofOfPurchaseDetail) => ProofOfPurchaseDetail,
+            (proofOfPurchaseDetail: ProofOfPurchaseDetail) => proofOfPurchaseDetail.product)
+    proofOfPurchaseDetail: ProofOfPurchaseDetail[];
 
     @OneToMany(type => HistArticulos, histArticulos => histArticulos.idArticulo)
     histArticuloss: HistArticulos[];
@@ -138,7 +144,9 @@ export class Product extends BaseEntity {
     @OneToMany(type => TempArt, tempArt => tempArt.idArticulo)
     tempArts: TempArt[];
 
-    @OneToMany(type => ShoppingCartContent, shoppingCartContent => shoppingCartContent.idArticulo)
-    tempCarros: ShoppingCartContent[];
+    @OneToMany(
+        (type: ShoppingCartContent) => ShoppingCartContent,
+            (shoppingCartContent: ShoppingCartContent) => shoppingCartContent.products)
+    shoppingCartContent: ShoppingCartContent[];
 
 }

@@ -12,9 +12,11 @@ export class ShoppingCartContent {
     })
     id: number;
 
-    @ManyToOne(type => Product, products => products.tempCarros, {})
-    @JoinColumn({name: "idArticulo"})
-    idArticulo: Product | null;
+    @ManyToOne(
+        (type: Product) => Product,
+        (products: Product) => products.shoppingCartContent)
+    @JoinColumn({name: "article_id", referencedColumnName: "id"})
+    products: Product | null;
 
     @Column("int", {
         name: "cantidad",

@@ -1,13 +1,13 @@
 import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Bank} from "./Bank";
-import {comprobanteEgreso} from "./comprobanteEgreso";
+import {ProofOfPurchase} from "./ProofOfPurchase";
 
 @Entity("chequePago", {schema: "dbo"})
 export class chequePago {
 
     @PrimaryGeneratedColumn({
-        type: "int",
-        name: "idChequePago"
+        name: "idChequePago",
+        type: "int"
     })
     idChequePago: number;
 
@@ -30,28 +30,31 @@ export class chequePago {
     monto: number;
 
     @Column("nchar", {
-        nullable: true,
         length: 10,
-        name: "telefono"
+        name: "telefono",
+        nullable: true
     })
     telefono: string | null;
 
     @Column("nvarchar", {
-        nullable: true,
         length: 50,
-        name: "nombrePersona"
+        name: "nombrePersona",
+        nullable: true
     })
     nombrePersona: string | null;
 
-    @ManyToOne(type => comprobanteEgreso, comprobanteEgreso => comprobanteEgreso.chequePagos, {nullable: false,})
-    @JoinColumn({name: 'IdFolio'})
-    idFolio: comprobanteEgreso | null;
+    @ManyToOne(
+        (type: ProofOfPurchase) => ProofOfPurchase,
+        (comprobanteEgreso: ProofOfPurchase) => comprobanteEgreso.chequePagos,
+        {nullable: false})
+    @JoinColumn({name: "IdFolio"})
+    idFolio: ProofOfPurchase | null;
 
     @Column("bit", {
-        nullable: true,
         default: () => "(1)",
-        name: "estado"
+        name: "estado",
+        nullable: true
     })
-    estado: boolean | null;
+    isActive: boolean | null;
 
 }

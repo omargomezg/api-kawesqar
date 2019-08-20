@@ -8,7 +8,7 @@ export class OutputType extends BaseEntity {
         name: "idtVenta",
         type: "tinyint",
     })
-    idtVenta: number;
+    id: number;
 
     @Column("nchar", {
         length: 40,
@@ -22,12 +22,12 @@ export class OutputType extends BaseEntity {
         name: "codigo",
         nullable: false,
     })
-    codigo: string;
+    code: string;
 
     @OneToMany(
         (type: RelationSystemUserOutputType) => RelationSystemUserOutputType,
-        (tipoEgresoUsuario: RelationSystemUserOutputType) => tipoEgresoUsuario.idtVenta)
-    tipoEgresoUsuarios: RelationSystemUserOutputType[];
+        (userOutputType: RelationSystemUserOutputType) => userOutputType.outputType)
+    userOutputTypes: RelationSystemUserOutputType[];
 
     public BasicList() {
         const list: OutputType[] = [];
