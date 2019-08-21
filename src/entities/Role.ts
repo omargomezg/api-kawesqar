@@ -8,21 +8,21 @@ export class Role {
         name: "idRol",
         type: "int",
     })
-    idRol: number;
+    id: number;
 
     @Column("nvarchar", {
         length: 50,
         name: "titulo",
         nullable: false,
     })
-    titulo: string;
+    name: string;
 
     @Column("nvarchar", {
         length: 256,
         name: "descripcion",
         nullable: true,
     })
-    descripcion: string | null;
+    description: string | null;
 
     @Column("bit", {
         default: () => "(0)",

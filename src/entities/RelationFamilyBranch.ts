@@ -20,7 +20,7 @@ export class RelationFamilyBranch {
 
     @ManyToOne(
         (type: Branch) => Branch,
-        (branch: Branch) => branch.branches, {})
+        (branch: Branch) => branch.relationSystemUserBranch, {})
     @JoinColumn({name: "idSucursal"})
     branch: Branch | null;
 

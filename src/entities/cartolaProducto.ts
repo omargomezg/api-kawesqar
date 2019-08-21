@@ -1,73 +1,62 @@
-import {
-    BaseEntity,
-    Column,
-    Entity,
-    Index,
-    JoinColumn,
-    JoinTable,
-    ManyToMany,
-    ManyToOne,
-    OneToMany,
-    OneToOne,
-    PrimaryColumn,
-    PrimaryGeneratedColumn,
-    RelationId
-} from "typeorm";
-import {Product} from "./Product";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {movimientoArticulo} from "./movimientoArticulo";
+import {Product} from "./Product";
 
 @Entity("cartolaProducto", {schema: "dbo"})
-export class cartolaProducto {
+export class cartolaProducto extends BaseEntity {
 
     @PrimaryGeneratedColumn({
-        type: "int",
-        name: "idCP"
+        name: "idCP",
+        type: "int"
     })
-    idCP: number;
-
-    @ManyToOne(type => Product, articulos => articulos.cartolaProductos, {nullable: false,})
-    @JoinColumn({name: "article_id", referencedColumnName: "id"})
-    idArticulo: Product | null;
+    id: number;
 
     @Column("datetime", {
-        nullable: false,
-        name: "fecha"
+        name: "fecha",
+        nullable: false
     })
     fecha: Date;
 
-    @ManyToOne(type => movimientoArticulo, movimientoArticulo => movimientoArticulo.cartolaProductos, {nullable: false,})
-    @JoinColumn({name: "idMovimiento"})
-    idMovimiento: movimientoArticulo | null;
-
     @Column("int", {
-        nullable: false,
-        name: "cantidad"
+        name: "cantidad",
+        nullable: false
     })
     cantidad: number;
 
     @Column("money", {
-        nullable: false,
         default: () => "(0)",
-        name: "valor"
+        name: "valor",
+        nullable: false
     })
     valor: number;
 
     @Column("money", {
-        nullable: false,
-        name: "saldo"
+        name: "saldo",
+        nullable: false
     })
     saldo: number;
 
     @Column("int", {
-        nullable: false,
-        name: "idSucursal"
+        name: "idSucursal",
+        nullable: false
     })
     idSucursal: number;
 
     @Column("nvarchar", {
-        nullable: true,
-        name: "comentarios"
+        name: "comentarios",
+        nullable: true
     })
-    comentarios: string | null;
+    comments: string | null;
+
+    @ManyToOne(
+        (type: Product) => Product,
+            (product: Product) => product.cartolaProductos,
+        {nullable: false})
+    @JoinColumn({name: "article_id", referencedColumnName: "id"})
+    product: Product | null;
+
+    @ManyToOne(type => movimientoArticulo, movimientoArticulo => movimientoArticulo.cartolaProductos, {nullable: false,})
+    @JoinColumn({name: "idMovimiento"})
+    idMovimiento: movimientoArticulo | null;
 
 }

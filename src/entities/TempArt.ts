@@ -1,63 +1,55 @@
-import {
-    BaseEntity,
-    Column,
-    Entity,
-    Index,
-    JoinColumn,
-    JoinTable,
-    ManyToMany,
-    ManyToOne,
-    OneToMany,
-    OneToOne,
-    PrimaryColumn,
-    PrimaryGeneratedColumn,
-    RelationId
-} from "typeorm";
-import {Product} from "./Product";
-import {facturas} from "./facturas";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Branch} from "./Branch";
+import {Invoice} from "./Invoice";
+import {Product} from "./Product";
 import {Store} from "./Store";
 
 @Entity("TempArt", {schema: "dbo"})
-export class TempArt {
+export class TempArt extends BaseEntity {
 
     @PrimaryGeneratedColumn({
-        type: "int",
-        name: "ID"
+        name: "ID",
+        type: "int"
     })
-    ID: number;
+    id: number;
 
-    @ManyToOne(type => Product, articulos => articulos.tempArts, {nullable: false,})
+    @ManyToOne(
+        (type: Product) => Product,
+            (product: Product) => product.tempArts,
+        {nullable: false})
     @JoinColumn({name: "article_id", referencedColumnName: "id"})
-    idArticulo: Product | null;
+    product: Product | null;
 
     @Column("datetime", {
-        nullable: false,
-        name: "FechaIng"
+        name: "FechaIng",
+        nullable: false
     })
-    FechaIng: Date;
+    created: Date;
 
     @Column("money", {
-        nullable: false,
-        name: "artValor"
+        name: "artValor",
+        nullable: false
     })
-    artValor: number;
+    amount: number;
 
     @Column("int", {
-        nullable: false,
-        name: "ArtCantidad"
+        name: "ArtCantidad",
+        nullable: false
     })
     ArtCantidad: number;
 
-    @ManyToOne(type => facturas, facturas => facturas.tempArts, {nullable: false,})
-    @JoinColumn({name: "IdFact"})
-    idFact: facturas | null;
-
     @Column("datetime", {
-        nullable: true,
-        name: "Vencimiento"
+        name: "Vencimiento",
+        nullable: true
     })
     Vencimiento: Date | null;
+
+    @ManyToOne(
+        (type: Invoice) => Invoice,
+        (invoice: Invoice) => invoice.tempArts,
+        {nullable: false})
+    @JoinColumn({name: "IdFact"})
+    invoice: Invoice | null;
 
     @ManyToOne(type => Branch, branch => branch.tempArts, {nullable: false,})
     @JoinColumn({name: "idSucursal"})

@@ -1,28 +1,25 @@
-import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
+import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
-
-@Entity("BaseFirmas",{schema:"dbo" } )
+@Entity("BaseFirmas", {schema: "dbo"})
 export class BaseFirmas {
 
     @PrimaryGeneratedColumn({
-        type:"int", 
-        name:"IdBaseFirma"
-        })
-    IdBaseFirma:number;
-        
+        name: "IdBaseFirma",
+        type: "int"
+    })
+    id: number;
 
-    @Column("text",{ 
-        nullable:false,
-        name:"Campo1"
-        })
-    Campo1:string;
-        
+    @Column("text", {
+        name: "Campo1",
+        nullable: false
+    })
+    Campo1: string;
 
-    @Column("bit",{ 
-        nullable:true,
+    @Column("bit", {
         default: () => "(1)",
-        name:"estado"
-        })
-    estado:boolean | null;
-        
+        name: "estado",
+        nullable: true
+    })
+    isActive: boolean | null;
+
 }

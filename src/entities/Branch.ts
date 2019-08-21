@@ -10,14 +10,14 @@ import {
     OneToOne,
     PrimaryGeneratedColumn
 } from "typeorm";
-import { RelationStoreBranch} from "./RelationStoreBranch";
 import {Commune} from "./Commune";
-import {ProofOfPurchase} from "./ProofOfPurchase";
 import {DesgloseArticulo} from "./DesgloseArticulo";
-import {facturas} from "./facturas";
+import {Invoice} from "./Invoice";
+import {ProofOfPurchase} from "./ProofOfPurchase";
+import {RelationFamilyBranch} from "./RelationFamilyBranch";
+import {RelationStoreBranch} from "./RelationStoreBranch";
 import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
 import {ShoppingCartContent} from "./ShoppingCartContent";
-import {RelationFamilyBranch} from "./RelationFamilyBranch";
 import {SystemUser} from "./SystemUser";
 import {TempArt} from "./TempArt";
 
@@ -54,7 +54,7 @@ export class Branch extends BaseEntity {
 
     @ManyToOne(
         (type: Commune) => Commune,
-        (comunas: Commune) => comunas.branches, {nullable: false})
+        (commune: Commune) => commune.branches, {nullable: false})
     @JoinColumn({name: "codigo"})
     commune: Commune | null;
 
@@ -114,7 +114,7 @@ export class Branch extends BaseEntity {
 
     @OneToOne(
         (type: SystemUser) => SystemUser,
-            (systemUser: SystemUser) => systemUser)
+        (systemUser: SystemUser) => systemUser)
     @JoinColumn({name: "rutRepLegal"})
     legalRepresentative: SystemUser;
 
@@ -130,18 +130,22 @@ export class Branch extends BaseEntity {
 
     @OneToMany(
         (type: RelationSystemUserBranch) => RelationSystemUserBranch,
-            (relationSystemUserBranch: RelationSystemUserBranch) => relationSystemUserBranch.branch)
+        (relationSystemUserBranch: RelationSystemUserBranch) => relationSystemUserBranch.branch)
     relationSystemUserBranch: RelationSystemUserBranch[];
 
-    @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.idSucursal)
+    @OneToMany(
+        (type: DesgloseArticulo) => DesgloseArticulo,
+        (desgloseArticulo: DesgloseArticulo) => desgloseArticulo.branch)
     desgloseArticulos: DesgloseArticulo[];
 
-    @OneToMany(type => facturas, facturas => facturas.sucursal)
-    facturass: facturas[];
+    @OneToMany(
+        (type: Invoice) => Invoice,
+        (invoice: Invoice) => invoice.branch)
+    invoices: Invoice[];
 
     @OneToMany(
         (type: RelationFamilyBranch) => RelationFamilyBranch,
-            (relationFamilyBranch: RelationFamilyBranch) => relationFamilyBranch.id)
+        (relationFamilyBranch: RelationFamilyBranch) => relationFamilyBranch.id)
     relationFamilyBranches: RelationFamilyBranch[];
 
     @OneToMany(type => TempArt, tempArt => tempArt.idSucursal)

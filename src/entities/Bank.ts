@@ -1,9 +1,9 @@
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {chequePago} from "./chequePago";
+import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {ChequePago} from "./ChequePago";
 import {FormsOfPayment} from "./FormsOfPayment";
 
 @Entity("bancos", {schema: "dbo"})
-export class Bank {
+export class Bank extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idBanco",
@@ -25,8 +25,10 @@ export class Bank {
     })
     isActive: boolean | null;
 
-    @OneToMany((type: chequePago) => chequePago, (cheque: chequePago) => cheque.idBanco)
-    cheques: chequePago[];
+    @OneToMany(
+        (type: ChequePago) => ChequePago,
+        (chequePago: ChequePago) => chequePago.bank)
+    cheques: ChequePago[];
 
     @OneToMany(
         (type: FormsOfPayment) => FormsOfPayment,

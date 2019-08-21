@@ -1,12 +1,12 @@
 import {BaseEntity, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
 import {cartolaProducto} from "./cartolaProducto";
 import {DesgloseArticulo} from "./DesgloseArticulo";
-import {detalleExistencia} from "./detalleExistencia";
-import {detalleFactura} from "./detalleFactura";
-import {ProofOfPurchaseDetail} from "./ProofOfPurchaseDetail";
+import {DetalleExistencia} from "./DetalleExistencia";
 import {Family} from "./Family";
 import {HistArticulos} from "./HistArticulos";
+import {InvoiceContent} from "./InvoiceContent";
 import {Measure} from "./Measure";
+import {ProofOfPurchaseDetail} from "./ProofOfPurchaseDetail";
 import {ShoppingCartContent} from "./ShoppingCartContent";
 import {TempArt} from "./TempArt";
 
@@ -117,36 +117,45 @@ export class Product extends BaseEntity {
 
     @ManyToOne(
         (type: Measure) => Measure,
-            (measure: Measure) => measure.articuloss2)
+        (measure: Measure) => measure.articuloss2)
     @JoinColumn({name: "idMedidaGranel"})
     idMedidaGranel: Measure | null;
 
-    @OneToMany(type => cartolaProducto, cartolaProducto => cartolaProducto.idArticulo)
+    @OneToMany(type => cartolaProducto, cartolaProducto => cartolaProducto.product)
     cartolaProductos: cartolaProducto[];
 
-    @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.idArticulo)
+    @OneToMany((type: DesgloseArticulo) => DesgloseArticulo,
+        (desgloseArticulo: DesgloseArticulo) => desgloseArticulo.product)
     desgloseArticulos: DesgloseArticulo[];
 
-    @OneToMany(type => detalleExistencia, detalleExistencia => detalleExistencia.idArticulo)
-    detalleExistencias: detalleExistencia[];
+    @OneToMany(
+        (type: DetalleExistencia) => DetalleExistencia,
+        (detalleExistencia: DetalleExistencia) => detalleExistencia.product)
+    detalleExistencias: DetalleExistencia[];
 
-    @OneToMany(type => detalleFactura, detalleFactura => detalleFactura.product)
-    detalleFacturas: detalleFactura[];
+    @OneToMany(
+        (type: InvoiceContent) => InvoiceContent,
+        (detalleFactura: InvoiceContent) => detalleFactura.product)
+    detalleFacturas: InvoiceContent[];
 
     @OneToMany(
         (type: ProofOfPurchaseDetail) => ProofOfPurchaseDetail,
-            (proofOfPurchaseDetail: ProofOfPurchaseDetail) => proofOfPurchaseDetail.product)
+        (proofOfPurchaseDetail: ProofOfPurchaseDetail) => proofOfPurchaseDetail.product)
     proofOfPurchaseDetail: ProofOfPurchaseDetail[];
 
-    @OneToMany(type => HistArticulos, histArticulos => histArticulos.idArticulo)
+    @OneToMany(
+        (type: HistArticulos) => HistArticulos,
+        (histArticulos: HistArticulos) => histArticulos.product)
     histArticuloss: HistArticulos[];
 
-    @OneToMany(type => TempArt, tempArt => tempArt.idArticulo)
+    @OneToMany(
+        (type: TempArt) => TempArt,
+        (tempArt: TempArt) => tempArt.product)
     tempArts: TempArt[];
 
     @OneToMany(
         (type: ShoppingCartContent) => ShoppingCartContent,
-            (shoppingCartContent: ShoppingCartContent) => shoppingCartContent.products)
+        (shoppingCartContent: ShoppingCartContent) => shoppingCartContent.products)
     shoppingCartContent: ShoppingCartContent[];
 
 }

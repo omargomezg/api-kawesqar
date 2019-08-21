@@ -20,7 +20,7 @@ export class RelationSystemUserBranch extends BaseEntity {
 
     @ManyToOne(
         (type: Branch) => Branch,
-        (branches: Branch) => branches.csRelacionUsuarioSucursals, {nullable: false})
+        (branches: Branch) => branches.relationSystemUserBranch, {nullable: false})
     @JoinColumn({name: "idSucursal"})
     branch: Branch | null;
 

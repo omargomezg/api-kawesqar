@@ -1,10 +1,10 @@
 import {IsEmail} from "class-validator";
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany} from "typeorm";
 import {Commune} from "./Commune";
-import {facturas} from "./facturas";
+import {Invoice} from "./Invoice";
 
 @Entity("proveedor", {schema: "dbo"})
-export class Proveedor {
+export class Supplier {
 
     @Column("nvarchar", {
         length: 10,
@@ -15,64 +15,66 @@ export class Proveedor {
     rut: string;
 
     @Column("nvarchar", {
-        nullable: false,
         length: 150,
-        name: "ProvNombre"
+        name: "ProvNombre",
+        nullable: false
     })
     ProvNombre: string;
 
     @Column("nchar", {
-        nullable: true,
         length: 15,
-        name: "ProvFono"
+        name: "ProvFono",
+        nullable: true
     })
-    ProvFono: string | null;
+    telephone: string | null;
 
     @Column("nchar", {
-        nullable: true,
         length: 15,
-        name: "ProvFax"
+        name: "ProvFax",
+        nullable: true
     })
     ProvFax: string | null;
 
     @Column("nchar", {
-        nullable: true,
         length: 15,
-        name: "ProvCelular"
+        name: "ProvCelular",
+        nullable: true
     })
     mobile: string | null;
 
     @Column("nvarchar", {
-        nullable: true,
         length: 50,
-        name: "ProvDireccion"
+        name: "ProvDireccion",
+        nullable: true
     })
-    ProvDireccion: string | null;
+    address: string | null;
 
     @Column("nvarchar", {
-        nullable: true,
         length: 50,
-        name: "ProvMail"
+        name: "ProvMail",
+        nullable: true
     })
     @IsEmail()
     email: string | null;
 
     @Column("nvarchar", {
-        nullable: true,
         length: 50,
-        name: "ProvWeb"
+        name: "ProvWeb",
+        nullable: true
     })
     webSite: string | null;
 
     @Column("bit", {
-        nullable: true,
-        name: "ProvEstado"
+        name: "ProvEstado",
+        nullable: true
     })
     isActive: boolean | null;
 
-    @ManyToOne(type => Commune, comunas => comunas.proveedors, {})
-    @JoinColumn({name: 'codigo'})
-    comuna: Commune | null;
+    @ManyToOne(
+        (type: Commune) => Commune,
+            (comunas: Commune) => comunas.supplier)
+    @JoinColumn({name: "codigo"})
+    commune: Commune | null;
 
     @Column("nchar", {
         length: 10,
@@ -81,7 +83,9 @@ export class Proveedor {
     })
     ProvAbreviacion: string | null;
 
-    @OneToMany(type => facturas, facturas => facturas.provRut)
-    facturass: facturas[];
+    @OneToMany(
+        (type: Invoice) => Invoice,
+            (invoice: Invoice) => invoice.supplier)
+    invoices: Invoice[];
 
 }

@@ -1,9 +1,9 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany} from "typeorm";
-import {cartola} from "./cartola";
-import {Commune} from "./Commune";
-import {ProofOfPurchase} from "./ProofOfPurchase";
-import {Person} from "./Person";
+import {Cartola} from "./Cartola";
 import {ClientType} from "./ClientType";
+import {Commune} from "./Commune";
+import {Person} from "./Person";
+import {ProofOfPurchase} from "./ProofOfPurchase";
 
 @Entity("clientes", {schema: "dbo"})
 export class Client extends Person {
@@ -60,7 +60,7 @@ export class Client extends Person {
 
     @ManyToOne(
         (type: Commune) => Commune,
-        (isCommune: Commune) => isCommune.clientess, {})
+        (isCommune: Commune) => isCommune.clients)
     @JoinColumn({name: "codigo"})
     commune: Commune | null;
 
@@ -72,16 +72,18 @@ export class Client extends Person {
 
     @ManyToOne(
         (type: ClientType) => ClientType,
-            (clientType: ClientType) => clientType.clients, {})
+        (clientType: ClientType) => clientType.clients)
     @JoinColumn({name: "idTcliente"})
     typeOfClient: ClientType | null;
 
-    @OneToMany(type => cartola, cartola => cartola.client)
-    cartolas: cartola[];
+    @OneToMany(
+        (type: Cartola) => Cartola,
+        (cartola: Cartola) => cartola.client)
+    cartolas: Cartola[];
 
     @OneToMany(
         (type: ProofOfPurchase) => ProofOfPurchase,
-            (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.client)
+        (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.client)
     proofOfPurchase: ProofOfPurchase[];
 
 }

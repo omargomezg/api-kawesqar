@@ -15,7 +15,7 @@ export class ProofOfPurchaseDetail {
         name: "cantidad",
         nullable: false
     })
-    cantidad: number;
+    quantity: number;
 
     @Column("money", {
         name: "valorTotal",

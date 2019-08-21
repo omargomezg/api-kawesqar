@@ -1,31 +1,31 @@
-import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany} from "typeorm";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
 import {Branch} from "./Branch";
-import {cartola} from "./cartola";
-import {chequePago} from "./chequePago";
+import {Cartola} from "./Cartola";
+import {ChequePago} from "./ChequePago";
 import {Client} from "./Client";
 import {CostCenterChild} from "./CostCenterChild";
-import {eliminaVenta} from "./eliminaVenta";
+import {EliminaVenta} from "./eliminaVenta";
 import {HistArticulos} from "./HistArticulos";
-import {ingresoContado} from "./ingresoContado";
+import {IngresoContado} from "./IngresoContado";
 import {ProofOfPurchaseDetail} from "./ProofOfPurchaseDetail";
-import {tipoPago} from "./tipoPago";
-import {turnoVenta} from "./turnoVenta";
+import {TipoPago} from "./tipoPago";
+import {TurnoVenta} from "./TurnoVenta";
 
 @Entity("comprobanteEgreso", {schema: "dbo"})
 export class ProofOfPurchase extends BaseEntity {
 
-    @Column("int", {
+    @PrimaryColumn("int", {
         name: "idFolio",
         nullable: false,
         primary: true
     })
-    folio: number;
+    id: number;
 
     @Column("datetime", {
         name: "fecha",
         nullable: false
     })
-    fecha: Date;
+    create: Date;
 
     @Column("bit", {
         default: () => "(1)",
@@ -100,42 +100,58 @@ export class ProofOfPurchase extends BaseEntity {
     @JoinColumn({name: "rut_cli"})
     client: Client | null;
 
-    @ManyToOne(type => tipoPago, tipoPago => tipoPago.proofOfPurchase)
+    @ManyToOne(
+        (type: TipoPago) => TipoPago,
+        (tipoPago: TipoPago) => tipoPago.proofOfPurchase)
     @JoinColumn({name: "idTipoPago"})
-    idTipoPago: tipoPago | null;
+    tipoPago: TipoPago | null;
 
-    @ManyToOne(type => turnoVenta, turnoVenta => turnoVenta.proofOfPurchase)
+    @ManyToOne(
+        (type: TurnoVenta) => TurnoVenta,
+        (turnoVenta: TurnoVenta) => turnoVenta.proofOfPurchase)
     @JoinColumn({name: "idTurno"})
-    idTurno: turnoVenta | null;
+    turnoVenta: TurnoVenta | null;
 
     @ManyToOne(
         (type: Branch) => Branch,
-        (branch: Branch) => branch.comprobanteEgresos)
+        (branch: Branch) => branch.proofOfPurchase)
     @JoinColumn({name: "idSucursal"})
     branch: Branch | null;
 
-    @ManyToOne(type => CostCenterChild, subGrupo => subGrupo.proofOfPurchase)
+    @ManyToOne(
+        (type) => CostCenterChild,
+            (costCenterChild: CostCenterChild) => costCenterChild.proofOfPurchase)
     @JoinColumn({name: "idSubGrupo"})
     idSubGrupo: CostCenterChild | null;
 
-    @OneToMany(type => cartola, cartola => cartola.idFolio)
-    cartolas: cartola[];
+    @OneToMany(
+        (type: Cartola) => Cartola,
+            (cartola: Cartola) => cartola.proofOfPurchase)
+    cartolas: Cartola[];
 
-    @OneToMany(type => chequePago, chequePago => chequePago.idFolio)
-    chequePagos: chequePago[];
+    @OneToMany(
+        (type: ChequePago) => ChequePago,
+        (chequePago: ChequePago) => chequePago.bank)
+    cheques: ChequePago[];
 
     @OneToMany(
         (type: ProofOfPurchaseDetail) => ProofOfPurchaseDetail,
         (purchaseDetails: ProofOfPurchaseDetail) => purchaseDetails.proofOfPurchase)
     purchaseDetails: ProofOfPurchaseDetail[];
 
-    @OneToMany(type => eliminaVenta, eliminaVenta => eliminaVenta.idFolio)
-    eliminaVentas: eliminaVenta[];
+    @OneToMany(
+        (type: EliminaVenta) => EliminaVenta,
+        (eliminaVenta: EliminaVenta) => eliminaVenta.proofOfPurchase)
+    eliminaVentass: EliminaVenta[];
 
-    @OneToMany(type => HistArticulos, histArticulos => histArticulos.proofOfPurchase)
+    @OneToMany(
+        (type) => HistArticulos,
+            (histArticulos: HistArticulos) => histArticulos.proofOfPurchase)
     histArticuloss: HistArticulos[];
 
-    @OneToMany(type => ingresoContado, ingresoContado => ingresoContado.proofOfPurchase)
-    ingresoContados: ingresoContado[];
+    @OneToMany(
+        (type) => IngresoContado,
+            (ingresoContado: IngresoContado) => ingresoContado.proofOfPurchase)
+    ingresoContados: IngresoContado[];
 
 }

@@ -36,7 +36,7 @@ export class provincias {
         
 
    
-    @OneToMany(type=>Commune, comunas=>comunas.padre)
+    @OneToMany(type=>Commune, comunas=>comunas.father)
     comunass:Commune[];
     
 }

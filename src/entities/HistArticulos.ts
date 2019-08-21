@@ -1,10 +1,84 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {facturas} from "./facturas";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Invoice} from "./Invoice";
 import {Product} from "./Product";
 import {ProofOfPurchase} from "./ProofOfPurchase";
 
 @Entity("histArticulos", {schema: "dbo"})
-export class HistArticulos {
+export class HistArticulos extends BaseEntity {
+
+    @PrimaryGeneratedColumn({
+        name: "idtable",
+        type: "numeric"
+    })
+    idtable: number;
+
+    @Column("int", {
+        name: "ID",
+        nullable: false
+    })
+    id: number;
+
+    @Column("datetime", {
+        name: "FechaIng",
+        nullable: false
+    })
+    create: Date;
+
+    @Column("money", {
+        name: "ArtValor",
+        nullable: false
+    })
+    ArtValor: number;
+
+    @Column("datetime", {
+        default: () => "'01/01/1900 0:00:00'",
+        name: "Vencimiento",
+        nullable: false
+    })
+    Vencimiento: Date;
+
+    @Column("int", {
+        name: "idSucursal",
+        nullable: true
+    })
+    idSucursal: number | null;
+
+    @Column("bit", {
+        name: "estado",
+        nullable: true
+    })
+    estado: boolean | null;
+
+    @Column("bit", {
+        name: "estadoUso",
+        nullable: true
+    })
+    estadoUso: boolean | null;
+
+    @Column("varchar", {
+        length: 12,
+        name: "rutusuario",
+        nullable: true
+    })
+    rutusuario: string | null;
+
+    @Column("int", {
+        name: "granelOriginal",
+        nullable: true
+    })
+    granelOriginal: number | null;
+
+    @Column("int", {
+        name: "idBodega",
+        nullable: true
+    })
+    idBodega: number | null;
+
+    @ManyToOne(
+        (type: Invoice) => Invoice,
+        (facturas: Invoice) => facturas.histArticuloss)
+    @JoinColumn({name: "IdFact"})
+    invoice: Invoice | null;
 
     @ManyToOne(
         (type: ProofOfPurchase) => ProofOfPurchase,
@@ -13,80 +87,11 @@ export class HistArticulos {
     @JoinColumn({name: "IdFolio"})
     proofOfPurchase: ProofOfPurchase | null;
 
-    @ManyToOne(type => Product, articulos => articulos.histArticuloss, {nullable: false,})
+    @ManyToOne(
+        (type: Product) => Product,
+            (product: Product) => product.histArticuloss,
+        {nullable: false})
     @JoinColumn({name: "article_id", referencedColumnName: "id"})
-    idArticulo: Product | null;
-
-    @Column("int", {
-        nullable: false,
-        name: "ID"
-    })
-    ID: number;
-
-    @Column("datetime", {
-        nullable: false,
-        name: "FechaIng"
-    })
-    FechaIng: Date;
-
-    @Column("money", {
-        nullable: false,
-        name: "ArtValor"
-    })
-    ArtValor: number;
-
-    @ManyToOne(type => facturas, facturas => facturas.histArticuloss, {})
-    @JoinColumn({name: 'IdFact'})
-    idFact: facturas | null;
-
-    @Column("datetime", {
-        nullable: false,
-        default: () => "'01/01/1900 0:00:00'",
-        name: "Vencimiento"
-    })
-    Vencimiento: Date;
-
-    @Column("int", {
-        nullable: true,
-        name: "idSucursal"
-    })
-    idSucursal: number | null;
-
-    @Column("bit", {
-        nullable: true,
-        name: "estado"
-    })
-    estado: boolean | null;
-
-    @Column("bit", {
-        nullable: true,
-        name: "estadoUso"
-    })
-    estadoUso: boolean | null;
-
-    @Column("varchar", {
-        nullable: true,
-        length: 12,
-        name: "rutusuario"
-    })
-    rutusuario: string | null;
-
-    @Column("int", {
-        nullable: true,
-        name: "granelOriginal"
-    })
-    granelOriginal: number | null;
-
-    @Column("int", {
-        nullable: true,
-        name: "idBodega"
-    })
-    idBodega: number | null;
-
-    @PrimaryGeneratedColumn({
-        type: "numeric",
-        name: "idtable"
-    })
-    idtable: number;
+    product: Product | null;
 
 }

@@ -2,20 +2,13 @@ import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typ
 import {ProofOfPurchase} from "./ProofOfPurchase";
 
 @Entity("ingresoContado", {schema: "dbo"})
-export class ingresoContado {
+export class IngresoContado {
 
     @PrimaryGeneratedColumn({
         name: "idIngresoContado",
         type: "int"
     })
     idIngresoContado: number;
-
-    @ManyToOne(
-        (type: ProofOfPurchase) => ProofOfPurchase,
-        (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.ingresoContados,
-        {nullable: false})
-    @JoinColumn({name: "idFolio"})
-    proofOfPurchase: ProofOfPurchase | null;
 
     @Column("nvarchar", {
         length: 50,
@@ -36,5 +29,12 @@ export class ingresoContado {
         nullable: false
     })
     idSucursal: number;
+
+    @ManyToOne(
+        (type: ProofOfPurchase) => ProofOfPurchase,
+        (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.ingresoContados,
+        {nullable: false})
+    @JoinColumn({name: "idFolio"})
+    proofOfPurchase: ProofOfPurchase | null;
 
 }

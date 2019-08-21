@@ -1,34 +1,31 @@
-import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {facturas} from "./facturas";
+import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Invoice} from "./Invoice";
 
-
-@Entity("tipoDocIn",{schema:"dbo" } )
-export class tipoDocIn {
+@Entity("tipoDocIn", {schema: "dbo"})
+export class tipoDocIn extends BaseEntity {
 
     @PrimaryGeneratedColumn({
-        type:"int", 
-        name:"idTipoDocIn"
-        })
-    idTipoDocIn:number;
-        
+        name: "idTipoDocIn",
+        type: "int"
+    })
+    id: number;
 
-    @Column("nvarchar",{ 
-        nullable:false,
-        length:50,
-        name:"descripcion"
-        })
-    descripcion:string;
-        
+    @Column("nvarchar", {
+        length: 50,
+        name: "descripcion",
+        nullable: false
+    })
+    description: string;
 
-    @Column("bit",{ 
-        nullable:false,
-        name:"estado"
-        })
-    estado:boolean;
-        
+    @Column("bit", {
+        name: "estado",
+        nullable: false
+    })
+    isActive: boolean;
 
-   
-    @OneToMany(type=>facturas, facturas=>facturas.idTipoDocIn)
-    facturass:facturas[];
-    
+    @OneToMany(
+        (type: Invoice) => Invoice,
+        (invoice: Invoice) => invoice.idTipoDocIn)
+    invoices: Invoice[];
+
 }

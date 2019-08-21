@@ -1,8 +1,8 @@
 import {Length} from "class-validator";
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {RelationStoreBranch} from "./RelationStoreBranch";
 import {DesgloseArticulo} from "./DesgloseArticulo";
-import {detalleExistencia} from "./detalleExistencia";
+import {DetalleExistencia} from "./DetalleExistencia";
+import {RelationStoreBranch} from "./RelationStoreBranch";
 import {ShoppingCartContent} from "./ShoppingCartContent";
 import {TempArt} from "./TempArt";
 
@@ -13,7 +13,7 @@ export class Store {
         name: "idBodega",
         type: "int"
     })
-    idBodega: number;
+    id: number;
 
     @Column("nvarchar", {
         length: 200,
@@ -21,24 +21,26 @@ export class Store {
         nullable: false
     })
     @Length(0, 200)
-    descripcion: string;
+    description: string;
 
     @OneToMany(
         (type: RelationStoreBranch) => RelationStoreBranch,
-            (brnaches: RelationStoreBranch) => brnaches.store)
+        (brnaches: RelationStoreBranch) => brnaches.store)
     branches: RelationStoreBranch[];
 
     @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.idBodega)
     desgloseArticulos: DesgloseArticulo[];
 
-    @OneToMany(type => detalleExistencia, detalleExistencia => detalleExistencia.store)
-    detalleExistencias: detalleExistencia[];
+    @OneToMany(
+        (type: DetalleExistencia) => DetalleExistencia,
+        (detalleExistencia: DetalleExistencia) => detalleExistencia.store)
+    detalleExistencias: DetalleExistencia[];
 
     @OneToMany(type => TempArt, tempArt => tempArt.idBodega)
     tempArts: TempArt[];
 
     @OneToMany((type: ShoppingCartContent) => ShoppingCartContent,
-            (shoppingCartContent) => shoppingCartContent.content)
+        (shoppingCartContent) => shoppingCartContent.content)
     content: ShoppingCartContent[];
 
 }

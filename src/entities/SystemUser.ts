@@ -1,8 +1,8 @@
 import {Column, Entity, OneToMany, OneToOne} from "typeorm";
 import {Branch} from "./Branch";
 import {DesgloseArticulo} from "./DesgloseArticulo";
-import {eliminaVenta} from "./eliminaVenta";
-import {facturas} from "./facturas";
+import {EliminaVenta} from "./EliminaVenta";
+import {Invoice} from "./Invoice";
 import {Person} from "./Person";
 import {RelacionUsuarioRol} from "./RelacionUsuarioRol";
 import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
@@ -25,7 +25,7 @@ export class SystemUser extends Person {
         nullable: false,
         select: false
     })
-    clave: Buffer;
+    password: Buffer;
 
     @Column("varchar", {
         length: 50,
@@ -109,22 +109,26 @@ export class SystemUser extends Person {
     relationSystemUserBranch: RelationSystemUserBranch[];
 
     @OneToMany((type: DesgloseArticulo) => DesgloseArticulo,
-        (desgloseArticulo: DesgloseArticulo) => desgloseArticulo.rutUsuario)
+        (desgloseArticulo: DesgloseArticulo) => desgloseArticulo.user)
     desgloseArticulos: DesgloseArticulo[];
 
-    @OneToMany(type => eliminaVenta, eliminaVenta => eliminaVenta.rutUsuario)
-    eliminaVentas: eliminaVenta[];
+    @OneToMany(
+        (type: EliminaVenta) => EliminaVenta,
+            (eliminaVenta: EliminaVenta) => eliminaVenta.systemUser)
+    eliminaVentas: EliminaVenta[];
 
-    @OneToMany(type => eliminaVenta, eliminaVenta => eliminaVenta.rutUsuario)
-    eliminaVentas2: eliminaVenta[];
+    @OneToMany(
+        (type: Invoice) => Invoice,
+            (invoice: Invoice) => invoice.systemUser)
+    invoices: Invoice[];
 
-    @OneToMany(type => facturas, facturas => facturas.rutUsuario)
-    facturass: facturas[];
-
-    @OneToMany(type => UserMenu, menuUsuario => menuUsuario.systemUser)
+    @OneToMany(
+        (type) => UserMenu,
+            (menuUsuario: UserMenu) => menuUsuario.systemUser)
     menuUsuarios: UserMenu[];
 
-    @OneToMany(type => RelationSystemUserOutputType, tipoEgreso_Usuario => tipoEgreso_Usuario.systemUser)
+    @OneToMany((type) => RelationSystemUserOutputType,
+            (userOutputType: RelationSystemUserOutputType) => userOutputType.systemUser)
     tipoEgresoUsuarios: RelationSystemUserOutputType[];
 
 }

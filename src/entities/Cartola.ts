@@ -1,10 +1,10 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Client} from "./Client";
+import {Movimientos} from "./movimientos";
 import {ProofOfPurchase} from "./ProofOfPurchase";
-import {movimientos} from "./movimientos";
 
 @Entity("cartola", {schema: "dbo"})
-export class cartola {
+export class Cartola extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idCartola",
@@ -30,20 +30,22 @@ export class cartola {
     })
     saldo: number;
 
-    @ManyToOne(type => movimientos, movimientos => movimientos.cartolas, {nullable: false,})
+    @ManyToOne((type: Movimientos) => Movimientos,
+        (movimientos: Movimientos) => movimientos.cartolas,
+        {nullable: false})
     @JoinColumn({name: "idMovimiento"})
-    idMovimiento: movimientos | null;
+    idMovimiento: Movimientos | null;
 
     @ManyToOne(
         (type: Client) => Client,
-            (client: Client) => client.cartolas, {nullable: false})
+        (client: Client) => client.cartolas, {nullable: false})
     @JoinColumn({name: "rutCliente"})
     client: Client | null;
 
     @ManyToOne(
         (type: ProofOfPurchase) => ProofOfPurchase,
-            (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.cartolas)
+        (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.cartolas)
     @JoinColumn({name: "idFolio"})
-    idFolio: ProofOfPurchase | null;
+    proofOfPurchase: ProofOfPurchase | null;
 
 }

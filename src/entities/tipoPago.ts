@@ -1,14 +1,14 @@
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {ProofOfPurchase} from "./ProofOfPurchase";
 
-@Entity("tipoPago", {schema: "dbo"})
-export class tipoPago {
+@Entity("tipoPago", {schema: "dbo",})
+export class TipoPago {
 
     @PrimaryGeneratedColumn({
         name: "idTipoPago",
         type: "int"
     })
-    idTipoPago: number;
+    id: number;
 
     @Column("nchar", {
         default: () => "N'Descripción del tipo de venta, por ejemplo cheque, contado, documento, etc...'''",
@@ -16,7 +16,7 @@ export class tipoPago {
         name: "descripcion",
         nullable: false
     })
-    descripcion: string;
+    name: string;
 
     @Column("bit", {
         default: () => "(0)",
@@ -34,7 +34,7 @@ export class tipoPago {
 
     @OneToMany(
         (type: ProofOfPurchase) => ProofOfPurchase,
-        (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.idTipoPago)
+        (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.tipoPago)
     proofOfPurchase: ProofOfPurchase[];
 
 }
