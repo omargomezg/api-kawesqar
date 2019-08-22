@@ -1,12 +1,12 @@
 import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
-import {Branch} from "../entities/Branch";
-import {RelationSystemUserBranch} from "../entities/RelationSystemUserBranch";
-import {SystemUser} from "../entities/SystemUser";
-import {EnabledUserModel, UpdateUserModel} from "../models/user.index";
-import {SystemUserRepository} from "../repository/SystemUserRepository";
-import {UserService} from "../service/user.service";
-import {RutUtils} from "../Utils/RutUtils";
-import {CommonController} from "./CommonController";
+import {Branch} from "../../entities/Branch";
+import {RelationSystemUserBranch} from "../../entities/RelationSystemUserBranch";
+import {SystemUser} from "../../entities/SystemUser";
+import {EnabledUserModel, UpdateUserModel} from "../../models/user.index";
+import {SystemUserRepository} from "../../repository/SystemUserRepository";
+import {UserService} from "../../service/user.service";
+import {RutUtils} from "../../Utils/RutUtils";
+import {CommonController} from "../CommonController";
 
 @JsonController("/api/user")
 export class UserController extends CommonController {

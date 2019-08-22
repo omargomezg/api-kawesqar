@@ -21,7 +21,7 @@ export class RelationStoreBranch {
         (type: Store) => Store,
         (store: Store) => store.branches, {nullable: false})
     @JoinColumn({name: "idBodega"})
-    store: Store | null;
+    store: Store | {};
 
     @ManyToOne(
         (type: Branch) => Branch,

@@ -1,10 +1,10 @@
-import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
+import {BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
 import {Branch} from "./Branch";
 import {Cartola} from "./Cartola";
 import {ChequePago} from "./ChequePago";
 import {Client} from "./Client";
 import {CostCenterChild} from "./CostCenterChild";
-import {EliminaVenta} from "./eliminaVenta";
+import {EliminaVenta} from "./EliminaVenta";
 import {HistArticulos} from "./HistArticulos";
 import {IngresoContado} from "./IngresoContado";
 import {ProofOfPurchaseDetail} from "./ProofOfPurchaseDetail";

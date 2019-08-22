@@ -1,6 +1,6 @@
 import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Client} from "./Client";
-import {Movimientos} from "./movimientos";
+import {Movimientos} from "./Movimientos";
 import {ProofOfPurchase} from "./ProofOfPurchase";
 
 @Entity("cartola", {schema: "dbo"})

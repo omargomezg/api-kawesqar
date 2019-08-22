@@ -11,28 +11,34 @@ export class EliminaVenta extends BaseEntity {
     })
     id: number;
 
+    /**
+     * The date when is deleted
+     */
     @Column("datetime", {
         name: "fecha",
         nullable: false
     })
     date: Date;
 
+    /**
+     * Reason why sell is deleted
+     */
     @Column("varchar", {
         length: 500,
         name: "motivo",
         nullable: false
     })
-    motivo: string;
+    description: string;
 
     @ManyToOne(
         (type) => ProofOfPurchase,
         (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.eliminaVentass,
         {nullable: false})
-    @JoinColumn({name: "idFolio"})
+    @JoinColumn({name: "idFolio", referencedColumnName: "id"})
     proofOfPurchase: ProofOfPurchase | null;
 
     @ManyToOne(
-        (type: SystemUser) => SystemUser,
+        (type) => SystemUser,
         (systemUser: SystemUser) => systemUser.eliminaVentas,
         {nullable: false})
     @JoinColumn({name: "rutUsuario"})

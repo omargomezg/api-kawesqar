@@ -1,5 +1,5 @@
 import {Length} from "class-validator";
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {DesgloseArticulo} from "./DesgloseArticulo";
 import {DetalleExistencia} from "./DetalleExistencia";
 import {RelationStoreBranch} from "./RelationStoreBranch";
@@ -7,13 +7,13 @@ import {ShoppingCartContent} from "./ShoppingCartContent";
 import {TempArt} from "./TempArt";
 
 @Entity("bodega", {schema: "dbo"})
-export class Store {
+export class Store extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idBodega",
         type: "int"
     })
-    id: number;
+    id: number = 0;
 
     @Column("nvarchar", {
         length: 200,

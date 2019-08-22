@@ -15,6 +15,10 @@ export class BranchController extends CommonController {
         return city.getAll();
     }
 
+    /**
+     * Get a list of branches associated with a user
+     * @param rut
+     */
     @Get("/:rut")
     public async getAllByUSer(@Param("rut") rut: string) {
         return await createQueryBuilder("Branch")
