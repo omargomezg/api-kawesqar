@@ -13,6 +13,7 @@ import {MeasureController} from "./controllers/MeasureController";
 import {MenuController} from "./controllers/MenuController";
 import {RoleController} from "./controllers/RoleController";
 import {ShoppingCartController} from "./controllers/ShoppingCartController";
+import {StoreBranchController} from "./controllers/store/StoreBranchController";
 import {StoreController} from "./controllers/StoreController";
 import {SubsidiaryController} from "./controllers/SubsidiaryController";
 import {SupplierController} from "./controllers/SupplierController";
@@ -55,6 +56,7 @@ const app = createExpressServer({
         RoleController,
         ShoppingCartController,
         StoreController,
+        StoreBranchController,
         SupplierController,
         SubsidiaryController,
         UserController,

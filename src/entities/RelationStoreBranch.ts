@@ -1,9 +1,10 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {IsNumber, MinLength} from "class-validator";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Branch} from "./Branch";
 import {Store} from "./Store";
 
 @Entity("bodega_sucursal", {schema: "dbo"})
-export class RelationStoreBranch {
+export class RelationStoreBranch extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idBodegaSucursal",
@@ -21,12 +22,12 @@ export class RelationStoreBranch {
         (type: Store) => Store,
         (store: Store) => store.branches, {nullable: false})
     @JoinColumn({name: "idBodega"})
-    store: Store | {};
+    store: Store;
 
     @ManyToOne(
         (type: Branch) => Branch,
         (branch: Branch) => branch.stores, {nullable: false,})
     @JoinColumn({name: "idSucursal"})
-    branch: Branch | null;
+    branch: Branch;
 
 }
