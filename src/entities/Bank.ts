@@ -1,6 +1,6 @@
 import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {ChequePago} from "./ChequePago";
-import {FormsOfPayment} from "./FormsOfPayment";
+import {Payment} from "./Payment";
 
 @Entity("bancos", {schema: "dbo"})
 export class Bank extends BaseEntity {
@@ -31,9 +31,9 @@ export class Bank extends BaseEntity {
     cheques: ChequePago[];
 
     @OneToMany(
-        (type: FormsOfPayment) => FormsOfPayment,
-        (formsOfPayment: FormsOfPayment) => formsOfPayment.bank
+        (type: Payment) => Payment,
+        (payment: Payment) => payment.bank
     )
-    formsOfPayment: FormsOfPayment[];
+    payments: Payment[];
 
 }
