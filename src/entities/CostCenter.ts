@@ -1,10 +1,10 @@
 import {Length} from "class-validator";
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {CostCenterChild} from "./CostCenterChild";
 import {RelationClientCostCenter} from "./RelationClientCostCenter";
 
 @Entity("Grupo", {schema: "dbo"})
-export class CostCenter {
+export class CostCenter extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idGrupo",

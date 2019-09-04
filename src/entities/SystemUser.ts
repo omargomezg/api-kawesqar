@@ -4,7 +4,7 @@ import {DesgloseArticulo} from "./DesgloseArticulo";
 import {EliminaVenta} from "./EliminaVenta";
 import {Invoice} from "./Invoice";
 import {Person} from "./Person";
-import {RelacionUsuarioRol} from "./RelacionUsuarioRol";
+import {RelationSystemUserRole} from "./RelationSystemUserRole";
 import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
 import {RelationSystemUserOutputType} from "./RelationSystemUserOutputType";
 import {ShoppingCart} from "./ShoppingCart";
@@ -99,9 +99,9 @@ export class SystemUser extends Person {
     shoppingCart: ShoppingCart;
 
     @OneToMany(
-        (type: RelacionUsuarioRol) => RelacionUsuarioRol,
-        (relacionUsuarioRol: RelacionUsuarioRol) => relacionUsuarioRol.user)
-    RelacionUsuarioRols: RelacionUsuarioRol[];
+        (type: RelationSystemUserRole) => RelationSystemUserRole,
+        (relacionUsuarioRol: RelationSystemUserRole) => relacionUsuarioRol.user)
+    RelacionUsuarioRols: RelationSystemUserRole[];
 
     @OneToMany(
         (type: RelationSystemUserBranch) => RelationSystemUserBranch,
