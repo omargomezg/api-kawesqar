@@ -1,16 +1,17 @@
-import {Column, Entity, OneToMany, OneToOne} from "typeorm";
-import {Branch} from "./Branch";
-import {DesgloseArticulo} from "./DesgloseArticulo";
-import {EliminaVenta} from "./EliminaVenta";
-import {Invoice} from "./Invoice";
-import {Person} from "./Person";
-import {RelacionUsuarioRol} from "./RelacionUsuarioRol";
-import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
-import {RelationSystemUserOutputType} from "./RelationSystemUserOutputType";
-import {ShoppingCart} from "./ShoppingCart";
-import {UserMenu} from "./UserMenu";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { Branch } from "./Branch";
+import { DesgloseArticulo } from "./DesgloseArticulo";
+import { EliminaVenta } from "./EliminaVenta";
+import { Invoice } from "./Invoice";
+import { Person } from "./Person";
+import { RelacionUsuarioRol } from "./RelacionUsuarioRol";
+import { RelationSystemUserBranch } from "./RelationSystemUserBranch";
+import { RelationSystemUserOutputType } from "./RelationSystemUserOutputType";
+import { ShoppingCart } from "./ShoppingCart";
+import { TurnoVenta } from "./TurnoVenta";
+import { UserMenu } from "./UserMenu";
 
-@Entity("cs_usuarios", {schema: "dbo"})
+@Entity("cs_usuarios", { schema: "dbo" })
 export class SystemUser extends Person {
 
     @Column("bit", {
@@ -34,7 +35,7 @@ export class SystemUser extends Person {
     })
     userName: string;
 
-    @Column("datetime", {name: "fechaCreacion"})
+    @Column("datetime", { name: "fechaCreacion" })
     created: Date;
 
     @Column("image", {
@@ -114,21 +115,25 @@ export class SystemUser extends Person {
 
     @OneToMany(
         (type: EliminaVenta) => EliminaVenta,
-            (eliminaVenta: EliminaVenta) => eliminaVenta.systemUser)
+        (eliminaVenta: EliminaVenta) => eliminaVenta.systemUser)
     eliminaVentas: EliminaVenta[];
 
     @OneToMany(
         (type: Invoice) => Invoice,
-            (invoice: Invoice) => invoice.systemUser)
+        (invoice: Invoice) => invoice.systemUser)
     invoices: Invoice[];
 
     @OneToMany(
         (type) => UserMenu,
-            (menuUsuario: UserMenu) => menuUsuario.systemUser)
+        (menuUsuario: UserMenu) => menuUsuario.systemUser)
     menuUsuarios: UserMenu[];
 
     @OneToMany((type) => RelationSystemUserOutputType,
-            (userOutputType: RelationSystemUserOutputType) => userOutputType.systemUser)
+        (userOutputType: RelationSystemUserOutputType) => userOutputType.systemUser)
     tipoEgresoUsuarios: RelationSystemUserOutputType[];
+
+    @OneToMany((type) => TurnoVenta,
+        (turnoVeta: TurnoVenta) => turnoVeta.systemUser)
+    turnoVenta: TurnoVenta[];
 
 }

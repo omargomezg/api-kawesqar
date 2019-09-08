@@ -1,9 +1,10 @@
-import {Length} from "class-validator";
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {ProofOfPurchase} from "./ProofOfPurchase";
+import { Length } from "class-validator";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { ProofOfPurchase } from "./ProofOfPurchase";
+import { SystemUser } from "./SystemUser";
 
-@Entity("turnoVenta", {schema: "dbo"})
-export class TurnoVenta {
+@Entity("turnoVenta", { schema: "dbo" })
+export class TurnoVenta extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idTurno",
@@ -42,5 +43,12 @@ export class TurnoVenta {
         (type) => ProofOfPurchase,
         (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.turnoVenta)
     proofOfPurchase: ProofOfPurchase[];
+
+    @ManyToOne(
+        (type: SystemUser) => SystemUser,
+        (systemUser: SystemUser) => systemUser.turnoVenta,
+        { nullable: false })
+    @JoinColumn({ name: "rutUsuario" })
+    systemUser: SystemUser | null;
 
 }

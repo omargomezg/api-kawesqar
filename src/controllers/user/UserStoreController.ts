@@ -1,9 +1,9 @@
-import {Body, JsonController, OnUndefined, Post} from "routing-controllers";
-import {Store} from "../../entities/Store";
-import {CommonController} from "../CommonController";
+import { Body, JsonController, OnUndefined, Post } from "routing-controllers";
+import { Store } from "../../entities/Store";
+import { CommonController } from "../CommonController";
 
 @JsonController("/api/user")
-export class UserStoreController extends CommonController{
+export class UserStoreController extends CommonController {
 
     @Post("/store")
     @OnUndefined(404)
