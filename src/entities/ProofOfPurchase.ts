@@ -1,4 +1,4 @@
-import {BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
 import {Branch} from "./Branch";
 import {Cartola} from "./Cartola";
 import {ChequePago} from "./ChequePago";
@@ -7,6 +7,7 @@ import {CostCenterChild} from "./CostCenterChild";
 import {EliminaVenta} from "./EliminaVenta";
 import {HistArticulos} from "./HistArticulos";
 import {IngresoContado} from "./IngresoContado";
+import {Payment} from "./Payment";
 import {ProofOfPurchaseDetail} from "./ProofOfPurchaseDetail";
 import {TipoPago} from "./tipoPago";
 import {TurnoVenta} from "./TurnoVenta";
@@ -120,13 +121,13 @@ export class ProofOfPurchase extends BaseEntity {
 
     @ManyToOne(
         (type) => CostCenterChild,
-            (costCenterChild: CostCenterChild) => costCenterChild.proofOfPurchase)
+        (costCenterChild: CostCenterChild) => costCenterChild.proofOfPurchase)
     @JoinColumn({name: "idSubGrupo"})
     idSubGrupo: CostCenterChild | null;
 
     @OneToMany(
         (type: Cartola) => Cartola,
-            (cartola: Cartola) => cartola.proofOfPurchase)
+        (cartola: Cartola) => cartola.proofOfPurchase)
     cartolas: Cartola[];
 
     @OneToMany(
@@ -146,12 +147,18 @@ export class ProofOfPurchase extends BaseEntity {
 
     @OneToMany(
         (type) => HistArticulos,
-            (histArticulos: HistArticulos) => histArticulos.proofOfPurchase)
+        (histArticulos: HistArticulos) => histArticulos.proofOfPurchase)
     histArticuloss: HistArticulos[];
 
     @OneToMany(
         (type) => IngresoContado,
-            (ingresoContado: IngresoContado) => ingresoContado.proofOfPurchase)
+        (ingresoContado: IngresoContado) => ingresoContado.proofOfPurchase)
     ingresoContados: IngresoContado[];
+
+    @OneToMany(
+        (type) => Payment,
+        (payment: Payment) => payment.proofOfPurchase
+    )
+    payments: Payment[];
 
 }

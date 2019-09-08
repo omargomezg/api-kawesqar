@@ -35,6 +35,7 @@ export class ArticleService {
                     .input("estado", Bit, isBulk)
                     .input("idSucursal", TinyInt, subsidiary)
                     .execute("disponibleVenta");
+                console.log(r);
                 return r.recordset.length > 0 ? r.recordset[0] : {};
             } else {
                 return {};

@@ -1,13 +1,13 @@
 {
   "type": "mssql",
-  "host": "216.155.90.149",
-  "port": 1433,
-  "username": "sa",
+  "host": "db-bodega.c9b5ikfafpsz.us-east-1.rds.amazonaws.com",
+  "port": 1521,
+  "username": "admin",
   "password": "Kumple22*zu+",
-  "database": "BExito",
+  "database": "ccmv",
   "entities": [
     "src/entities/*.ts"
   ],
   "logging": true,
-  "synchronize": false
+  "synchronize": true
 }

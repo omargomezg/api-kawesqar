@@ -1,5 +1,5 @@
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {RelacionUsuarioRol} from "./RelacionUsuarioRol";
+import {RelationSystemUserRole} from "./RelationSystemUserRole";
 
 @Entity("cs_rol", {schema: "dbo"})
 export class Role {
@@ -50,8 +50,9 @@ export class Role {
     })
     ventAdmin: boolean;
 
-    @OneToMany((type: RelacionUsuarioRol) => RelacionUsuarioRol,
-        (relacionusuarioRol: RelacionUsuarioRol) => relacionusuarioRol.idRol)
-    csRelacionUsuarioRols: RelacionUsuarioRol[];
+    @OneToMany(
+        (type: RelationSystemUserRole) => RelationSystemUserRole,
+        (relationSystemUserRole: RelationSystemUserRole) => relationSystemUserRole.idRol)
+    relationSystemUserRoles: RelationSystemUserRole[];
 
 }

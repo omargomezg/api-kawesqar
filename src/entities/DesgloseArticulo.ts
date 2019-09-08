@@ -18,7 +18,7 @@ export class DesgloseArticulo extends BaseEntity {
         name: "FechaIng",
         nullable: false
     })
-    FechaIng: Date;
+    created: Date;
 
     @Column("money", {
         name: "artValor",
@@ -72,15 +72,15 @@ export class DesgloseArticulo extends BaseEntity {
     user: SystemUser | null;
 
     @Column("int", {
-        nullable: true,
         default: () => "(0)",
-        name: "granel"
+        name: "granel",
+        nullable: true
     })
     granel: number | null;
 
     @Column("int", {
-        nullable: true,
-        name: "granelOriginal"
+        name: "granelOriginal",
+        nullable: true
     })
     granelOriginal: number | null;
 

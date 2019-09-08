@@ -1,12 +1,12 @@
-import { Column, Entity, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne } from "typeorm";
 import { Branch } from "./Branch";
 import { DesgloseArticulo } from "./DesgloseArticulo";
 import { EliminaVenta } from "./EliminaVenta";
 import { Invoice } from "./Invoice";
 import { Person } from "./Person";
-import { RelacionUsuarioRol } from "./RelacionUsuarioRol";
 import { RelationSystemUserBranch } from "./RelationSystemUserBranch";
 import { RelationSystemUserOutputType } from "./RelationSystemUserOutputType";
+import { RelationSystemUserRole } from "./RelationSystemUserRole";
 import { ShoppingCart } from "./ShoppingCart";
 import { TurnoVenta } from "./TurnoVenta";
 import { UserMenu } from "./UserMenu";
@@ -100,9 +100,9 @@ export class SystemUser extends Person {
     shoppingCart: ShoppingCart;
 
     @OneToMany(
-        (type: RelacionUsuarioRol) => RelacionUsuarioRol,
-        (relacionUsuarioRol: RelacionUsuarioRol) => relacionUsuarioRol.user)
-    RelacionUsuarioRols: RelacionUsuarioRol[];
+        (type: RelationSystemUserRole) => RelationSystemUserRole,
+        (relacionUsuarioRol: RelationSystemUserRole) => relacionUsuarioRol.user)
+    RelacionUsuarioRols: RelationSystemUserRole[];
 
     @OneToMany(
         (type: RelationSystemUserBranch) => RelationSystemUserBranch,
