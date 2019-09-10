@@ -1,46 +1,46 @@
-import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
-import {Branch} from "../../entities/Branch";
-import {RelationSystemUserBranch} from "../../entities/RelationSystemUserBranch";
-import {SystemUser} from "../../entities/SystemUser";
-import {EnabledUserModel, UpdateUserModel} from "../../models/user.index";
-import {SystemUserRepository} from "../../repository/SystemUserRepository";
-import {UserService} from "../../service/user.service";
-import {RutUtils} from "../../Utils/RutUtils";
-import {CommonController} from "../CommonController";
+import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put } from "routing-controllers";
+import { Branch } from "../../entities/Branch";
+import { RelationSystemUserBranch } from "../../entities/RelationSystemUserBranch";
+import { SystemUser } from "../../entities/SystemUser";
+import { EnabledUserModel, UpdateUserModel } from "../../models/user.index";
+import { SystemUserRepository } from "../../repository/SystemUserRepository";
+import { UserService } from "../../service/user.service";
+import { RutUtils } from "../../Utils/RutUtils";
+import { CommonController } from "../CommonController";
 
 @JsonController("/api/user")
 export class UserController extends CommonController {
     private userService = new UserService();
+    private uRep = new SystemUserRepository();
 
     @Get("")
     public getAll() {
-        return SystemUser.find();
+        return this.uRep.getUsersWithRole();
     }
 
     @Get("/:rut")
     @OnUndefined(404)
     public getOne(@Param("rut") rut: string) {
         return SystemUser.findOne({
-            where: {rut: RutUtils.format(rut)}
+            where: { rut: RutUtils.format(rut) }
         });
     }
 
     @Get("/:rut/sucursal")
-    @OnUndefined(404)
+    // @OnUndefined(404)
     public async getSubsidiaryForUser(@Param("rut") rut: string) {
-        const uRep = new SystemUserRepository();
-        return uRep.getUserAndBranchs(RutUtils.format(rut));
-       /* return SystemUser.findOne({
-            join: {
-                alias: "sucursales",
-                innerJoinAndSelect: {
-                    branch: "sucursales.csRelacionUsuarioSucursals",
-                    branches: "branch.branch"
-                },
-            },
-            select: ["rut"],
-            where: {rut: RutUtils.format(rut)},
-        });*/
+        return this.uRep.getUserAndBranchs(RutUtils.format(rut));
+        /* return SystemUser.findOne({
+             join: {
+                 alias: "sucursales",
+                 innerJoinAndSelect: {
+                     branch: "sucursales.csRelacionUsuarioSucursals",
+                     branches: "branch.branch"
+                 },
+             },
+             select: ["rut"],
+             where: {rut: RutUtils.format(rut)},
+         });*/
     }
     // SystemUser _> csRelacionUsuarioSucursals _> branch
 

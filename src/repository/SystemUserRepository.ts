@@ -1,6 +1,6 @@
-import {createQueryBuilder, EntityRepository, getManager, Repository} from "typeorm";
-import {ShoppingCart} from "../entities/ShoppingCart";
-import {SystemUser} from "../entities/SystemUser";
+import { createQueryBuilder, EntityRepository, getManager, Repository } from "typeorm";
+import { ShoppingCart } from "../entities/ShoppingCart";
+import { SystemUser } from "../entities/SystemUser";
 
 @EntityRepository()
 export class SystemUserRepository extends Repository<SystemUser> {
@@ -13,7 +13,14 @@ export class SystemUserRepository extends Repository<SystemUser> {
         return await createQueryBuilder("SystemUser")
             .innerJoinAndSelect("SystemUser.relationSystemUserBranch", "RelationSystemUserBranch")
             .innerJoinAndSelect("RelationSystemUserBranch.branch", "branches")
-            .where("SystemUser.rut = :UserRut", {UserRut: rut})
+            .where("SystemUser.rut = :UserRut", { UserRut: rut })
             .getOne();
+    }
+
+    public async getUsersWithRole() {
+        return await createQueryBuilder("SystemUser")
+            .innerJoinAndSelect("SystemUser.relacionUsuarioRols", "RelationSystemUserRole")
+            .innerJoinAndSelect("RelationSystemUserRole.idRol", "Role")
+            .getMany();
     }
 }

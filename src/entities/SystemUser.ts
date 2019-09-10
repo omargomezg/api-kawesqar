@@ -102,7 +102,7 @@ export class SystemUser extends Person {
     @OneToMany(
         (type: RelationSystemUserRole) => RelationSystemUserRole,
         (relacionUsuarioRol: RelationSystemUserRole) => relacionUsuarioRol.user)
-    RelacionUsuarioRols: RelationSystemUserRole[];
+    relacionUsuarioRols: RelationSystemUserRole[];
 
     @OneToMany(
         (type: RelationSystemUserBranch) => RelationSystemUserBranch,

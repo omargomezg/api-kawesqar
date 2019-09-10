@@ -1,8 +1,8 @@
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {RelationSystemUserRole} from "./RelationSystemUserRole";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { RelationSystemUserRole } from "./RelationSystemUserRole";
 
-@Entity("cs_rol", {schema: "dbo"})
-export class Role {
+@Entity("cs_rol", { schema: "dbo" })
+export class Role extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idRol",

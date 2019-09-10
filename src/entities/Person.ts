@@ -1,4 +1,4 @@
-import {BaseEntity, Column, PrimaryColumn} from "typeorm";
+import { BaseEntity, Column, PrimaryColumn } from "typeorm";
 
 export abstract class Person extends BaseEntity {
     @PrimaryColumn("nvarchar", {
@@ -25,4 +25,10 @@ export abstract class Person extends BaseEntity {
         nullable: true,
     })
     secondLastName: string | null;
+
+    @Column("nvarchar", {
+        length: 256,
+        nullable: true,
+    })
+    email: string | null;
 }

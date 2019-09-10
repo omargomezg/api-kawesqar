@@ -1,6 +1,6 @@
-import {getManager} from "typeorm";
-import {Product} from "../entities/Product";
-import {ShoppingCart} from "../entities/ShoppingCart";
+import { getManager } from "typeorm";
+import { Product } from "../entities/Product";
+import { ShoppingCart } from "../entities/ShoppingCart";
 
 export class ShoppingCartRepository {
     public getByUser(rut: string): Promise<ShoppingCart[]> {
@@ -18,7 +18,6 @@ export class ShoppingCartRepository {
     public create(rut: string): Promise<ShoppingCart> {
         const data = new ShoppingCart();
         data.systemUser.rut = rut;
-        console.log("rut : ", JSON.stringify(data));
         return getManager()
             .getRepository(ShoppingCart)
             .save(data);

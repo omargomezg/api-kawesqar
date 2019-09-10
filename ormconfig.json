@@ -1,13 +1,13 @@
 {
   "type": "mssql",
-  "host": "db-bodega.c9b5ikfafpsz.us-east-1.rds.amazonaws.com",
-  "port": 1521,
-  "username": "admin",
+  "host": "localhost",
+  "port": 1433,
+  "username": "sa",
   "password": "Kumple22*zu+",
-  "database": "ccmv",
+  "database": "farmacia",
   "entities": [
     "src/entities/*.ts"
   ],
   "logging": true,
-  "synchronize": true
+  "synchronize": false
 }
