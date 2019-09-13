@@ -6,11 +6,12 @@ import {Family} from "./Family";
 import {HistArticulos} from "./HistArticulos";
 import {InvoiceContent} from "./InvoiceContent";
 import {Measure} from "./Measure";
+import {Note} from "./Note";
 import {ProofOfPurchaseDetail} from "./ProofOfPurchaseDetail";
 import {ShoppingCartContent} from "./ShoppingCartContent";
 import {TempArt} from "./TempArt";
 
-@Entity("Articulos", {schema: "dbo"})
+@Entity("articulos", {schema: "dbo"})
 export class Product extends BaseEntity {
 
     @PrimaryColumn("nvarchar", {
@@ -121,7 +122,15 @@ export class Product extends BaseEntity {
     @JoinColumn({name: "idMedidaGranel"})
     idMedidaGranel: Measure | null;
 
-    @OneToMany(type => cartolaProducto, cartolaProducto => cartolaProducto.product)
+    @OneToMany(
+        (type) => Note,
+        (note: Note) => note.product
+    )
+    notes: Note[];
+
+    @OneToMany(
+        (type) => cartolaProducto,
+        (cartolaProducto) => cartolaProducto.product)
     cartolaProductos: cartolaProducto[];
 
     @OneToMany((type: DesgloseArticulo) => DesgloseArticulo,

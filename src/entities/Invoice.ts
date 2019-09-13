@@ -7,6 +7,8 @@ import {Supplier} from "./Supplier";
 import {SystemUser} from "./SystemUser";
 import {TempArt} from "./TempArt";
 import {tipoDocIn} from "./tipoDocIn";
+import {Note} from "./Note";
+import {Product} from "./Product";
 
 @Entity("facturas", {schema: "dbo"})
 export class Invoice extends BaseEntity {
@@ -93,5 +95,15 @@ export class Invoice extends BaseEntity {
 
     @OneToMany(type => TempArt, tempArt => tempArt.invoice)
     tempArts: TempArt[];
+
+    @OneToMany(
+        (type) => Note,
+        (note: Note) => note.invoice)
+    notes: Note[];
+
+    @OneToMany(
+        (type) => Product,
+        (product: Product) => product)
+    products: Product[];
 
 }

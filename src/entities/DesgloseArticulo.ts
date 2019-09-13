@@ -5,7 +5,7 @@ import {Product} from "./Product";
 import {Store} from "./Store";
 import {SystemUser} from "./SystemUser";
 
-@Entity("DesgloseArticulo", {schema: "dbo"})
+@Entity("desgloseArticulo", {schema: "dbo"})
 export class DesgloseArticulo extends BaseEntity {
 
     @PrimaryGeneratedColumn({
@@ -84,8 +84,10 @@ export class DesgloseArticulo extends BaseEntity {
     })
     granelOriginal: number | null;
 
-    @ManyToOne(type => Store, bodega => bodega.desgloseArticulos, {})
-    @JoinColumn({name: 'idBodega'})
+    @ManyToOne(
+        (type) => Store,
+            bodega => bodega.desgloseArticulos, {})
+    @JoinColumn({name: "idBodega"})
     idBodega: Store | null;
 
 }
