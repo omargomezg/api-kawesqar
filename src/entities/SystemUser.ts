@@ -22,6 +22,7 @@ export class SystemUser extends Person {
     isActive: boolean | null;
 
     @Column("varbinary", {
+        length: "MAX",
         name: "clave",
         nullable: false,
         select: false

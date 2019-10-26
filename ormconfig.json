@@ -9,5 +9,5 @@
     "src/entities/*.ts"
   ],
   "logging": true,
-  "synchronize": true
+  "synchronize": false
 }

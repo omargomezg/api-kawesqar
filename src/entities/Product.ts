@@ -1,5 +1,5 @@
 import {BaseEntity, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
-import {cartolaProducto} from "./cartolaProducto";
+import {CartolaProducto} from "./CartolaProducto";
 import {DesgloseArticulo} from "./DesgloseArticulo";
 import {DetalleExistencia} from "./DetalleExistencia";
 import {Family} from "./Family";
@@ -129,9 +129,9 @@ export class Product extends BaseEntity {
     notes: Note[];
 
     @OneToMany(
-        (type) => cartolaProducto,
-        (cartolaProducto) => cartolaProducto.product)
-    cartolaProductos: cartolaProducto[];
+        (type) => CartolaProducto,
+        (cartolaProducto: CartolaProducto) => cartolaProducto.product)
+    cartolaProductos: CartolaProducto[];
 
     @OneToMany((type: DesgloseArticulo) => DesgloseArticulo,
         (desgloseArticulo: DesgloseArticulo) => desgloseArticulo.product)
@@ -144,8 +144,8 @@ export class Product extends BaseEntity {
 
     @OneToMany(
         (type: InvoiceContent) => InvoiceContent,
-        (detalleFactura: InvoiceContent) => detalleFactura.product)
-    detalleFacturas: InvoiceContent[];
+        (invoiceContent: InvoiceContent) => invoiceContent.product)
+    invoiceContents: InvoiceContent[];
 
     @OneToMany(
         (type: ProofOfPurchaseDetail) => ProofOfPurchaseDetail,

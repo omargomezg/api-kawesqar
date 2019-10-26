@@ -1,12 +1,10 @@
-import { Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put } from "routing-controllers";
-import { Branch } from "../../entities/Branch";
-import { RelationSystemUserBranch } from "../../entities/RelationSystemUserBranch";
-import { SystemUser } from "../../entities/SystemUser";
-import { EnabledUserModel, UpdateUserModel } from "../../models/user.index";
-import { SystemUserRepository } from "../../repository/SystemUserRepository";
-import { UserService } from "../../service/user.service";
-import { RutUtils } from "../../Utils/RutUtils";
-import { CommonController } from "../CommonController";
+import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
+import {SystemUser} from "../../entities/SystemUser";
+import {EnabledUserModel, UpdateUserModel} from "../../models/user.index";
+import {SystemUserRepository} from "../../repository/SystemUserRepository";
+import {UserService} from "../../service/user.service";
+import {RutUtils} from "../../Utils/RutUtils";
+import {CommonController} from "../CommonController";
 
 @JsonController("/api/user")
 export class UserController extends CommonController {
@@ -22,12 +20,12 @@ export class UserController extends CommonController {
     @OnUndefined(404)
     public getOne(@Param("rut") rut: string) {
         return SystemUser.findOne({
-            where: { rut: RutUtils.format(rut) }
+            where: {rut: RutUtils.format(rut)}
         });
     }
 
     @Get("/:rut/sucursal")
-    // @OnUndefined(404)
+    @OnUndefined(404)
     public async getSubsidiaryForUser(@Param("rut") rut: string) {
         return this.uRep.getUserAndBranchs(RutUtils.format(rut));
         /* return SystemUser.findOne({
@@ -42,6 +40,7 @@ export class UserController extends CommonController {
              where: {rut: RutUtils.format(rut)},
          });*/
     }
+
     // SystemUser _> csRelacionUsuarioSucursals _> branch
 
     @Get("/:rut/exists")
@@ -58,7 +57,11 @@ export class UserController extends CommonController {
 
     @Post("/:rut")
     public createUser(@Param("rut") rut: string, @Body() user: SystemUser) {
-        return SystemUser.create(user);
+        /*console.log(user);
+        const data = SystemUser.save(user);
+        return data;*/
+        const repo = new SystemUserRepository();
+        return repo.createUser(user);
     }
 
     @Post("/:rut/default/subsidiary")

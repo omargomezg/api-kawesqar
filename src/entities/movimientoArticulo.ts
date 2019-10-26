@@ -1,5 +1,5 @@
 import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {cartolaProducto} from "./cartolaProducto";
+import {CartolaProducto} from "./CartolaProducto";
 
 @Entity("movimientoArticulo",{schema:"dbo" } )
 export class movimientoArticulo {
@@ -23,7 +23,7 @@ export class movimientoArticulo {
         })
     public tipo:string;
 
-    @OneToMany((type)=>cartolaProducto, (cartolaProducto)=>cartolaProducto.idMovimiento)
-    public cartolaProductos:cartolaProducto[];
+    @OneToMany((type)=>CartolaProducto, (cartolaProducto)=>cartolaProducto.idMovimiento)
+    public cartolaProductos:CartolaProducto[];
 
 }

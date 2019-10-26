@@ -9,12 +9,12 @@ export class UserTurnController extends CommonController {
 
     @Get("/:rut/:status")
     public async getOne(@Param("rut") rut: string, @Param("status") status: string) {
-        const turno = await TurnoVenta.findOne({
+        const turn = await TurnoVenta.findOne({
             where: {
                 isActive: status,
                 systemUser: { rut: RutUtils.format(rut) }
             }
         });
-        return turno === undefined ? {} : turno;
+        return turn === undefined ? {} : turn;
     }
 }

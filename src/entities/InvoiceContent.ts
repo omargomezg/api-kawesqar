@@ -31,7 +31,7 @@ export class InvoiceContent extends BaseEntity {
 
     @ManyToOne(
         (type: Product) => Product,
-        (product: Product) => product.detalleFacturas,
+        (product: Product) => product.invoiceContents,
         {nullable: false})
     @JoinColumn({name: "id", referencedColumnName: "id"})
     product: Product | null;

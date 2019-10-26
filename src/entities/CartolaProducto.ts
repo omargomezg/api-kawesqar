@@ -3,7 +3,7 @@ import {movimientoArticulo} from "./movimientoArticulo";
 import {Product} from "./Product";
 
 @Entity("cartolaProducto", {schema: "dbo"})
-export class cartolaProducto extends BaseEntity {
+export class CartolaProducto extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idCP",
