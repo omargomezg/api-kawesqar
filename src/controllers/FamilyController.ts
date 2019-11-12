@@ -1,7 +1,7 @@
 import { Get, JsonController, Param } from "routing-controllers";
 import { FamilyService } from "../service/family.service";
 
-@JsonController("/api")
+@JsonController()
 export class FamilyController {
 
     @Get("/family/:rut")

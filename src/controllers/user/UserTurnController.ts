@@ -1,13 +1,14 @@
-import { Body, Get, JsonController, OnUndefined, Param, Post } from "routing-controllers";
-import { Store } from "../../entities/Store";
+import {Get, JsonController, OnUndefined, Param} from "routing-controllers";
 import { TurnoVenta } from "../../entities/TurnoVenta";
 import { RutUtils } from "../../Utils/RutUtils";
 import { CommonController } from "../CommonController";
+import {UndefinedArrayError} from "../../models/error/UndefinedArrayError";
 
-@JsonController("/api/user/turn")
+@JsonController("/user/turn")
 export class UserTurnController extends CommonController {
 
     @Get("/:rut/:status")
+    @OnUndefined(UndefinedArrayError)
     public async getOne(@Param("rut") rut: string, @Param("status") status: string) {
         const turn = await TurnoVenta.findOne({
             where: {

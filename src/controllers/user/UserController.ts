@@ -5,8 +5,9 @@ import {SystemUserRepository} from "../../repository/SystemUserRepository";
 import {UserService} from "../../service/user.service";
 import {RutUtils} from "../../Utils/RutUtils";
 import {CommonController} from "../CommonController";
+import {UndefinedArrayListError} from "../../models/error/UndefinedArrayListError";
 
-@JsonController("/api/user")
+@JsonController("/user")
 export class UserController extends CommonController {
     private userService = new UserService();
     private uRep = new SystemUserRepository();
@@ -19,15 +20,24 @@ export class UserController extends CommonController {
     @Get("/:rut")
     @OnUndefined(404)
     public getOne(@Param("rut") rut: string) {
-        return SystemUser.findOne({
-            where: {rut: RutUtils.format(rut)}
-        });
+        return this.uRep.getUserWithRoles(rut);
+    }
+
+    @Post("/:rut")
+    public createUser(@Param("rut") rut: string, @Body() user: SystemUser) {
+        return this.userService.create(user);
+    }
+
+    @Put("/:rut")
+    public updateUser(@Param("rut") rut: string, @Body() user: SystemUser) {
+        return this.uRep.update({rut: user.rut},
+            user);
     }
 
     @Get("/:rut/sucursal")
-    @OnUndefined(404)
+    @OnUndefined(UndefinedArrayListError)
     public async getSubsidiaryForUser(@Param("rut") rut: string) {
-        return this.uRep.getUserAndBranchs(RutUtils.format(rut));
+        return this.uRep.getUserAndBranches(RutUtils.format(rut));
         /* return SystemUser.findOne({
              join: {
                  alias: "sucursales",
@@ -55,23 +65,9 @@ export class UserController extends CommonController {
         return this.userService.getDiscountUser(rut);
     }
 
-    @Post("/:rut")
-    public createUser(@Param("rut") rut: string, @Body() user: SystemUser) {
-        /*console.log(user);
-        const data = SystemUser.save(user);
-        return data;*/
-        const repo = new SystemUserRepository();
-        return repo.createUser(user);
-    }
-
     @Post("/:rut/default/subsidiary")
     public setDefaultSubsidiaryForUser(@Param("rut") rut: string, @Body() data: any) {
         return this.userService.setDefaultSubsidiaryForUser(data);
-    }
-
-    @Put("/:rut")
-    public updateUser(@Param("rut") rut: string, @Body() user: UpdateUserModel) {
-        return this.userService.update(user);
     }
 
     @Delete("/:rut/enabled")

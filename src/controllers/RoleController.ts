@@ -3,38 +3,36 @@ import { Role } from "../entities/Role";
 import { RoleRepository } from "../repository/RoleRepository";
 import { RoleService } from "../service/role.service";
 
-@JsonController("/api/role")
+@JsonController("/role")
 export class RoleController {
+
+    private static async createDefaultRoles(): Promise<Role[]> {
+        const repository = new RoleRepository();
+        const roleAdmin = new Role();
+        roleAdmin.isActive = true;
+        roleAdmin.name = "Administrador";
+        roleAdmin.description = "Administrador de sistema";
+        roleAdmin.accesoVenta = true;
+        roleAdmin.valorDescuento = 80;
+        roleAdmin.ventAdmin = true;
+        await repository.createRole(roleAdmin);
+        const roleUser = new Role();
+        roleUser.isActive = true;
+        roleUser.name = "Usuario";
+        roleUser.description = "Usuario de sistema";
+        roleUser.accesoVenta = true;
+        roleUser.valorDescuento = 20;
+        roleUser.ventAdmin = true;
+        await repository.createRole(roleUser);
+        return await Role.find();
+    }
 
     @Get("")
     public async getRoles() {
         let roles = await Role.find();
-        console.log(roles);
         if (roles.length === 0) {
-            console.log("eeee");
-            roles = await this.createDefaultRoles();
+            roles = await RoleController.createDefaultRoles();
         }
         return roles;
-    }
-
-    private async createDefaultRoles(): Promise<Role[]> {
-        const repository = new RoleRepository();
-        const admin = new Role();
-        admin.isActive = true;
-        admin.name = "Administrador";
-        admin.description = "Administrador de sistema";
-        admin.accesoVenta = true;
-        admin.valorDescuento = 80;
-        admin.ventAdmin = true;
-        repository.createRole(admin);
-        const user = new Role();
-        user.isActive = true;
-        user.name = "Usuario";
-        user.description = "Usuario de sistema";
-        user.accesoVenta = true;
-        user.valorDescuento = 20;
-        user.ventAdmin = true;
-        repository.createRole(user);
-        return await Role.find();
     }
 }

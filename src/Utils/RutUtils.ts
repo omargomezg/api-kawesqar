@@ -1,7 +1,7 @@
 export class RutUtils {
     public static format(rut: string) {
-        const rutLimpio = rut.replace(".", "").replace("-", "");
-        return rutLimpio.substring(0, rutLimpio.length - 1) +
-            "-" + rutLimpio.substring(rutLimpio.length - 1, rutLimpio.length);
+        const cleanedString = rut.replace(".", "").replace("-", "");
+        return cleanedString.substring(0, cleanedString.length - 1) +
+            "-" + cleanedString.substring(cleanedString.length - 1, cleanedString.length);
     }
 }

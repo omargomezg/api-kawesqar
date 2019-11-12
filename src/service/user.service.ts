@@ -1,13 +1,11 @@
-import {throws} from "assert";
 import {Bit, Int, NChar, NVarChar, VarChar} from "mssql";
 import {InternalServerError} from "routing-controllers";
-import {OutputType} from "../entities/OutputType";
-import {RelationSystemUserOutputType} from "../entities/RelationSystemUserOutputType";
+import {RelationSystemUserRole} from "../entities/RelationSystemUserRole";
 import {SystemUser} from "../entities/SystemUser";
 import {Db} from "../models/db";
 import {UserExistsModel} from "../models/response/user.exists.model";
 import {EnabledUserModel} from "../models/user.index";
-import User from "../models/user/user.model";
+import {SystemUserRepository} from "../repository/SystemUserRepository";
 
 export class UserService {
     private db = new Db();
@@ -121,54 +119,32 @@ export class UserService {
     }
 
     public async create(user: SystemUser) {
-        await SystemUser.create(user);
-        // TODO poblar relationSystemUserOutputType y setear opción por defecto
-        const relation: RelationSystemUserOutputType[] = [];
-        const outputType = await OutputType.find();
-        if (outputType === undefined) {
-            throw new Error("Outpiut is undefined");
-        }
-        outputType.forEach((item) => console.log(item));
-        /*const pool = await this.db.poolPromise();
-        try {
-            const r = await pool.request()
-                .input("rutUsuario", VarChar(12), user.rut)
-                .input("nombres", NVarChar(256), user.nombre)
-                .input("apPaterno", NVarChar(256), user.paterno)
-                .input("apMaterno", NVarChar(256), user.materno)
-                .input("clave", NVarChar(50), user.password)
-                .input("userName", VarChar(50), user.username)
-                .input("fono", NChar(10), user.telephone)
-                .input("eMail", NVarChar(256), user.email)
-                .input("salidaVenta", Bit, user.allowedServices.sales)
-                .input("salidaFactura", Bit, user.allowedServices.bill)
-                .input("salidaEmpleados", Bit, user.allowedServices.employees)
-                .input("idEgresoDefault", Bit, true)
-                .input("rol", Int, user.role)
-                .execute("mantenedorUsuario");
-            return r.recordset[0];
-        } catch (err) {
-            throw new InternalServerError(err.message);
-        }*/
+        const repo = new SystemUserRepository();
+        await repo.createUser(user);
+        user.relationSystemUserRoles.forEach((item) => {
+            RelationSystemUserRole.create(item);
+        });
+        const userRepo = new SystemUserRepository();
+        return userRepo.getUserWithRoles(user.rut);
     }
 
-    public async update(user: User) {
+    public async update(user: SystemUser) {
         const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("rutUsuario", VarChar(12), user.rut)
-                .input("nombres", NVarChar(256), user.nombre)
-                .input("apPaterno", NVarChar(256), user.paterno)
-                .input("apMaterno", NVarChar(256), user.materno)
+                .input("nombres", NVarChar(256), user.firstName)
+                .input("apPaterno", NVarChar(256), user.lastName)
+                .input("apMaterno", NVarChar(256), user.secondLastName)
                 .input("clave", NVarChar(50), user.password)
-                .input("userName", VarChar(50), user.username)
-                .input("fono", NChar(10), user.telephone)
+                .input("userName", VarChar(50), user.userName)
+                .input("fono", NChar(10), "")
                 .input("eMail", NVarChar(256), user.email)
-                .input("salidaVenta", Bit, user.allowedServices.sales)
-                .input("salidaFactura", Bit, user.allowedServices.bill)
-                .input("salidaEmpleados", Bit, user.allowedServices.employees)
+                .input("salidaVenta", Bit, user.salidaVenta)
+                .input("salidaFactura", Bit, user.salidaFactura)
+                .input("salidaEmpleados", Bit, user.salidaEmpleados)
                 .input("idEgresoDefault", Bit, true)
-                .input("rol", Int, user.role)
+                .input("rol", Int, 1)
                 .execute("mantenedorUsuario");
             return r.recordset[0];
         } catch (err) {

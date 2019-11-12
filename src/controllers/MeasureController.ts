@@ -1,7 +1,7 @@
 import { Get, JsonController } from "routing-controllers";
 import { MeasureService } from "../service/measure.service";
 
-@JsonController("/api")
+@JsonController()
 export class MeasureController {
 
     @Get("/measure")

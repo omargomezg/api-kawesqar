@@ -2,7 +2,7 @@ import {Get, JsonController, Param} from "routing-controllers";
 import {Product} from "../entities/Product";
 import {ArticleService} from "../service/article.service";
 
-@JsonController("/api/article")
+@JsonController("/article")
 export class ArticleController {
     private article = new ArticleService();
 

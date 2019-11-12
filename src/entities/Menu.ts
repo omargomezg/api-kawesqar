@@ -1,49 +1,37 @@
-import {
-    BaseEntity,
-    Column,
-    Entity,
-    Index,
-    JoinColumn,
-    JoinTable,
-    ManyToMany,
-    ManyToOne,
-    OneToMany,
-    OneToOne,
-    PrimaryColumn,
-    PrimaryGeneratedColumn,
-    RelationId
-} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {UserMenu} from "./UserMenu";
 
 @Entity("menu", {schema: "dbo"})
 export class Menu {
 
     @PrimaryGeneratedColumn({
-        type: "int",
-        name: "id"
+        name: "id",
+        type: "int"
     })
     id: number;
 
     @Column("int", {
-        nullable: false,
-        name: "parent"
+        name: "parent",
+        nullable: false
     })
     parent: number;
 
     @Column("nvarchar", {
-        nullable: false,
         length: 50,
-        name: "texto"
+        name: "texto",
+        nullable: false
     })
-    texto: string;
+    name: string;
 
     @Column("nvarchar", {
-        nullable: false,
-        name: "url"
+        name: "url",
+        nullable: false
     })
     url: string;
 
-    @OneToMany(type => UserMenu, menuUsuario => menuUsuario.menu)
-    menuUsuarios: UserMenu[];
+    @OneToMany(
+        (type: UserMenu) => UserMenu,
+        (userMenu: UserMenu) => userMenu.menu)
+    userMenus: UserMenu[];
 
 }

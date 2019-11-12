@@ -1,7 +1,7 @@
 import { Get, JsonController, Param } from "routing-controllers";
 import { SupplierService } from "../service/supplier.service";
 
-@JsonController("/api")
+@JsonController()
 export class SupplierController {
 
     @Get("/supplier/:rut")

@@ -1,20 +1,24 @@
-import { Get, JsonController, Param } from "routing-controllers";
-import { MenuService } from "../service/menu.service";
+import {Get, JsonController, OnUndefined, Param} from "routing-controllers";
+import {UndefinedArrayListError} from "../models/error/UndefinedArrayListError";
+import {SystemUserRepository} from "../repository/SystemUserRepository";
 
-@JsonController("/api/menu")
+@JsonController("/menu")
 export class MenuController {
+    private userRepository: SystemUserRepository;
 
-    constructor(private menuService: MenuService) {
-        this.menuService = new MenuService();
+    constructor() {
+        this.userRepository = new SystemUserRepository();
     }
 
     @Get("/:rut")
+    @OnUndefined(UndefinedArrayListError)
     public getRoot(@Param("rut") rut: string) {
-        return this.menuService.getRoot(rut);
+        return this.userRepository.getMenu(rut);
     }
 
     @Get("/:rut/:parent")
-    public getChilds(@Param("rut") rut: string, @Param("parent") parent: number) {
-        return this.menuService.getChild(rut, parent);
+    @OnUndefined(UndefinedArrayListError)
+    public getMenuChildes(@Param("rut") rut: string, @Param("parent") parent: number) {
+        return this.userRepository.getMenuChildes(rut, parent);
     }
 }

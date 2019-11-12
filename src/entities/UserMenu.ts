@@ -13,7 +13,7 @@ export class UserMenu {
 
     @ManyToOne(
         (type: Menu) => Menu,
-        (menu: Menu) => menu.menuUsuarios, {nullable: false})
+        (menu: Menu) => menu.userMenus, {nullable: false})
     @JoinColumn({name: "id"})
     menu: Menu | null;
 

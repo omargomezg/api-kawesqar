@@ -1,9 +1,9 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import { Role } from "./Role";
 import { SystemUser } from "./SystemUser";
 
 @Entity("cs_relacion_usuarioRol", { schema: "dbo" })
-export class RelationSystemUserRole {
+export class RelationSystemUserRole extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idRelacion",
@@ -20,7 +20,7 @@ export class RelationSystemUserRole {
 
     @ManyToOne(
         (type) => SystemUser,
-        (systemUser: SystemUser) => systemUser.relacionUsuarioRols,
+        (systemUser: SystemUser) => systemUser.relationSystemUserRoles,
         { nullable: false })
     @JoinColumn({ name: "rut" })
     user: SystemUser | null;
@@ -30,6 +30,6 @@ export class RelationSystemUserRole {
         (rol: Role) => rol.relationSystemUserRoles,
         { nullable: false })
     @JoinColumn({ name: "idRol" })
-    idRol: Role | null;
+    role: Role | null;
 
 }

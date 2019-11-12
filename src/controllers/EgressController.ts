@@ -2,7 +2,10 @@ import { Get, JsonController, Param } from "routing-controllers";
 import { OutputType } from "../entities/OutputType";
 import { EgressService } from "../service/egress.service";
 
-@JsonController("/api/egress")
+/**
+ * A controller for egress
+ */
+@JsonController("/egress")
 export class EgressController {
 
     @Get("/")

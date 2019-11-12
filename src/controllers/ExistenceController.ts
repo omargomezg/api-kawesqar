@@ -1,8 +1,8 @@
-import { Body, JsonController, Param, Post } from "routing-controllers";
+import { Body, JsonController, Post } from "routing-controllers";
 import { IExistenceModel } from "../models/request/existence.model";
 import { ExistenceService } from "../service/existence.service";
 
-@JsonController("/api")
+@JsonController()
 export class ExistenceController {
 
     @Post("/existence")

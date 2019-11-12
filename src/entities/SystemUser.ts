@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, OneToOne } from "typeorm";
+import {Column, Entity, OneToMany, OneToOne, UpdateDateColumn} from "typeorm";
 import { Branch } from "./Branch";
 import { DesgloseArticulo } from "./DesgloseArticulo";
 import { EliminaVenta } from "./EliminaVenta";
@@ -39,15 +39,20 @@ export class SystemUser extends Person {
     @Column("datetime", { name: "fechaCreacion" })
     created: Date;
 
+    @UpdateDateColumn()
+    updated: Date;
+
     @Column("image", {
         name: "imagenPerfil",
-        nullable: true
+        nullable: true,
+        select: false
     })
     imagenPerfil: Buffer | null;
 
     @Column("varchar", {
         name: "imagenTipo",
-        nullable: true
+        nullable: true,
+        select: false
     })
     imagenTipo: string | null;
 
@@ -76,7 +81,7 @@ export class SystemUser extends Person {
         name: "traspaso",
         nullable: false
     })
-    traspaso: boolean;
+    sendToOtherBranch: boolean;
 
     @Column("bit", {
         name: "credito",
@@ -103,7 +108,7 @@ export class SystemUser extends Person {
     @OneToMany(
         (type: RelationSystemUserRole) => RelationSystemUserRole,
         (relacionUsuarioRol: RelationSystemUserRole) => relacionUsuarioRol.user)
-    relacionUsuarioRols: RelationSystemUserRole[];
+    relationSystemUserRoles: RelationSystemUserRole[];
 
     @OneToMany(
         (type: RelationSystemUserBranch) => RelationSystemUserBranch,

@@ -52,7 +52,7 @@ export class Role extends BaseEntity {
 
     @OneToMany(
         (type: RelationSystemUserRole) => RelationSystemUserRole,
-        (relationSystemUserRole: RelationSystemUserRole) => relationSystemUserRole.idRol)
+        (relationSystemUserRole: RelationSystemUserRole) => relationSystemUserRole.role)
     relationSystemUserRoles: RelationSystemUserRole[];
 
 }

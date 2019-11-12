@@ -6,7 +6,7 @@ import {CityService} from "../service/city.service";
 import {RutUtils} from "../Utils/RutUtils";
 import {CommonController} from "./CommonController";
 
-@JsonController("/api/branch")
+@JsonController("/branch")
 export class BranchController extends CommonController {
 
     @Get("/")

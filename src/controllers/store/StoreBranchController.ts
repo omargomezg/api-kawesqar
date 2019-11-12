@@ -3,7 +3,7 @@ import {Branch} from "../../entities/Branch";
 import {RelationStoreBranch} from "../../entities/RelationStoreBranch";
 import {Store} from "../../entities/Store";
 
-@JsonController("/api/store-branch")
+@JsonController("/store-branch")
 export class StoreBranchController {
 
     @Get("/")

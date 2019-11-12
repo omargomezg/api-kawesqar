@@ -1,7 +1,7 @@
 import {Get, JsonController} from "routing-controllers";
 import {CityService} from "../service/city.service";
 
-@JsonController("/api")
+@JsonController()
 export class CityController {
 
     @Get("/city")
