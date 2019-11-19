@@ -54,7 +54,7 @@ export class DesgloseArticulo extends BaseEntity {
 
     @ManyToOne(
         (type: Branch) => Branch,
-            (branch: Branch) => branch.desgloseArticulos)
+        (branch: Branch) => branch.desgloseArticulos)
     @JoinColumn({name: "idSucursal"})
     branch: Branch | null;
 
@@ -67,7 +67,7 @@ export class DesgloseArticulo extends BaseEntity {
 
     @ManyToOne(
         (type: SystemUser) => SystemUser,
-            (systemUser: SystemUser) => systemUser.desgloseArticulos)
+        (systemUser: SystemUser) => systemUser.desgloseArticulos)
     @JoinColumn({name: "rutUsuario"})
     user: SystemUser | null;
 
@@ -86,8 +86,8 @@ export class DesgloseArticulo extends BaseEntity {
 
     @ManyToOne(
         (type) => Store,
-            bodega => bodega.desgloseArticulos, {})
+        (bodega: Store) => bodega.desgloseArticulos, {})
     @JoinColumn({name: "idBodega"})
-    idBodega: Store | null;
+    store: Store | null;
 
 }

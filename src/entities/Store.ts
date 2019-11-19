@@ -5,6 +5,7 @@ import {DetalleExistencia} from "./DetalleExistencia";
 import {RelationStoreBranch} from "./RelationStoreBranch";
 import {ShoppingCartContent} from "./ShoppingCartContent";
 import {TempArt} from "./TempArt";
+import {ProofOfPurchaseDetail} from "./ProofOfPurchaseDetail";
 
 @Entity("bodega", {schema: "dbo"})
 export class Store extends BaseEntity {
@@ -24,11 +25,17 @@ export class Store extends BaseEntity {
     description: string;
 
     @OneToMany(
+        (type: ProofOfPurchaseDetail) => ProofOfPurchaseDetail,
+        (proofOfPurchaseDetail: ProofOfPurchaseDetail) => proofOfPurchaseDetail.store
+    )
+    proofOfPurchaseDetail: ProofOfPurchaseDetail[];
+
+    @OneToMany(
         (type: RelationStoreBranch) => RelationStoreBranch,
         (brnaches: RelationStoreBranch) => brnaches.store)
     branches: RelationStoreBranch[];
 
-    @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.idBodega)
+    @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.store)
     desgloseArticulos: DesgloseArticulo[];
 
     @OneToMany(
@@ -36,7 +43,7 @@ export class Store extends BaseEntity {
         (detalleExistencia: DetalleExistencia) => detalleExistencia.store)
     detalleExistencias: DetalleExistencia[];
 
-    @OneToMany(type => TempArt, tempArt => tempArt.idBodega)
+    @OneToMany(type => TempArt, tempArt => tempArt.store)
     tempArts: TempArt[];
 
     @OneToMany((type: ShoppingCartContent) => ShoppingCartContent,

@@ -1,6 +1,7 @@
 import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Product} from "./Product";
 import {ProofOfPurchase} from "./ProofOfPurchase";
+import {Store} from "./Store";
 
 @Entity("detalleVenta", {schema: "dbo"})
 export class ProofOfPurchaseDetail {
@@ -46,6 +47,12 @@ export class ProofOfPurchaseDetail {
         nullable: true
     })
     f: boolean | null;
+
+    @ManyToOne(
+        (type: Store) => Store,
+        (store: Store) => store.proofOfPurchaseDetail
+    )
+    store: Store;
 
     @ManyToOne(
         (type: ProofOfPurchase) => ProofOfPurchase,

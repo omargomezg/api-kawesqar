@@ -13,13 +13,6 @@ export class TempArt extends BaseEntity {
     })
     id: number;
 
-    @ManyToOne(
-        (type: Product) => Product,
-            (product: Product) => product.tempArts,
-        {nullable: false})
-    @JoinColumn({name: "article_id", referencedColumnName: "id"})
-    product: Product | null;
-
     @Column("datetime", {
         name: "FechaIng",
         nullable: false
@@ -42,7 +35,14 @@ export class TempArt extends BaseEntity {
         name: "Vencimiento",
         nullable: true
     })
-    Vencimiento: Date | null;
+    expirationDate: Date | null;
+
+    @ManyToOne(
+        (type: Product) => Product,
+        (product: Product) => product.tempArts,
+        {nullable: false})
+    @JoinColumn({name: "article_id", referencedColumnName: "id"})
+    product: Product | null;
 
     @ManyToOne(
         (type: Invoice) => Invoice,
@@ -51,12 +51,14 @@ export class TempArt extends BaseEntity {
     @JoinColumn({name: "IdFact"})
     invoice: Invoice | null;
 
-    @ManyToOne(type => Branch, branch => branch.tempArts, {nullable: false,})
+    @ManyToOne((type) => Branch,
+        (branch: Branch) => branch.tempArts, {nullable: false})
     @JoinColumn({name: "idSucursal"})
-    idSucursal: Branch | null;
+    branch: Branch | null;
 
-    @ManyToOne(type => Store, store => store.tempArts, {nullable: false,})
+    @ManyToOne((type: Store) => Store,
+        (store: Store) => store.tempArts, {nullable: false})
     @JoinColumn({name: "idBodega"})
-    idBodega: Store | null;
+    store: Store | null;
 
 }

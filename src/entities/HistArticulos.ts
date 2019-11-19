@@ -6,12 +6,6 @@ import {ProofOfPurchase} from "./ProofOfPurchase";
 @Entity("histArticulos", {schema: "dbo"})
 export class HistArticulos extends BaseEntity {
 
-    @PrimaryGeneratedColumn({
-        name: "idtable",
-        type: "numeric"
-    })
-    idtable: number;
-
     @Column("int", {
         name: "ID",
         nullable: false
@@ -35,7 +29,7 @@ export class HistArticulos extends BaseEntity {
         name: "Vencimiento",
         nullable: false
     })
-    Vencimiento: Date;
+    expirationDate: Date;
 
     @Column("int", {
         name: "idSucursal",
@@ -47,7 +41,7 @@ export class HistArticulos extends BaseEntity {
         name: "estado",
         nullable: true
     })
-    estado: boolean | null;
+    isActive: boolean | null;
 
     @Column("bit", {
         name: "estadoUso",

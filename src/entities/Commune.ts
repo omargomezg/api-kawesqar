@@ -1,7 +1,7 @@
 import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {Branch} from "./Branch";
 import {Client} from "./Client";
-import {provincias} from "./provincias";
+import {Provincia} from "./provincia";
 import {Supplier} from "./Supplier";
 
 @Entity("comunas", {schema: "dbo"})
@@ -19,9 +19,9 @@ export class Commune extends BaseEntity {
     })
     name: string;
 
-    @ManyToOne(type => provincias, provincias => provincias.comunass, {nullable: false,})
+    @ManyToOne(type => Provincia, provincias => provincias.communes, {nullable: false,})
     @JoinColumn({name: "padre"})
-    father: provincias | null;
+    father: Provincia | null;
 
     @OneToMany(
         (type: Client) => Client,

@@ -148,10 +148,10 @@ export class Branch extends BaseEntity {
         (relationFamilyBranch: RelationFamilyBranch) => relationFamilyBranch.id)
     relationFamilyBranches: RelationFamilyBranch[];
 
-    @OneToMany(type => TempArt, tempArt => tempArt.idSucursal)
+    @OneToMany(type => TempArt, tempArt => tempArt.branch)
     tempArts: TempArt[];
 
     @OneToMany(type => ShoppingCartContent, tempCarro => tempCarro.store)
-    tempCarros: ShoppingCartContent[];
+    shoppingCartContents: ShoppingCartContent[];
 
 }
