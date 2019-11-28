@@ -1,10 +1,13 @@
-import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {Invoice} from "./Invoice";
-import {Product} from "./Product";
-import {ProofOfPurchase} from "./ProofOfPurchase";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Invoice } from "./Invoice";
+import { Product } from "./Product";
+import { ProofOfPurchase } from "./ProofOfPurchase";
 
-@Entity("histArticulos", {schema: "dbo"})
+@Entity("histArticulos", { schema: "dbo" })
 export class HistArticulos extends BaseEntity {
+
+    @PrimaryGeneratedColumn()
+    idTable: number;
 
     @Column("int", {
         name: "ID",
@@ -71,21 +74,21 @@ export class HistArticulos extends BaseEntity {
     @ManyToOne(
         (type: Invoice) => Invoice,
         (facturas: Invoice) => facturas.histArticuloss)
-    @JoinColumn({name: "IdFact"})
+    @JoinColumn({ name: "IdFact" })
     invoice: Invoice | null;
 
     @ManyToOne(
         (type: ProofOfPurchase) => ProofOfPurchase,
         (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.histArticuloss,
-        {nullable: false})
-    @JoinColumn({name: "IdFolio"})
+        { nullable: false })
+    @JoinColumn({ name: "IdFolio" })
     proofOfPurchase: ProofOfPurchase | null;
 
     @ManyToOne(
         (type: Product) => Product,
-            (product: Product) => product.histArticuloss,
-        {nullable: false})
-    @JoinColumn({name: "article_id", referencedColumnName: "id"})
+        (product: Product) => product.histArticuloss,
+        { nullable: false })
+    @JoinColumn({ name: "article_id", referencedColumnName: "id" })
     product: Product | null;
 
 }

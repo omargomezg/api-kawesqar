@@ -1,11 +1,11 @@
 {
   "cache": true,
   "type": "mssql",
-  "host": "216.155.90.149",
+  "host": "localhost",
   "port": 1433,
   "username": "sa",
   "password": "Kumple22*zu+",
-  "database": "farmacia_qa",
+  "database": "qaccmv",
   "entities": [
     "src/entities/*.ts"
   ],

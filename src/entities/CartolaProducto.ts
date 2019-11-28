@@ -1,8 +1,8 @@
-import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {movimientoArticulo} from "./movimientoArticulo";
-import {Product} from "./Product";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { MovimientoArticulo } from "./movimientoArticulo";
+import { Product } from "./Product";
 
-@Entity("cartolaProducto", {schema: "dbo"})
+@Entity("cartolaProducto", { schema: "dbo" })
 export class CartolaProducto extends BaseEntity {
 
     @PrimaryGeneratedColumn({
@@ -50,13 +50,16 @@ export class CartolaProducto extends BaseEntity {
 
     @ManyToOne(
         (type: Product) => Product,
-            (product: Product) => product.cartolaProductos,
-        {nullable: false})
-    @JoinColumn({name: "article_id", referencedColumnName: "id"})
+        (product: Product) => product.cartolaProductos,
+        { nullable: false })
+    @JoinColumn({ name: "article_id", referencedColumnName: "id" })
     product: Product | null;
 
-    @ManyToOne(type => movimientoArticulo, movimientoArticulo => movimientoArticulo.cartolaProductos, {nullable: false,})
-    @JoinColumn({name: "idMovimiento"})
-    idMovimiento: movimientoArticulo | null;
+    @ManyToOne(
+        (type: MovimientoArticulo) => MovimientoArticulo,
+        (movimientoArticulo: MovimientoArticulo) => movimientoArticulo.cartolaProductos,
+        { nullable: false })
+    @JoinColumn({ name: "idMovimiento" })
+    idMovimiento: MovimientoArticulo | null;
 
 }
