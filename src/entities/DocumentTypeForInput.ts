@@ -2,7 +2,7 @@ import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typ
 import {Invoice} from "./Invoice";
 
 @Entity("tipoDocIn", {schema: "dbo"})
-export class tipoDocIn extends BaseEntity {
+export class DocumentTypeForInput extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idTipoDocIn",
@@ -25,7 +25,7 @@ export class tipoDocIn extends BaseEntity {
 
     @OneToMany(
         (type: Invoice) => Invoice,
-        (invoice: Invoice) => invoice.idTipoDocIn)
+        (invoice: Invoice) => invoice.documentType)
     invoices: Invoice[];
 
 }

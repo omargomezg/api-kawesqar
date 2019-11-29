@@ -1,14 +1,14 @@
 import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {Branch} from "./Branch";
 import {DesgloseArticulo} from "./DesgloseArticulo";
+import {DocumentTypeForInput} from "./DocumentTypeForInput";
 import {HistArticulos} from "./HistArticulos";
 import {InvoiceContent} from "./InvoiceContent";
+import {Note} from "./Note";
+import {Product} from "./Product";
 import {Supplier} from "./Supplier";
 import {SystemUser} from "./SystemUser";
 import {TempArt} from "./TempArt";
-import {tipoDocIn} from "./tipoDocIn";
-import {Note} from "./Note";
-import {Product} from "./Product";
 
 @Entity("facturas", {schema: "dbo"})
 export class Invoice extends BaseEntity {
@@ -60,13 +60,17 @@ export class Invoice extends BaseEntity {
 
     @ManyToOne(
         (type: Supplier) => Supplier,
-        (supplier: Supplier) => supplier.invoices, {nullable: false})
+        (supplier: Supplier) => supplier.invoices,
+        {nullable: false})
     @JoinColumn({name: "ProvRut"})
     supplier: Supplier | null;
 
-    @ManyToOne(type => tipoDocIn, tipoDocIn => tipoDocIn.invoices, {nullable: false})
+    @ManyToOne(
+        (type: DocumentTypeForInput) => DocumentTypeForInput,
+        (documentTypeForInput: DocumentTypeForInput) => documentTypeForInput.invoices,
+        {nullable: false})
     @JoinColumn({name: "idTipoDocIn"})
-    idTipoDocIn: tipoDocIn | null;
+    documentType: DocumentTypeForInput | null;
 
     @ManyToOne(
         (type: SystemUser) => SystemUser,
