@@ -2,7 +2,7 @@ import { Body, JsonController, Put } from "routing-controllers";
 import { Bank } from "../entities/Bank";
 import { BankRepository } from "../repository/BankRepository";
 
-@JsonController("/api/bank")
+@JsonController("/bank")
 export class BankController {
     private bankRepo = new BankRepository();
 

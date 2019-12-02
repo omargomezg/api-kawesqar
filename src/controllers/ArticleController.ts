@@ -1,15 +1,14 @@
 import {Get, JsonController, Param} from "routing-controllers";
+import {Product} from "../entities/Product";
 import {ArticleService} from "../service/article.service";
-import {CityService} from "../service/city.service";
 
-@JsonController("/api/article")
+@JsonController("/article")
 export class ArticleController {
     private article = new ArticleService();
 
     @Get("/")
     public getAll() {
-        const city = new CityService();
-        return city.getAll();
+        return Product.find();
     }
 
     @Get("/:key")

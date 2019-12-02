@@ -1,19 +1,20 @@
 import {Length} from "class-validator";
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {bodega_sucursal} from "./bodega_sucursal";
+import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {DesgloseArticulo} from "./DesgloseArticulo";
-import {detalleExistencia} from "./detalleExistencia";
+import {DetalleExistencia} from "./DetalleExistencia";
+import {ProofOfPurchaseDetail} from "./ProofOfPurchaseDetail";
+import {RelationStoreBranch} from "./RelationStoreBranch";
 import {ShoppingCartContent} from "./ShoppingCartContent";
 import {TempArt} from "./TempArt";
 
 @Entity("bodega", {schema: "dbo"})
-export class Store {
+export class Store extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idBodega",
         type: "int"
     })
-    idBodega: number;
+    id: number = 0;
 
     @Column("nvarchar", {
         length: 200,
@@ -21,22 +22,32 @@ export class Store {
         nullable: false
     })
     @Length(0, 200)
-    descripcion: string;
+    description: string;
 
-    @OneToMany(type => bodega_sucursal, bodega_sucursal => bodega_sucursal.idBodega)
-    bodegaSucursals: bodega_sucursal[];
+    @OneToMany(
+        (type: ProofOfPurchaseDetail) => ProofOfPurchaseDetail,
+        (proofOfPurchaseDetail: ProofOfPurchaseDetail) => proofOfPurchaseDetail.store
+    )
+    proofOfPurchaseDetail: ProofOfPurchaseDetail[];
 
-    @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.idBodega)
+    @OneToMany(
+        (type: RelationStoreBranch) => RelationStoreBranch,
+        (brnaches: RelationStoreBranch) => brnaches.store)
+    branches: RelationStoreBranch[];
+
+    @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.store)
     desgloseArticulos: DesgloseArticulo[];
 
-    @OneToMany(type => detalleExistencia, detalleExistencia => detalleExistencia.idbodega)
-    detalleExistencias: detalleExistencia[];
+    @OneToMany(
+        (type: DetalleExistencia) => DetalleExistencia,
+        (detalleExistencia: DetalleExistencia) => detalleExistencia.store)
+    detalleExistencias: DetalleExistencia[];
 
-    @OneToMany(type => TempArt, tempArt => tempArt.idBodega)
+    @OneToMany(type => TempArt, tempArt => tempArt.store)
     tempArts: TempArt[];
 
     @OneToMany((type: ShoppingCartContent) => ShoppingCartContent,
-            (shoppingCartContent) => shoppingCartContent.content)
+        (shoppingCartContent) => shoppingCartContent.content)
     content: ShoppingCartContent[];
 
 }

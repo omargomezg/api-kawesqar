@@ -1,96 +1,93 @@
-import {
-    BaseEntity,
-    Column,
-    Entity,
-    Index,
-    JoinColumn,
-    JoinTable,
-    ManyToMany,
-    ManyToOne,
-    OneToMany,
-    OneToOne,
-    PrimaryColumn,
-    PrimaryGeneratedColumn,
-    RelationId
-} from "typeorm";
-import {Product} from "./Product";
-import {facturas} from "./facturas";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Branch} from "./Branch";
-import {SystemUser} from "./SystemUser";
+import {Invoice} from "./Invoice";
+import {Product} from "./Product";
 import {Store} from "./Store";
+import {SystemUser} from "./SystemUser";
 
-@Entity("DesgloseArticulo", {schema: "dbo"})
-export class DesgloseArticulo {
-
-    @ManyToOne(type => Product, articulos => articulos.desgloseArticulos, {nullable: false,})
-    @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
-    idArticulo: Product | null;
+@Entity("desgloseArticulo", {schema: "dbo"})
+export class DesgloseArticulo extends BaseEntity {
 
     @PrimaryGeneratedColumn({
-        type: "int",
-        name: "ID"
+        name: "ID",
+        type: "int"
     })
-    ID: number;
+    id: number;
 
     @Column("datetime", {
-        nullable: false,
-        name: "FechaIng"
+        name: "FechaIng",
+        nullable: false
     })
-    FechaIng: Date;
+    created: Date;
 
     @Column("money", {
-        nullable: false,
-        name: "artValor"
+        name: "artValor",
+        nullable: false
     })
     artValor: number;
 
-    @ManyToOne(type => facturas, facturas => facturas.desgloseArticulos, {})
-    @JoinColumn({name: 'idFact'})
-    idFact: facturas | null;
+    @Column("bit", {
+        default: () => "(1)",
+        name: "estado",
+        nullable: true
+    })
+    isActive: boolean | null;
 
     @Column("datetime", {
-        nullable: true,
-        name: "Vencimiento"
+        name: "Vencimiento",
+        nullable: true
     })
-    Vencimiento: Date | null;
+    expirationDate: Date | null;
 
-    @ManyToOne(type => Branch, cs_sucursales => cs_sucursales.desgloseArticulos, {})
-    @JoinColumn({name: 'idSucursal'})
-    idSucursal: Branch | null;
+    @ManyToOne(
+        (type: Product) => Product,
+        (product: Product) => product.desgloseArticulos,
+        {nullable: false})
+    @JoinColumn({name: "article_id", referencedColumnName: "id"})
+    product: Product | null;
+
+    @ManyToOne(
+        (type: Invoice) => Invoice,
+        (invoice: Invoice) => invoice.desgloseArticulos)
+    @JoinColumn({name: "idFact"})
+    invoice: Invoice | null;
+
+    @ManyToOne(
+        (type: Branch) => Branch,
+        (branch: Branch) => branch.desgloseArticulos)
+    @JoinColumn({name: "idSucursal"})
+    branch: Branch | null;
 
     @Column("bit", {
-        nullable: true,
-        default: () => "(1)",
-        name: "estado"
-    })
-    estado: boolean | null;
-
-    @Column("bit", {
-        nullable: true,
         default: () => "(0)",
-        name: "estadoUso"
+        name: "estadoUso",
+        nullable: true
     })
     estadoUso: boolean | null;
 
-    @ManyToOne(type => SystemUser, cs_usuarios => cs_usuarios.desgloseArticulos, {})
-    @JoinColumn({name: 'rutUsuario'})
-    rutUsuario: SystemUser | null;
+    @ManyToOne(
+        (type: SystemUser) => SystemUser,
+        (systemUser: SystemUser) => systemUser.desgloseArticulos)
+    @JoinColumn({name: "rutUsuario"})
+    user: SystemUser | null;
 
     @Column("int", {
-        nullable: true,
         default: () => "(0)",
-        name: "granel"
+        name: "granel",
+        nullable: true
     })
     granel: number | null;
 
     @Column("int", {
-        nullable: true,
-        name: "granelOriginal"
+        name: "granelOriginal",
+        nullable: true
     })
     granelOriginal: number | null;
 
-    @ManyToOne(type => Store, bodega => bodega.desgloseArticulos, {})
-    @JoinColumn({name: 'idBodega'})
-    idBodega: Store | null;
+    @ManyToOne(
+        (type) => Store,
+        (bodega: Store) => bodega.desgloseArticulos, {})
+    @JoinColumn({name: "idBodega"})
+    store: Store | null;
 
 }

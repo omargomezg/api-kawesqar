@@ -1,70 +1,64 @@
-import {
-    BaseEntity,
-    Column,
-    Entity,
-    Index,
-    JoinColumn,
-    JoinTable,
-    ManyToMany,
-    ManyToOne,
-    OneToMany,
-    OneToOne,
-    PrimaryColumn,
-    PrimaryGeneratedColumn,
-    RelationId
-} from "typeorm";
-import {Product} from "./Product";
-import {facturas} from "./facturas";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Branch} from "./Branch";
+import {Invoice} from "./Invoice";
+import {Product} from "./Product";
 import {Store} from "./Store";
 
 @Entity("TempArt", {schema: "dbo"})
-export class TempArt {
+export class TempArt extends BaseEntity {
 
     @PrimaryGeneratedColumn({
-        type: "int",
-        name: "ID"
+        name: "ID",
+        type: "int"
     })
-    ID: number;
-
-    @ManyToOne(type => Product, articulos => articulos.tempArts, {nullable: false,})
-    @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
-    idArticulo: Product | null;
+    id: number;
 
     @Column("datetime", {
-        nullable: false,
-        name: "FechaIng"
+        name: "FechaIng",
+        nullable: false
     })
-    FechaIng: Date;
+    created: Date;
 
     @Column("money", {
-        nullable: false,
-        name: "artValor"
+        name: "artValor",
+        nullable: false
     })
-    artValor: number;
+    amount: number;
 
     @Column("int", {
-        nullable: false,
-        name: "ArtCantidad"
+        name: "ArtCantidad",
+        nullable: false
     })
     ArtCantidad: number;
 
-    @ManyToOne(type => facturas, facturas => facturas.tempArts, {nullable: false,})
-    @JoinColumn({name: "IdFact"})
-    idFact: facturas | null;
-
     @Column("datetime", {
-        nullable: true,
-        name: "Vencimiento"
+        name: "Vencimiento",
+        nullable: true
     })
-    Vencimiento: Date | null;
+    expirationDate: Date | null;
 
-    @ManyToOne(type => Branch, branch => branch.tempArts, {nullable: false,})
+    @ManyToOne(
+        (type: Product) => Product,
+        (product: Product) => product.tempArts,
+        {nullable: false})
+    @JoinColumn({name: "article_id", referencedColumnName: "id"})
+    product: Product | null;
+
+    @ManyToOne(
+        (type: Invoice) => Invoice,
+        (invoice: Invoice) => invoice.tempArts,
+        {nullable: false})
+    @JoinColumn({name: "IdFact"})
+    invoice: Invoice | null;
+
+    @ManyToOne((type) => Branch,
+        (branch: Branch) => branch.tempArts, {nullable: false})
     @JoinColumn({name: "idSucursal"})
-    idSucursal: Branch | null;
+    branch: Branch | null;
 
-    @ManyToOne(type => Store, store => store.tempArts, {nullable: false,})
+    @ManyToOne((type: Store) => Store,
+        (store: Store) => store.tempArts, {nullable: false})
     @JoinColumn({name: "idBodega"})
-    idBodega: Store | null;
+    store: Store | null;
 
 }

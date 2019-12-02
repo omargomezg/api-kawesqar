@@ -1,21 +1,17 @@
-import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {Client} from "./Client";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {Branch} from "./Branch";
-import {Proveedor} from "./Proveedor";
-import {provincias} from "./provincias";
+import {Client} from "./Client";
+import {Provincia} from "./provincia";
+import {Supplier} from "./Supplier";
 
 @Entity("comunas", {schema: "dbo"})
-export class Commune {
+export class Commune extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "codigo",
         type: "int"
     })
-    codigo: number;
-
-    @ManyToOne(type => provincias, provincias => provincias.comunass, {nullable: false,})
-    @JoinColumn({name: "padre"})
-    padre: provincias | null;
+    code: number;
 
     @Column("varchar", {
         name: "nombre",
@@ -23,13 +19,23 @@ export class Commune {
     })
     name: string;
 
-    @OneToMany(type => Client, clientes => clientes.commune)
-    clientess: Client[];
+    @ManyToOne(type => Provincia, provincias => provincias.communes, {nullable: false,})
+    @JoinColumn({name: "padre"})
+    father: Provincia | null;
 
-    @OneToMany(type => Branch, cs_sucursales => cs_sucursales.commune)
+    @OneToMany(
+        (type: Client) => Client,
+        (client: Client) => client.commune)
+    clients: Client[];
+
+    @OneToMany(
+        (type: Branch) => Branch,
+            (branch: Branch) => branch.commune)
     branches: Branch[];
 
-    @OneToMany(type => Proveedor, proveedor => proveedor.comuna)
-    proveedors: Proveedor[];
+    @OneToMany(
+        (type: Supplier) => Supplier,
+        (supplier: Supplier) => supplier.commune)
+    supplier: Supplier[];
 
 }

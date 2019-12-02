@@ -1,9 +1,9 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Branch} from "./Branch";
 import {SystemUser} from "./SystemUser";
 
 @Entity("cs_relacion_usuarioSucursal", {schema: "dbo"})
-export class RelationSystemUserBranch {
+export class RelationSystemUserBranch extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idRelacion",
@@ -11,22 +11,22 @@ export class RelationSystemUserBranch {
     })
     id: number;
 
-    @ManyToOne(
-        (type: Branch) => Branch,
-        (branchs: Branch) => branchs.csRelacionUsuarioSucursals, {nullable: false})
-    @JoinColumn({name: "idSucursal"})
-    branch: Branch | null;
-
-    @ManyToOne((type: SystemUser) => SystemUser,
-        (user: SystemUser) => user.csRelacionUsuarioSucursals, {nullable: false})
-    @JoinColumn({name: "rutUsuario"})
-    systemUser: SystemUser | null;
-
     @Column("bit", {
         default: () => "(1)",
         name: "estado",
         nullable: false,
     })
     isActive: boolean;
+
+    @ManyToOne(
+        (type: Branch) => Branch,
+        (branches: Branch) => branches.relationSystemUserBranch, {nullable: false})
+    @JoinColumn({name: "idSucursal"})
+    branch: Branch | null;
+
+    @ManyToOne((type: SystemUser) => SystemUser,
+        (user: SystemUser) => user.relationSystemUserBranch, {nullable: false})
+    @JoinColumn({name: "rutUsuario"})
+    systemUser: SystemUser | null;
 
 }

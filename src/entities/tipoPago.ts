@@ -1,44 +1,40 @@
-import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {comprobanteEgreso} from "./comprobanteEgreso";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {ProofOfPurchase} from "./ProofOfPurchase";
 
-
-@Entity("tipoPago",{schema:"dbo" } )
-export class tipoPago {
+@Entity("tipoPago", {schema: "dbo",})
+export class TipoPago {
 
     @PrimaryGeneratedColumn({
-        type:"int", 
-        name:"idTipoPago"
-        })
-    idTipoPago:number;
-        
+        name: "idTipoPago",
+        type: "int"
+    })
+    id: number;
 
-    @Column("nchar",{ 
-        nullable:false,
-        length:20,
+    @Column("nchar", {
         default: () => "N'Descripción del tipo de venta, por ejemplo cheque, contado, documento, etc...'''",
-        name:"descripcion"
-        })
-    descripcion:string;
-        
+        length: 20,
+        name: "descripcion",
+        nullable: false
+    })
+    name: string;
 
-    @Column("bit",{ 
-        nullable:false,
+    @Column("bit", {
         default: () => "(0)",
-        name:"usoBoleta"
-        })
-    usoBoleta:boolean;
-        
+        name: "usoBoleta",
+        nullable: false
+    })
+    usoBoleta: boolean;
 
-    @Column("bit",{ 
-        nullable:false,
+    @Column("bit", {
         default: () => "(0)",
-        name:"usoFactura"
-        })
-    usoFactura:boolean;
-        
+        name: "usoFactura",
+        nullable: false
+    })
+    usoFactura: boolean;
 
-   
-    @OneToMany(type=>comprobanteEgreso, comprobanteEgreso=>comprobanteEgreso.idTipoPago)
-    comprobanteEgresos:comprobanteEgreso[];
-    
+    @OneToMany(
+        (type: ProofOfPurchase) => ProofOfPurchase,
+        (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.tipoPago)
+    proofOfPurchase: ProofOfPurchase[];
+
 }

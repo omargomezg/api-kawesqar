@@ -1,64 +1,58 @@
-import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from "typeorm";
-import { cs_relacion_usuarioRol } from "./cs_relacion_usuarioRol";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { RelationSystemUserRole } from "./RelationSystemUserRole";
 
 @Entity("cs_rol", { schema: "dbo" })
-export class role {
+export class Role extends BaseEntity {
 
     @PrimaryGeneratedColumn({
+        name: "idRol",
         type: "int",
-        name: "idRol"
     })
-    idRol: number;
-
+    id: number;
 
     @Column("nvarchar", {
-        nullable: false,
         length: 50,
-        name: "titulo"
+        name: "titulo",
+        nullable: false,
     })
-    titulo: string;
-
+    name: string;
 
     @Column("nvarchar", {
-        nullable: true,
         length: 256,
-        name: "descripcion"
+        name: "descripcion",
+        nullable: true,
     })
-    descripcion: string | null;
-
+    description: string | null;
 
     @Column("bit", {
-        nullable: true,
         default: () => "(0)",
-        name: "estado"
+        name: "estado",
+        nullable: true,
     })
     isActive: boolean | null;
 
-
     @Column("bit", {
+        name: "accesoVenta",
         nullable: false,
-        name: "accesoVenta"
     })
     accesoVenta: boolean;
 
-
     @Column("int", {
+        name: "valorDescuento",
         nullable: false,
-        name: "valorDescuento"
     })
     valorDescuento: number;
 
-
     @Column("bit", {
-        nullable: false,
         default: () => "(0)",
-        name: "ventAdmin"
+        name: "ventAdmin",
+        nullable: false,
     })
     ventAdmin: boolean;
 
-
-
-    @OneToMany(type => cs_relacion_usuarioRol, cs_relacion_usuarioRol => cs_relacion_usuarioRol.idRol)
-    csRelacionUsuarioRols: cs_relacion_usuarioRol[];
+    @OneToMany(
+        (type: RelationSystemUserRole) => RelationSystemUserRole,
+        (relationSystemUserRole: RelationSystemUserRole) => relationSystemUserRole.role)
+    relationSystemUserRoles: RelationSystemUserRole[];
 
 }

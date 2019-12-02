@@ -1,13 +1,14 @@
-import { Column, Entity, OneToMany, OneToOne } from "typeorm";
+import {Column, Entity, OneToMany, OneToOne, UpdateDateColumn} from "typeorm";
 import { Branch } from "./Branch";
-import { cs_relacion_usuarioRol } from "./cs_relacion_usuarioRol";
 import { DesgloseArticulo } from "./DesgloseArticulo";
-import { eliminaVenta } from "./eliminaVenta";
-import { facturas } from "./facturas";
+import { EliminaVenta } from "./EliminaVenta";
+import { Invoice } from "./Invoice";
 import { Person } from "./Person";
 import { RelationSystemUserBranch } from "./RelationSystemUserBranch";
+import { RelationSystemUserOutputType } from "./RelationSystemUserOutputType";
+import { RelationSystemUserRole } from "./RelationSystemUserRole";
 import { ShoppingCart } from "./ShoppingCart";
-import { tipoEgreso_Usuario } from "./tipoEgreso_Usuario";
+import { TurnoVenta } from "./TurnoVenta";
 import { UserMenu } from "./UserMenu";
 
 @Entity("cs_usuarios", { schema: "dbo" })
@@ -21,10 +22,12 @@ export class SystemUser extends Person {
     isActive: boolean | null;
 
     @Column("varbinary", {
+        length: "MAX",
         name: "clave",
-        nullable: false
+        nullable: false,
+        select: false
     })
-    clave: Buffer;
+    password: Buffer;
 
     @Column("varchar", {
         length: 50,
@@ -33,15 +36,23 @@ export class SystemUser extends Person {
     })
     userName: string;
 
+    @Column("datetime", { name: "fechaCreacion" })
+    created: Date;
+
+    @UpdateDateColumn()
+    updated: Date;
+
     @Column("image", {
         name: "imagenPerfil",
-        nullable: true
+        nullable: true,
+        select: false
     })
     imagenPerfil: Buffer | null;
 
     @Column("varchar", {
         name: "imagenTipo",
-        nullable: true
+        nullable: true,
+        select: false
     })
     imagenTipo: string | null;
 
@@ -70,7 +81,7 @@ export class SystemUser extends Person {
         name: "traspaso",
         nullable: false
     })
-    traspaso: boolean;
+    sendToOtherBranch: boolean;
 
     @Column("bit", {
         name: "credito",
@@ -85,8 +96,7 @@ export class SystemUser extends Person {
     })
     discount: boolean | null;
 
-    @OneToOne(
-        (type: Branch) => Branch,
+    @OneToOne((type: Branch) => Branch,
         (branch: Branch) => branch.legalRepresentative)
     branch: Branch;
 
@@ -95,31 +105,41 @@ export class SystemUser extends Person {
         (shoppingCart: ShoppingCart) => shoppingCart.systemUser)
     shoppingCart: ShoppingCart;
 
-    @OneToMany(type => cs_relacion_usuarioRol, cs_relacion_usuarioRol => cs_relacion_usuarioRol.user)
-    csRelacionUsuarioRols: cs_relacion_usuarioRol[];
+    @OneToMany(
+        (type: RelationSystemUserRole) => RelationSystemUserRole,
+        (relacionUsuarioRol: RelationSystemUserRole) => relacionUsuarioRol.user)
+    relationSystemUserRoles: RelationSystemUserRole[];
 
     @OneToMany(
         (type: RelationSystemUserBranch) => RelationSystemUserBranch,
         (userBranch: RelationSystemUserBranch) => userBranch.systemUser)
-    csRelacionUsuarioSucursals: RelationSystemUserBranch[];
+    relationSystemUserBranch: RelationSystemUserBranch[];
 
     @OneToMany((type: DesgloseArticulo) => DesgloseArticulo,
-        (desgloseArticulo: DesgloseArticulo) => desgloseArticulo.rutUsuario)
+        (desgloseArticulo: DesgloseArticulo) => desgloseArticulo.user)
     desgloseArticulos: DesgloseArticulo[];
 
-    @OneToMany(type => eliminaVenta, eliminaVenta => eliminaVenta.rutUsuario)
-    eliminaVentas: eliminaVenta[];
+    @OneToMany(
+        (type: EliminaVenta) => EliminaVenta,
+        (eliminaVenta: EliminaVenta) => eliminaVenta.systemUser)
+    eliminaVentas: EliminaVenta[];
 
-    @OneToMany(type => eliminaVenta, eliminaVenta => eliminaVenta.rutUsuario)
-    eliminaVentas2: eliminaVenta[];
+    @OneToMany(
+        (type: Invoice) => Invoice,
+        (invoice: Invoice) => invoice.systemUser)
+    invoices: Invoice[];
 
-    @OneToMany(type => facturas, facturas => facturas.rutUsuario)
-    facturass: facturas[];
-
-    @OneToMany(type => UserMenu, menuUsuario => menuUsuario.systemUser)
+    @OneToMany(
+        (type) => UserMenu,
+        (menuUsuario: UserMenu) => menuUsuario.systemUser)
     menuUsuarios: UserMenu[];
 
-    @OneToMany(type => tipoEgreso_Usuario, tipoEgreso_Usuario => tipoEgreso_Usuario.rutUsuario)
-    tipoEgresoUsuarios: tipoEgreso_Usuario[];
+    @OneToMany((type) => RelationSystemUserOutputType,
+        (userOutputType: RelationSystemUserOutputType) => userOutputType.systemUser)
+    tipoEgresoUsuarios: RelationSystemUserOutputType[];
+
+    @OneToMany((type) => TurnoVenta,
+        (turnoVeta: TurnoVenta) => turnoVeta.systemUser)
+    turnoVenta: TurnoVenta[];
 
 }

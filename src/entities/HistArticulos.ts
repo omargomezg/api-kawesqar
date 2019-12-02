@@ -1,89 +1,94 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {comprobanteEgreso} from "./comprobanteEgreso";
-import {facturas} from "./facturas";
-import {Product} from "./Product";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Invoice } from "./Invoice";
+import { Product } from "./Product";
+import { ProofOfPurchase } from "./ProofOfPurchase";
 
-@Entity("histArticulos", {schema: "dbo"})
-export class HistArticulos {
+@Entity("histArticulos", { schema: "dbo" })
+export class HistArticulos extends BaseEntity {
 
-    @ManyToOne(type => comprobanteEgreso, comprobanteEgreso => comprobanteEgreso.histArticuloss, {nullable: false,})
-    @JoinColumn({name: 'IdFolio'})
-    idFolio: comprobanteEgreso | null;
-
-    @ManyToOne(type => Product, articulos => articulos.histArticuloss, {nullable: false,})
-    @JoinColumn({name: "article_id", referencedColumnName: "idArticulo"})
-    idArticulo: Product | null;
+    @PrimaryGeneratedColumn()
+    idTable: number;
 
     @Column("int", {
-        nullable: false,
-        name: "ID"
+        name: "ID",
+        nullable: false
     })
-    ID: number;
+    id: number;
 
     @Column("datetime", {
-        nullable: false,
-        name: "FechaIng"
+        name: "FechaIng",
+        nullable: false
     })
-    FechaIng: Date;
+    create: Date;
 
     @Column("money", {
-        nullable: false,
-        name: "ArtValor"
+        name: "ArtValor",
+        nullable: false
     })
     ArtValor: number;
 
-    @ManyToOne(type => facturas, facturas => facturas.histArticuloss, {})
-    @JoinColumn({name: 'IdFact'})
-    idFact: facturas | null;
-
     @Column("datetime", {
-        nullable: false,
         default: () => "'01/01/1900 0:00:00'",
-        name: "Vencimiento"
+        name: "Vencimiento",
+        nullable: false
     })
-    Vencimiento: Date;
+    expirationDate: Date;
 
     @Column("int", {
-        nullable: true,
-        name: "idSucursal"
+        name: "idSucursal",
+        nullable: true
     })
     idSucursal: number | null;
 
     @Column("bit", {
-        nullable: true,
-        name: "estado"
+        name: "estado",
+        nullable: true
     })
-    estado: boolean | null;
+    isActive: boolean | null;
 
     @Column("bit", {
-        nullable: true,
-        name: "estadoUso"
+        name: "estadoUso",
+        nullable: true
     })
     estadoUso: boolean | null;
 
     @Column("varchar", {
-        nullable: true,
         length: 12,
-        name: "rutusuario"
+        name: "rutusuario",
+        nullable: true
     })
     rutusuario: string | null;
 
     @Column("int", {
-        nullable: true,
-        name: "granelOriginal"
+        name: "granelOriginal",
+        nullable: true
     })
     granelOriginal: number | null;
 
     @Column("int", {
-        nullable: true,
-        name: "idBodega"
+        name: "idBodega",
+        nullable: true
     })
     idBodega: number | null;
 
-    @PrimaryGeneratedColumn({
-        type: "numeric",
-        name: "idtable"
-    })
-    idtable: number;
+    @ManyToOne(
+        (type: Invoice) => Invoice,
+        (facturas: Invoice) => facturas.histArticuloss)
+    @JoinColumn({ name: "IdFact" })
+    invoice: Invoice | null;
+
+    @ManyToOne(
+        (type: ProofOfPurchase) => ProofOfPurchase,
+        (proofOfPurchase: ProofOfPurchase) => proofOfPurchase.histArticuloss,
+        { nullable: false })
+    @JoinColumn({ name: "IdFolio" })
+    proofOfPurchase: ProofOfPurchase | null;
+
+    @ManyToOne(
+        (type: Product) => Product,
+        (product: Product) => product.histArticuloss,
+        { nullable: false })
+    @JoinColumn({ name: "article_id", referencedColumnName: "id" })
+    product: Product | null;
 
 }

@@ -1,9 +1,11 @@
 import {Bit, Int, NChar, NVarChar, VarChar} from "mssql";
 import {InternalServerError} from "routing-controllers";
+import {RelationSystemUserRole} from "../entities/RelationSystemUserRole";
+import {SystemUser} from "../entities/SystemUser";
 import {Db} from "../models/db";
 import {UserExistsModel} from "../models/response/user.exists.model";
 import {EnabledUserModel} from "../models/user.index";
-import User from "../models/user/user.model";
+import {SystemUserRepository} from "../repository/SystemUserRepository";
 
 export class UserService {
     private db = new Db();
@@ -13,7 +15,7 @@ export class UserService {
         try {
             const r = await pool.request()
                 .query(`
-                    select rutUsuario as rut,
+                    select rut as rut,
                            nombres,
                            apPaterno,
                            apMaterno,
@@ -33,7 +35,7 @@ export class UserService {
                                select top 1 rol.titulo
                                from cs_rol rol
                                    inner join cs_relacion_usuarioRol ur ON ur.idRol = rol.idRol
-                               where ur.rutUsuario = cs_usuarios.rutUsuario and ur.estado = 1), (
+                               where ur.rutUsuario = cs_usuarios.rut and ur.estado = 1), (
                                    select titulo from cs_rol where idRol = rol))
                     from cs_usuarios
                     Order By updated desc`);
@@ -80,7 +82,7 @@ export class UserService {
                 .query(`
                     select users = count(1)
                     from cs_usuarios
-                    where rutUsuario = dbo.formatearRut('${rut}')
+                    where rut = dbo.formatearRut('${rut}')
         `);
             return new UserExistsModel(r.recordset[0].users > 0);
         } catch (err) {
@@ -116,47 +118,33 @@ export class UserService {
         }
     }
 
-    public async create(user: User) {
-        const pool = await this.db.poolPromise();
-        try {
-            const r = await pool.request()
-                .input("rutUsuario", VarChar(12), user.rut)
-                .input("nombres", NVarChar(256), user.nombre)
-                .input("apPaterno", NVarChar(256), user.paterno)
-                .input("apMaterno", NVarChar(256), user.materno)
-                .input("clave", NVarChar(50), user.password)
-                .input("userName", VarChar(50), user.username)
-                .input("fono", NChar(10), user.telephone)
-                .input("eMail", NVarChar(256), user.email)
-                .input("salidaVenta", Bit, user.allowedServices.sales)
-                .input("salidaFactura", Bit, user.allowedServices.bill)
-                .input("salidaEmpleados", Bit, user.allowedServices.employees)
-                .input("idEgresoDefault", Bit, true)
-                .input("rol", Int, user.role)
-                .execute("mantenedorUsuario");
-            return r.recordset[0];
-        } catch (err) {
-            throw new InternalServerError(err.message);
-        }
+    public async create(user: SystemUser) {
+        const repo = new SystemUserRepository();
+        await repo.createUser(user);
+        user.relationSystemUserRoles.forEach((item) => {
+            RelationSystemUserRole.create(item);
+        });
+        const userRepo = new SystemUserRepository();
+        return userRepo.getUserWithRoles(user.rut);
     }
 
-    public async update(user: User) {
+    public async update(user: SystemUser) {
         const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()
                 .input("rutUsuario", VarChar(12), user.rut)
-                .input("nombres", NVarChar(256), user.nombre)
-                .input("apPaterno", NVarChar(256), user.paterno)
-                .input("apMaterno", NVarChar(256), user.materno)
+                .input("nombres", NVarChar(256), user.firstName)
+                .input("apPaterno", NVarChar(256), user.lastName)
+                .input("apMaterno", NVarChar(256), user.secondLastName)
                 .input("clave", NVarChar(50), user.password)
-                .input("userName", VarChar(50), user.username)
-                .input("fono", NChar(10), user.telephone)
+                .input("userName", VarChar(50), user.userName)
+                .input("fono", NChar(10), "")
                 .input("eMail", NVarChar(256), user.email)
-                .input("salidaVenta", Bit, user.allowedServices.sales)
-                .input("salidaFactura", Bit, user.allowedServices.bill)
-                .input("salidaEmpleados", Bit, user.allowedServices.employees)
+                .input("salidaVenta", Bit, user.salidaVenta)
+                .input("salidaFactura", Bit, user.salidaFactura)
+                .input("salidaEmpleados", Bit, user.salidaEmpleados)
                 .input("idEgresoDefault", Bit, true)
-                .input("rol", Int, user.role)
+                .input("rol", Int, 1)
                 .execute("mantenedorUsuario");
             return r.recordset[0];
         } catch (err) {
@@ -172,7 +160,7 @@ export class UserService {
         try {
             const r = await pool.request().query(`UPDATE cs_usuarios SET updated = GETDATE(),
             estado = CAST('${model.enabled}' as bit)
-            WHERE rutUsuario = dbo.formatearRut('${rut}')`);
+            WHERE rut = dbo.formatearRut('${rut}')`);
             return r.rowsAffected;
         } catch (err) {
             throw new InternalServerError(err.message);

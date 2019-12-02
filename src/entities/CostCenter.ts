@@ -1,10 +1,10 @@
 import {Length} from "class-validator";
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {CostCenterChild} from "./CostCenterChild";
-import {Tab_CliUnionGrupo} from "./Tab_CliUnionGrupo";
+import {RelationClientCostCenter} from "./RelationClientCostCenter";
 
 @Entity("Grupo", {schema: "dbo"})
-export class CostCenter {
+export class CostCenter extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: "idGrupo",
@@ -27,10 +27,14 @@ export class CostCenter {
     })
     isActive: boolean;
 
-    @OneToMany(type => CostCenterChild, subGrupo => subGrupo.father)
-    subGrupos: CostCenterChild[];
+    @OneToMany(
+        (type: CostCenterChild) => CostCenterChild,
+            (child: CostCenterChild) => child.costCenter)
+    child: CostCenterChild[];
 
-    @OneToMany(type => Tab_CliUnionGrupo, tab_CliUnionGrupo => tab_CliUnionGrupo.idGrupo)
-    tabCliUnionGrupos: Tab_CliUnionGrupo[];
+    @OneToMany(
+        (type: RelationClientCostCenter) => RelationClientCostCenter,
+        (relationClientCostCenter: RelationClientCostCenter) => relationClientCostCenter.costCenter)
+    relationClientCostCenter: RelationClientCostCenter[];
 
 }

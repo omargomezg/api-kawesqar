@@ -1,17 +1,18 @@
-import {Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
-import {cartolaProducto} from "./cartolaProducto";
+import {BaseEntity, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
+import {CartolaProducto} from "./CartolaProducto";
 import {DesgloseArticulo} from "./DesgloseArticulo";
-import {detalleExistencia} from "./detalleExistencia";
-import {detalleFactura} from "./detalleFactura";
-import {detalleVenta} from "./detalleVenta";
-import {familia} from "./familia";
+import {DetalleExistencia} from "./DetalleExistencia";
+import {Family} from "./Family";
 import {HistArticulos} from "./HistArticulos";
-import {Medidas} from "./Medidas";
+import {InvoiceContent} from "./InvoiceContent";
+import {Measure} from "./Measure";
+import {Note} from "./Note";
+import {ProofOfPurchaseDetail} from "./ProofOfPurchaseDetail";
 import {ShoppingCartContent} from "./ShoppingCartContent";
 import {TempArt} from "./TempArt";
 
-@Entity("Articulos", {schema: "dbo"})
-export class Product {
+@Entity("articulos", {schema: "dbo"})
+export class Product extends BaseEntity {
 
     @PrimaryColumn("nvarchar", {
         length: 50,
@@ -20,30 +21,19 @@ export class Product {
         primary: true,
     })
     @Index()
-    idArticulo: string;
-
-    @Column("nvarchar", {
-        length: 50,
-        name: "nomArticulo",
-        nullable: false
-    })
-    nomArticulo: string;
-
-    @ManyToOne(type => Medidas, medidas => medidas.articuloss, {})
-    @JoinColumn({name: 'idMedida'})
-    idMedida: Medidas | null;
+    id: string;
 
     @Column("bit", {
-        nullable: true,
         default: () => "(1)",
-        name: "estado"
+        name: "estado",
+        nullable: true,
     })
-    estado: boolean | null;
+    isActive: boolean | null;
 
     @Column("int", {
-        nullable: true,
         default: () => "(0)",
-        name: "Alerta"
+        name: "Alerta",
+        nullable: true
     })
     Alerta: number | null;
 
@@ -74,10 +64,6 @@ export class Product {
     })
     ganancia: number | null;
 
-    @ManyToOne(type => familia, familia => familia.articuloss, {})
-    @JoinColumn({name: "idFamilia"})
-    idFamilia: familia | null;
-
     @Column("smallmoney", {
         default: () => "(0)",
         name: "precioGranel",
@@ -85,9 +71,12 @@ export class Product {
     })
     precioGranel: number | null;
 
-    @ManyToOne(type => Medidas, medidas => medidas.articuloss2, {})
-    @JoinColumn({name: "idMedidaGranel"})
-    idMedidaGranel: Medidas | null;
+    @Column("nvarchar", {
+        length: 50,
+        name: "nomArticulo",
+        nullable: false
+    })
+    name: string;
 
     @Column("bit", {
         default: () => "(1)",
@@ -107,36 +96,75 @@ export class Product {
         name: "img_file",
         nullable: true,
     })
-    img_file: Buffer | null;
+    imgFile: Buffer | null;
 
     @Column("varchar", {
         name: "img_content_type",
         nullable: true,
     })
-    img_content_type: string | null;
+    imgContentType: string | null;
 
-    @OneToMany(type => cartolaProducto, cartolaProducto => cartolaProducto.idArticulo)
-    cartolaProductos: cartolaProducto[];
+    @ManyToOne(
+        (type: Family) => Family,
+        (family: Family) => family.products)
+    @JoinColumn({name: "idFamilia"})
+    family: Family | null;
 
-    @OneToMany(type => DesgloseArticulo, desgloseArticulo => desgloseArticulo.idArticulo)
+    @ManyToOne(
+        (type: Measure) => Measure,
+        (measure: Measure) => measure.products)
+    @JoinColumn({name: "idMedida"})
+    measure: Measure | null;
+
+    @ManyToOne(
+        (type: Measure) => Measure,
+        (measure: Measure) => measure.articuloss2)
+    @JoinColumn({name: "idMedidaGranel"})
+    idMedidaGranel: Measure | null;
+
+    @OneToMany(
+        (type) => Note,
+        (note: Note) => note.product
+    )
+    notes: Note[];
+
+    @OneToMany(
+        (type) => CartolaProducto,
+        (cartolaProducto: CartolaProducto) => cartolaProducto.product)
+    cartolaProductos: CartolaProducto[];
+
+    @OneToMany((type: DesgloseArticulo) => DesgloseArticulo,
+        (desgloseArticulo: DesgloseArticulo) => desgloseArticulo.product)
     desgloseArticulos: DesgloseArticulo[];
 
-    @OneToMany(type => detalleExistencia, detalleExistencia => detalleExistencia.idArticulo)
-    detalleExistencias: detalleExistencia[];
+    @OneToMany(
+        (type: DetalleExistencia) => DetalleExistencia,
+        (detalleExistencia: DetalleExistencia) => detalleExistencia.product)
+    detalleExistencias: DetalleExistencia[];
 
-    @OneToMany(type => detalleFactura, detalleFactura => detalleFactura.idArticulo)
-    detalleFacturas: detalleFactura[];
+    @OneToMany(
+        (type: InvoiceContent) => InvoiceContent,
+        (invoiceContent: InvoiceContent) => invoiceContent.product)
+    invoiceContents: InvoiceContent[];
 
-    @OneToMany(type => detalleVenta, detalleVenta => detalleVenta.idArticulo)
-    detalleVentas: detalleVenta[];
+    @OneToMany(
+        (type: ProofOfPurchaseDetail) => ProofOfPurchaseDetail,
+        (proofOfPurchaseDetail: ProofOfPurchaseDetail) => proofOfPurchaseDetail.product)
+    proofOfPurchaseDetail: ProofOfPurchaseDetail[];
 
-    @OneToMany(type => HistArticulos, histArticulos => histArticulos.idArticulo)
+    @OneToMany(
+        (type: HistArticulos) => HistArticulos,
+        (histArticulos: HistArticulos) => histArticulos.product)
     histArticuloss: HistArticulos[];
 
-    @OneToMany(type => TempArt, tempArt => tempArt.idArticulo)
+    @OneToMany(
+        (type: TempArt) => TempArt,
+        (tempArt: TempArt) => tempArt.product)
     tempArts: TempArt[];
 
-    @OneToMany(type => ShoppingCartContent, shoppingCartContent => shoppingCartContent.idArticulo)
-    tempCarros: ShoppingCartContent[];
+    @OneToMany(
+        (type: ShoppingCartContent) => ShoppingCartContent,
+        (shoppingCartContent: ShoppingCartContent) => shoppingCartContent.products)
+    shoppingCartContent: ShoppingCartContent[];
 
 }

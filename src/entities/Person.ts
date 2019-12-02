@@ -1,6 +1,6 @@
-import { Column, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, PrimaryColumn } from "typeorm";
 
-export abstract class Person {
+export abstract class Person extends BaseEntity {
     @PrimaryColumn("nvarchar", {
         length: 12,
         nullable: false,
@@ -25,4 +25,10 @@ export abstract class Person {
         nullable: true,
     })
     secondLastName: string | null;
+
+    @Column("nvarchar", {
+        length: 256,
+        nullable: true,
+    })
+    email: string | null;
 }

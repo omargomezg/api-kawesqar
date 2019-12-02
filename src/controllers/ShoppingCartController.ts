@@ -1,14 +1,18 @@
 import {Body, Delete, Get, JsonController, Param, Put} from "routing-controllers";
+import {ShoppingCart} from "../entities/ShoppingCart";
 import {ShoppingCartModel} from "../models/database/ShoppingCart.model";
 import {ShoppingCartService} from "../service/shopping-cart.service";
+import {CommonController} from "./CommonController";
 
-@JsonController("/api/shopping-cart")
-export class ShoppingCartController {
+@JsonController("/shopping-cart")
+export class ShoppingCartController extends CommonController {
     public cart = new ShoppingCartService();
 
     @Get("/:id/:rut")
-    public get(@Param("id") id: number, @Param("rut") rut: string) {
-        return this.cart.get(id, rut);
+    public async get(@Param("id") id: number, @Param("rut") rut: string) {
+        const shCart = new ShoppingCart();
+        shCart.systemUser = await this.getUser(rut);
+        return shCart;
     }
 
     @Put("/:id/:rut")

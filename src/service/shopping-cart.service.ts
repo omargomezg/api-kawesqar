@@ -1,33 +1,57 @@
-import { Bit, Int, Money, NVarChar, TinyInt } from "mssql";
-import { InternalServerError } from "routing-controllers";
-import { CommonController } from "../controllers/CommonController";
-import { OutputFlowTypeDao } from "../dao/OutputFlowTypeDao";
-import { ShoppingCartDao } from "../dao/ShoppingCartDao";
-import { ShoppingCartDetailDao } from "../dao/ShoppingCartDetailDao";
-import { ShoppingCart } from "../entities/ShoppingCart";
-import { ShoppingCartModel } from "../models/database/ShoppingCart.model";
-import { ShoppingCartDetailModel } from "../models/database/ShoppingCartDetail.model";
-import { DisponibleVentaModel } from "../models/database/storedprocedure/disponibleVenta.model";
-import { SubsidiaryModel } from "../models/database/Subsidiary.model";
-import { UserModel } from "../models/database/User.model";
-import { ShoppingCartRepository } from "../repository/ShoppingCartRepository";
-import { ArticleService } from "./article.service";
+import {Bit, Int, Money, NVarChar, TinyInt} from "mssql";
+import {InternalServerError} from "routing-controllers";
+import {FindConditions} from "typeorm";
+import {CommonController} from "../controllers/CommonController";
+import {OutputFlowTypeDao} from "../dao/OutputFlowTypeDao";
+import {ShoppingCartDao} from "../dao/ShoppingCartDao";
+import {ShoppingCartDetailDao} from "../dao/ShoppingCartDetailDao";
+import {ShoppingCart} from "../entities/ShoppingCart";
+import {SystemUser} from "../entities/SystemUser";
+import {ShoppingCartModel} from "../models/database/ShoppingCart.model";
+import {ShoppingCartDetailModel} from "../models/database/ShoppingCartDetail.model";
+import {DisponibleVentaModel} from "../models/database/storedprocedure/disponibleVenta.model";
+import {SubsidiaryModel} from "../models/database/Subsidiary.model";
+import {UserModel} from "../models/database/User.model";
+import {SystemUserRepository} from "../repository/SystemUserRepository";
+import {ArticleService} from "./article.service";
 
 export class ShoppingCartService extends CommonController {
     private articleService: ArticleService = new ArticleService();
     private shoppingCartDetailDao: ShoppingCartDetailDao = new ShoppingCartDetailDao();
+    private userService: SystemUserRepository = new SystemUserRepository();
 
     public async finalize() {
         return null;
     }
 
-    public async get2(id: number, rut: string) {
-        let model: ShoppingCart;
-        const shopp = new ShoppingCartRepository();
-        await shopp.getByUser(rut)
-            .then((result) => {
-                model = result;
+    public async getorm(id: number, rut: string) {
+        const user = this.getUser(rut);
+        /*const shopp = new ShoppingCart();
+        const param: FindConditions<ShoppingCart> = new ShoppingCart();
+        const user: SystemUser = new SystemUser();
+        user.rut = rut;
+        param.systemUser = user;
+        return await ShoppingCart.findOne(param);*/
+        /*await getConnection().transaction(tranEntityManager => {
+            const data = await ShoppingCart.findOne(1);
+            return data;
+        });*/
+        /*const scr = new ShoppingCartRepository();
+        const user = new SystemUserRepository();
+        let obj: ShoppingCart;
+        scr.getByUser(rut).then((data) => {
+            obj = data !== undefined ? data : [];
+        });
+        if (obj.length > 0) {
+            return obj;
+        } else {
+            await scr.create(rut).then((result) => {
+                console.log(result);
+                return scr.getByUser(rut).then((data) => obj = data);
             });
+            return obj;
+        }*/
+        return user;
     }
 
     public async get(id: number, rut: string) {
