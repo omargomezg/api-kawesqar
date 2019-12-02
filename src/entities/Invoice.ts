@@ -94,10 +94,12 @@ export class Invoice extends BaseEntity {
         (invoiceContent: InvoiceContent) => invoiceContent.invoice)
     content: InvoiceContent[];
 
-    @OneToMany(type => HistArticulos, histArticulos => histArticulos.invoice)
+    @OneToMany((type: HistArticulos) => HistArticulos,
+            (histArticulos: HistArticulos) => histArticulos.invoice)
     histArticuloss: HistArticulos[];
 
-    @OneToMany(type => TempArt, tempArt => tempArt.invoice)
+    @OneToMany((type: TempArt) => TempArt,
+            (tempArt: TempArt) => tempArt.invoice)
     tempArts: TempArt[];
 
     @OneToMany(
