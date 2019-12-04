@@ -1,7 +1,7 @@
-import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {Product} from "./Product";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Product } from "./Product";
 
-@Entity("Medidas", {schema: "dbo"})
+@Entity("Medidas", { schema: "dbo" })
 export class Measure extends BaseEntity {
 
     @PrimaryGeneratedColumn({
@@ -36,7 +36,9 @@ export class Measure extends BaseEntity {
         (product: Product) => product.measure)
     products: Product[];
 
-    @OneToMany(type => Product, articulos => articulos.idMedidaGranel)
+    @OneToMany(
+        (type: Product) => Product,
+        (articulos: Product) => articulos.idMedidaGranel)
     articuloss2: Product[];
 
 }

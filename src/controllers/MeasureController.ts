@@ -22,10 +22,11 @@ export class MeasureController {
 
     @Put("/:id")
     public async putMeasure(@Param("id") key: number, @Body() measure: Measure) {
-        // code here!
-
-        if (Measure.findOne({ id: measure.id })) {
-            return Measure.update({ id: measure.id }, measure);
+        if (key === measure.id) {
+            if (Measure.findOne({ id: measure.id })) {
+                console.log("Encontró");
+                return Measure.save(measure);
+            }
         }
         return new ErrorEvent("id not exists");
     }

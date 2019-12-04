@@ -1,4 +1,4 @@
-import {Length} from "class-validator";
+import { Length } from "class-validator";
 import {
     BaseEntity,
     Column,
@@ -8,20 +8,21 @@ import {
     ManyToOne,
     OneToMany,
     OneToOne,
-    PrimaryGeneratedColumn
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
 } from "typeorm";
-import {Commune} from "./Commune";
-import {DesgloseArticulo} from "./DesgloseArticulo";
-import {Invoice} from "./Invoice";
-import {ProofOfPurchase} from "./ProofOfPurchase";
-import {RelationFamilyBranch} from "./RelationFamilyBranch";
-import {RelationStoreBranch} from "./RelationStoreBranch";
-import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
-import {ShoppingCartContent} from "./ShoppingCartContent";
-import {SystemUser} from "./SystemUser";
-import {TempArt} from "./TempArt";
+import { Commune } from "./Commune";
+import { DesgloseArticulo } from "./DesgloseArticulo";
+import { Invoice } from "./Invoice";
+import { ProofOfPurchase } from "./ProofOfPurchase";
+import { RelationFamilyBranch } from "./RelationFamilyBranch";
+import { RelationStoreBranch } from "./RelationStoreBranch";
+import { RelationSystemUserBranch } from "./RelationSystemUserBranch";
+import { ShoppingCartContent } from "./ShoppingCartContent";
+import { SystemUser } from "./SystemUser";
+import { TempArt } from "./TempArt";
 
-@Entity("cs_sucursales", {schema: "dbo"})
+@Entity("cs_sucursales", { schema: "dbo" })
 export class Branch extends BaseEntity {
 
     @PrimaryGeneratedColumn({
@@ -51,12 +52,6 @@ export class Branch extends BaseEntity {
         nullable: true,
     })
     address: string | null;
-
-    @ManyToOne(
-        (type: Commune) => Commune,
-        (commune: Commune) => commune.branches, {nullable: false})
-    @JoinColumn({name: "codigo"})
-    commune: Commune | null;
 
     @Column("varchar", {
         length: 50,
@@ -96,7 +91,7 @@ export class Branch extends BaseEntity {
         nullable: true,
     })
     @Length(0, 250)
-    Giro: string | null;
+    giro: string | null;
 
     @Column("bit", {
         name: "registroContado",
@@ -112,10 +107,20 @@ export class Branch extends BaseEntity {
     })
     numInicialRegContado: number | null;
 
+    @UpdateDateColumn()
+    updated: Date;
+
+    @ManyToOne(
+        (type: Commune) => Commune,
+        (commune: Commune) => commune.branches,
+        { nullable: false })
+    @JoinColumn({ name: "codigo" })
+    commune: Commune | null;
+
     @OneToOne(
         (type: SystemUser) => SystemUser,
         (systemUser: SystemUser) => systemUser)
-    @JoinColumn({name: "rutRepLegal"})
+    @JoinColumn({ name: "rutRepLegal" })
     legalRepresentative: SystemUser;
 
     @OneToMany(

@@ -1,12 +1,11 @@
-import {Get, JsonController} from "routing-controllers";
-import {CityService} from "../service/city.service";
+import { Get, JsonController } from "routing-controllers";
+import { Commune } from "../entities/Commune";
 
-@JsonController()
+@JsonController("/city")
 export class CityController {
 
-    @Get("/city")
+    @Get()
     public getAll() {
-        const city = new CityService();
-        return city.getAll();
+        return Commune.find();
     }
 }
