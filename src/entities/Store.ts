@@ -2,10 +2,10 @@ import {Length} from "class-validator";
 import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {DesgloseArticulo} from "./DesgloseArticulo";
 import {DetalleExistencia} from "./DetalleExistencia";
+import {ProofOfPurchaseDetail} from "./ProofOfPurchaseDetail";
 import {RelationStoreBranch} from "./RelationStoreBranch";
 import {ShoppingCartContent} from "./ShoppingCartContent";
 import {TempArt} from "./TempArt";
-import {ProofOfPurchaseDetail} from "./ProofOfPurchaseDetail";
 
 @Entity("bodega", {schema: "dbo"})
 export class Store extends BaseEntity {

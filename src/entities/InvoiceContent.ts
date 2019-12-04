@@ -26,14 +26,14 @@ export class InvoiceContent extends BaseEntity {
     @ManyToOne(
         (type: Invoice) => Invoice,
         (invoice: Invoice) => invoice.content, {nullable: false})
-    @JoinColumn({name: "idFact"})
+    @JoinColumn({name: "idFact", referencedColumnName: "id"})
     invoice: Invoice | null;
 
     @ManyToOne(
         (type: Product) => Product,
         (product: Product) => product.invoiceContents,
         {nullable: false})
-    @JoinColumn({name: "id", referencedColumnName: "id"})
+    @JoinColumn({name: "idArticulo", referencedColumnName: "id"})
     product: Product | null;
 
 }

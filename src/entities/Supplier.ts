@@ -19,7 +19,7 @@ export class Supplier {
         name: "ProvNombre",
         nullable: false
     })
-    ProvNombre: string;
+    name: string;
 
     @Column("nchar", {
         length: 15,
