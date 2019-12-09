@@ -1,7 +1,6 @@
-import { Get, JsonController, Param } from "routing-controllers";
-import { Role } from "../entities/Role";
-import { RoleRepository } from "../repository/RoleRepository";
-import { RoleService } from "../service/role.service";
+import {Get, JsonController} from "routing-controllers";
+import {Role} from "../entities/Role";
+import {RoleRepository} from "../repository/RoleRepository";
 
 @JsonController("/role")
 export class RoleController {

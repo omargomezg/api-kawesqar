@@ -1,15 +1,15 @@
 import {Column, Entity, OneToMany, OneToOne, UpdateDateColumn} from "typeorm";
-import { Branch } from "./Branch";
-import { DesgloseArticulo } from "./DesgloseArticulo";
-import { EliminaVenta } from "./EliminaVenta";
-import { Invoice } from "./Invoice";
-import { Person } from "./Person";
-import { RelationSystemUserBranch } from "./RelationSystemUserBranch";
-import { RelationSystemUserOutputType } from "./RelationSystemUserOutputType";
-import { RelationSystemUserRole } from "./RelationSystemUserRole";
-import { ShoppingCart } from "./ShoppingCart";
-import { TurnoVenta } from "./TurnoVenta";
-import { UserMenu } from "./UserMenu";
+import {Branch} from "./Branch";
+import {DesgloseArticulo} from "./DesgloseArticulo";
+import {EliminaVenta} from "./EliminaVenta";
+import {Invoice} from "./Invoice";
+import {Person} from "./Person";
+import {RelationSystemUserBranch} from "./RelationSystemUserBranch";
+import {RelationSystemUserOutputType} from "./RelationSystemUserOutputType";
+import {RelationSystemUserRole} from "./RelationSystemUserRole";
+import {ShoppingCart} from "./ShoppingCart";
+import {TurnoVenta} from "./TurnoVenta";
+import {UserMenu} from "./UserMenu";
 
 @Entity("cs_usuarios", { schema: "dbo" })
 export class SystemUser extends Person {
@@ -136,7 +136,7 @@ export class SystemUser extends Person {
 
     @OneToMany((type) => RelationSystemUserOutputType,
         (userOutputType: RelationSystemUserOutputType) => userOutputType.systemUser)
-    tipoEgresoUsuarios: RelationSystemUserOutputType[];
+        tipoEgresoUsuarios: RelationSystemUserOutputType[];
 
     @OneToMany((type) => TurnoVenta,
         (turnoVeta: TurnoVenta) => turnoVeta.systemUser)

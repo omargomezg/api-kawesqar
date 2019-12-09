@@ -1,11 +1,13 @@
 import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
 import {SystemUser} from "../../entities/SystemUser";
-import {EnabledUserModel, UpdateUserModel} from "../../models/user.index";
+import {UndefinedArrayListError} from "../../models/error/UndefinedArrayListError";
+import {EnabledUserModel} from "../../models/user.index";
 import {SystemUserRepository} from "../../repository/SystemUserRepository";
 import {UserService} from "../../service/user.service";
 import {RutUtils} from "../../Utils/RutUtils";
 import {CommonController} from "../CommonController";
-import {UndefinedArrayListError} from "../../models/error/UndefinedArrayListError";
+import {createQueryBuilder} from "typeorm";
+import {RelationSystemUserOutputType} from "../../entities/RelationSystemUserOutputType";
 
 @JsonController("/user")
 export class UserController extends CommonController {
@@ -29,9 +31,12 @@ export class UserController extends CommonController {
     }
 
     @Put("/:rut")
-    public updateUser(@Param("rut") rut: string, @Body() user: SystemUser) {
-        return this.uRep.update({rut: user.rut},
-            user);
+    public async updateUser(@Param("rut") rut: string, @Body() user: SystemUser) {
+        await RelationSystemUserOutputType.save(user.tipoEgresoUsuarios);
+        return createQueryBuilder()
+            .update(SystemUser)
+            .where("rut = :rut", {rut: user.rut})
+            .execute();
     }
 
     @Get("/:rut/sucursal")
@@ -39,16 +44,16 @@ export class UserController extends CommonController {
     public async getSubsidiaryForUser(@Param("rut") rut: string) {
         return this.uRep.getUserAndBranches(RutUtils.format(rut));
         /* return SystemUser.findOne({
-             join: {
-                 alias: "sucursales",
-                 innerJoinAndSelect: {
-                     branch: "sucursales.csRelacionUsuarioSucursals",
-                     branches: "branch.branch"
+                 join: {
+                     alias: "sucursales",
+                     innerJoinAndSelect: {
+                         branch: "sucursales.csRelacionUsuarioSucursals",
+                         branches: "branch.branch"
+                     },
                  },
-             },
-             select: ["rut"],
-             where: {rut: RutUtils.format(rut)},
-         });*/
+                 select: ["rut"],
+                 where: {rut: RutUtils.format(rut)},
+             });*/
     }
 
     // SystemUser _> csRelacionUsuarioSucursals _> branch
@@ -66,7 +71,10 @@ export class UserController extends CommonController {
     }
 
     @Post("/:rut/default/subsidiary")
-    public setDefaultSubsidiaryForUser(@Param("rut") rut: string, @Body() data: any) {
+    public setDefaultSubsidiaryForUser(
+        @Param("rut") rut: string,
+        @Body() data: any
+    ) {
         return this.userService.setDefaultSubsidiaryForUser(data);
     }
 

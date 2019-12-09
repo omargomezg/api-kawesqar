@@ -45,6 +45,8 @@ export class SystemUserRepository extends Repository<SystemUser> {
         return await createQueryBuilder("SystemUser")
             .innerJoinAndSelect("SystemUser.relationSystemUserRoles", "RelationSystemUserRole")
             .innerJoinAndSelect("RelationSystemUserRole.role", "Role")
+            .innerJoinAndSelect("SystemUser.tipoEgresoUsuarios","RelationSystemUserOutputType")
+            .innerJoinAndSelect("RelationSystemUserOutputType.outputType", "OutputType")
             .where("SystemUser.rut = :rut", {rut: RutUtils.format(rut)})
             .getOne();
     }

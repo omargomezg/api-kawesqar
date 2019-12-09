@@ -1,9 +1,8 @@
-import { Body, Get, JsonController, Param, Put } from "routing-controllers";
-import { createQueryBuilder } from "typeorm";
-import { Branch } from "../entities/Branch";
-import { Commune } from "../entities/Commune";
-import { ISubsidiaryPostModel } from "../models/request/subsidiary.model";
-import { SubsidiaryService } from "../service/subsidiary.service";
+import {Body, Get, JsonController, Param, Put} from "routing-controllers";
+import {createQueryBuilder} from "typeorm";
+import {Branch} from "../entities/Branch";
+import {Commune} from "../entities/Commune";
+import {SubsidiaryService} from "../service/subsidiary.service";
 
 @JsonController("/subsidiary")
 export class SubsidiaryController {
@@ -28,10 +27,18 @@ export class SubsidiaryController {
   @Get("/:id")
   public async getById(@Param("id") id: number) {
     // return Branch.findByIds([id]);
-    return await createQueryBuilder("Branch")
+    let result: Branch;
+    const data = await createQueryBuilder("Branch")
       .innerJoinAndSelect("Branch.commune", "Commune")
       .where(`Branch.id = ${id}`)
       .getOne();
+    if (data === undefined) {
+      result = new Branch();
+      result.commune = new Commune();
+      return result;
+    }
+    result = Object.assign(new Branch(), data);
+    return result;
   }
 
   @Put("/:id")
