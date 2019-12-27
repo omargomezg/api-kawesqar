@@ -48,6 +48,7 @@ export class SystemUserRepository extends Repository<SystemUser> {
             .innerJoinAndSelect("SystemUser.tipoEgresoUsuarios","RelationSystemUserOutputType")
             .innerJoinAndSelect("RelationSystemUserOutputType.outputType", "OutputType")
             .where("SystemUser.rut = :rut", {rut: RutUtils.format(rut)})
+            .andWhere("OutputType.codeEnum is not null")
             .getOne();
     }
 

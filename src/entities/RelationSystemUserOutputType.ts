@@ -14,6 +14,18 @@ export class RelationSystemUserOutputType extends BaseEntity {
     })
     id: number;
 
+    @Column("bit", {
+        name: "estado",
+        nullable: false,
+    })
+    isActive: boolean;
+
+    @Column("bit", {
+        name: "selDefault",
+        nullable: true,
+    })
+    isDefault: boolean | null;
+
     @ManyToOne(
         (type: OutputType) => OutputType,
         (tipoEgreso: OutputType) => tipoEgreso.userOutputTypes,
@@ -27,17 +39,5 @@ export class RelationSystemUserOutputType extends BaseEntity {
         {nullable: false})
     @JoinColumn({name: "rutUsuario"})
     systemUser: SystemUser | null;
-
-    @Column("bit", {
-        name: "estado",
-        nullable: false,
-    })
-    isActive: boolean;
-
-    @Column("bit", {
-        name: "selDefault",
-        nullable: true,
-    })
-    isDefault: boolean | null;
 
 }

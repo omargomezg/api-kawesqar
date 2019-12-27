@@ -1,5 +1,6 @@
 import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {RelationSystemUserOutputType} from "./RelationSystemUserOutputType";
+import {SaleTypeEnum} from "../models/enum/type-sale.enum";
 
 @Entity("tipoEgreso", {schema: "dbo"})
 export class OutputType extends BaseEntity {
@@ -23,6 +24,14 @@ export class OutputType extends BaseEntity {
         nullable: false,
     })
     code: string;
+
+    @Column()
+    codeEnum: SaleTypeEnum;
+
+    @Column("nvarchar", {
+        length: 10
+    })
+    abbreviation: string;
 
     @OneToMany(
         (type: RelationSystemUserOutputType) => RelationSystemUserOutputType,

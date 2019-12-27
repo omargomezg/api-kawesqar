@@ -1,4 +1,6 @@
 import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
+import {createQueryBuilder} from "typeorm";
+import {RelationSystemUserOutputType} from "../../entities/RelationSystemUserOutputType";
 import {SystemUser} from "../../entities/SystemUser";
 import {UndefinedArrayListError} from "../../models/error/UndefinedArrayListError";
 import {EnabledUserModel} from "../../models/user.index";
@@ -6,44 +8,52 @@ import {SystemUserRepository} from "../../repository/SystemUserRepository";
 import {UserService} from "../../service/user.service";
 import {RutUtils} from "../../Utils/RutUtils";
 import {CommonController} from "../CommonController";
-import {createQueryBuilder} from "typeorm";
-import {RelationSystemUserOutputType} from "../../entities/RelationSystemUserOutputType";
 
 @JsonController("/user")
 export class UserController extends CommonController {
-    private userService = new UserService();
-    private uRep = new SystemUserRepository();
+  private userService = new UserService();
+  private uRep = new SystemUserRepository();
 
-    @Get("")
-    public getAll() {
-        return this.uRep.getUsersWithRole();
+  @Get("")
+  public getAll() {
+    return this.uRep.getUsersWithRole();
+  }
+
+  @Get("/:rut")
+  @OnUndefined(404)
+  public getOne(@Param("rut") rut: string) {
+    return this.uRep.getUserWithRoles(rut);
+  }
+
+  @Post("/:rut")
+  public createUser(@Param("rut") rut: string, @Body() user: SystemUser) {
+    return this.userService.create(user);
+  }
+
+  @Put("/:rut")
+  public async updateUser(@Param("rut") rut: string, @Body() user: SystemUser) {
+    for (const item of user.tipoEgresoUsuarios) {
+      createQueryBuilder()
+          .update(RelationSystemUserOutputType)
+          .set({
+            isActive: item.isActive
+          })
+          .where(`id = ${item.id}`)
+          .andWhere(`systemUser.rut = '${RutUtils.format(user.rut)}'`)
+          .execute();
     }
+    // await RelationSystemUserOutputType.save(user.tipoEgresoUsuarios);
+    return createQueryBuilder()
+        .update(SystemUser)
+        .where("rut = :rut", {rut: user.rut})
+        .execute();
+  }
 
-    @Get("/:rut")
-    @OnUndefined(404)
-    public getOne(@Param("rut") rut: string) {
-        return this.uRep.getUserWithRoles(rut);
-    }
-
-    @Post("/:rut")
-    public createUser(@Param("rut") rut: string, @Body() user: SystemUser) {
-        return this.userService.create(user);
-    }
-
-    @Put("/:rut")
-    public async updateUser(@Param("rut") rut: string, @Body() user: SystemUser) {
-        await RelationSystemUserOutputType.save(user.tipoEgresoUsuarios);
-        return createQueryBuilder()
-            .update(SystemUser)
-            .where("rut = :rut", {rut: user.rut})
-            .execute();
-    }
-
-    @Get("/:rut/sucursal")
-    @OnUndefined(UndefinedArrayListError)
-    public async getSubsidiaryForUser(@Param("rut") rut: string) {
-        return this.uRep.getUserAndBranches(RutUtils.format(rut));
-        /* return SystemUser.findOne({
+  @Get("/:rut/sucursal")
+  @OnUndefined(UndefinedArrayListError)
+  public async getSubsidiaryForUser(@Param("rut") rut: string) {
+    return this.uRep.getUserAndBranches(RutUtils.format(rut));
+    /* return SystemUser.findOne({
                  join: {
                      alias: "sucursales",
                      innerJoinAndSelect: {
@@ -54,32 +64,32 @@ export class UserController extends CommonController {
                  select: ["rut"],
                  where: {rut: RutUtils.format(rut)},
              });*/
-    }
+  }
 
-    // SystemUser _> csRelacionUsuarioSucursals _> branch
+  // SystemUser _> csRelacionUsuarioSucursals _> branch
 
-    @Get("/:rut/exists")
-    @OnUndefined(404)
-    public getExists(@Param("rut") rut: string) {
-        return this.userService.getExists(rut);
-    }
+  @Get("/:rut/exists")
+  @OnUndefined(404)
+  public getExists(@Param("rut") rut: string) {
+    return this.userService.getExists(rut);
+  }
 
-    @Get("/:rut/discount")
-    @OnUndefined(404)
-    public getDiscount(@Param("rut") rut: string) {
-        return this.userService.getDiscountUser(rut);
-    }
+  @Get("/:rut/discount")
+  @OnUndefined(404)
+  public getDiscount(@Param("rut") rut: string) {
+    return this.userService.getDiscountUser(rut);
+  }
 
-    @Post("/:rut/default/subsidiary")
-    public setDefaultSubsidiaryForUser(
-        @Param("rut") rut: string,
-        @Body() data: any
-    ) {
-        return this.userService.setDefaultSubsidiaryForUser(data);
-    }
+  @Post("/:rut/default/subsidiary")
+  public setDefaultSubsidiaryForUser(
+    @Param("rut") rut: string,
+    @Body() data: any
+  ) {
+    return this.userService.setDefaultSubsidiaryForUser(data);
+  }
 
-    @Delete("/:rut/enabled")
-    public remove(@Param("rut") rut: string, @Body() model: EnabledUserModel) {
-        return this.userService.enabled(rut, model);
-    }
+  @Delete("/:rut/enabled")
+  public remove(@Param("rut") rut: string, @Body() model: EnabledUserModel) {
+    return this.userService.enabled(rut, model);
+  }
 }
