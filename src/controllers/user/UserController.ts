@@ -8,88 +8,106 @@ import {SystemUserRepository} from "../../repository/SystemUserRepository";
 import {UserService} from "../../service/user.service";
 import {RutUtils} from "../../Utils/RutUtils";
 import {CommonController} from "../CommonController";
+import {RelationSystemUserRole} from "../../entities/RelationSystemUserRole";
 
 @JsonController("/user")
 export class UserController extends CommonController {
-  private userService = new UserService();
-  private uRep = new SystemUserRepository();
+    private userService = new UserService();
+    private uRep = new SystemUserRepository();
 
-  @Get("")
-  public getAll() {
-    return this.uRep.getUsersWithRole();
-  }
-
-  @Get("/:rut")
-  @OnUndefined(404)
-  public getOne(@Param("rut") rut: string) {
-    return this.uRep.getUserWithRoles(rut);
-  }
-
-  @Post("/:rut")
-  public createUser(@Param("rut") rut: string, @Body() user: SystemUser) {
-    return this.userService.create(user);
-  }
-
-  @Put("/:rut")
-  public async updateUser(@Param("rut") rut: string, @Body() user: SystemUser) {
-    for (const item of user.tipoEgresoUsuarios) {
-      createQueryBuilder()
-          .update(RelationSystemUserOutputType)
-          .set({
-            isActive: item.isActive
-          })
-          .where(`id = ${item.id}`)
-          .andWhere(`systemUser.rut = '${RutUtils.format(user.rut)}'`)
-          .execute();
+    @Get("")
+    public getAll() {
+        return this.uRep.getUsersWithRole();
     }
-    // await RelationSystemUserOutputType.save(user.tipoEgresoUsuarios);
-    return createQueryBuilder()
-        .update(SystemUser)
-        .where("rut = :rut", {rut: user.rut})
-        .execute();
-  }
 
-  @Get("/:rut/sucursal")
-  @OnUndefined(UndefinedArrayListError)
-  public async getSubsidiaryForUser(@Param("rut") rut: string) {
-    return this.uRep.getUserAndBranches(RutUtils.format(rut));
-    /* return SystemUser.findOne({
-                 join: {
-                     alias: "sucursales",
-                     innerJoinAndSelect: {
-                         branch: "sucursales.csRelacionUsuarioSucursals",
-                         branches: "branch.branch"
+    @Get("/:rut")
+    @OnUndefined(404)
+    public getOne(@Param("rut") rut: string) {
+        return this.uRep.getUserWithRoles(rut);
+    }
+
+    @Post("/:rut")
+    public createUser(@Param("rut") rut: string, @Body() user: SystemUser) {
+        return this.userService.create(user);
+    }
+
+    @Put("/:rut")
+    public async updateUser(@Param("rut") rut: string, @Body() user: SystemUser) {
+        for (const item of user.tipoEgresoUsuarios) {
+            createQueryBuilder()
+                .update(RelationSystemUserOutputType)
+                .set({
+                    isActive: item.isActive
+                })
+                .where(`id = ${item.id}`)
+                .andWhere(`systemUser.rut = '${RutUtils.format(user.rut)}'`)
+                .execute();
+        }
+
+        // await RelationSystemUserOutputType.save(user.tipoEgresoUsuarios);
+        await createQueryBuilder()
+            .update(SystemUser)
+            .set({
+              firstName: user.firstName,
+              lastName: user.lastName,
+              secondLastName: user.secondLastName,
+              email: user.email
+            })
+            .where("rut = :rut", {rut: user.rut})
+            .execute();
+          for (const item of user.relationSystemUserRoles) {
+            createQueryBuilder()
+                .update(RelationSystemUserRole)
+                .set({
+                  isActive: item.isActive
+                })
+                .where(`id = ${item.id}`)
+                .execute();
+          }
+        return user;
+    }
+
+    @Get("/:rut/sucursal")
+    @OnUndefined(UndefinedArrayListError)
+    public async getSubsidiaryForUser(@Param("rut") rut: string) {
+        return this.uRep.getUserAndBranches(RutUtils.format(rut));
+        /* return SystemUser.findOne({
+                     join: {
+                         alias: "sucursales",
+                         innerJoinAndSelect: {
+                             branch: "sucursales.csRelacionUsuarioSucursals",
+                             branches: "branch.branch"
+                         },
                      },
-                 },
-                 select: ["rut"],
-                 where: {rut: RutUtils.format(rut)},
-             });*/
-  }
+                     select: ["rut"],
+                     where: {rut: RutUtils.format(rut)},
+                 });*/
+    }
 
-  // SystemUser _> csRelacionUsuarioSucursals _> branch
+    // SystemUser _> csRelacionUsuarioSucursals _> branch
 
-  @Get("/:rut/exists")
-  @OnUndefined(404)
-  public getExists(@Param("rut") rut: string) {
-    return this.userService.getExists(rut);
-  }
+    @Get("/:rut/exists")
+    @OnUndefined(404)
+    public getExists(@Param("rut") rut: string) {
+        return this.userService.getExists(rut);
+    }
 
-  @Get("/:rut/discount")
-  @OnUndefined(404)
-  public getDiscount(@Param("rut") rut: string) {
-    return this.userService.getDiscountUser(rut);
-  }
+    @Get("/:rut/discount")
+    @OnUndefined(404)
+    public getDiscount(@Param("rut") rut: string) {
+        return this.userService.getDiscountUser(rut);
+    }
 
-  @Post("/:rut/default/subsidiary")
-  public setDefaultSubsidiaryForUser(
-    @Param("rut") rut: string,
-    @Body() data: any
-  ) {
-    return this.userService.setDefaultSubsidiaryForUser(data);
-  }
+    @Post("/:rut/default/subsidiary")
+    public setDefaultSubsidiaryForUser(
+        @Param("rut") rut: string,
+        @Body() data: any
+    ) {
+        return this.userService.setDefaultSubsidiaryForUser(data);
+    }
 
-  @Delete("/:rut/enabled")
-  public remove(@Param("rut") rut: string, @Body() model: EnabledUserModel) {
-    return this.userService.enabled(rut, model);
-  }
+    @Delete("/:rut/enabled")
+    public remove(@Param("rut") rut: string, @Body() model: EnabledUserModel) {
+        return this.userService.enabled(rut, model);
+    }
 }

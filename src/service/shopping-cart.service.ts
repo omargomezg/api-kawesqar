@@ -1,12 +1,9 @@
 import {Bit, Int, Money, NVarChar, TinyInt} from "mssql";
 import {InternalServerError} from "routing-controllers";
-import {FindConditions} from "typeorm";
 import {CommonController} from "../controllers/CommonController";
 import {OutputFlowTypeDao} from "../dao/OutputFlowTypeDao";
 import {ShoppingCartDao} from "../dao/ShoppingCartDao";
 import {ShoppingCartDetailDao} from "../dao/ShoppingCartDetailDao";
-import {ShoppingCart} from "../entities/ShoppingCart";
-import {SystemUser} from "../entities/SystemUser";
 import {ShoppingCartModel} from "../models/database/ShoppingCart.model";
 import {ShoppingCartDetailModel} from "../models/database/ShoppingCartDetail.model";
 import {DisponibleVentaModel} from "../models/database/storedprocedure/disponibleVenta.model";
@@ -14,6 +11,7 @@ import {SubsidiaryModel} from "../models/database/Subsidiary.model";
 import {UserModel} from "../models/database/User.model";
 import {SystemUserRepository} from "../repository/SystemUserRepository";
 import {ArticleService} from "./article.service";
+import {ProofOfPurchase} from "../entities/ProofOfPurchase";
 
 export class ShoppingCartService extends CommonController {
     private articleService: ArticleService = new ArticleService();
@@ -81,6 +79,7 @@ export class ShoppingCartService extends CommonController {
     }
 
     public async branchTransfer(data: any) {
+        const idFolio = ProofOfPurchase.findOne()
         const pool = await this.db.poolPromise();
         try {
             const r = await pool.request()

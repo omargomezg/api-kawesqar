@@ -22,8 +22,12 @@ export class ArticleService {
     const conn = getConnection();
     const query = `exec disponibleVenta '${sku}', ${isBulk}, ${subsidiary}`;
     const data = await conn.query(query);
-    console.log(data[0]);
-    return data[0];
+    return data;
+    if (data !== undefined) {
+      return data[0];
+    } else {
+      return {};
+    }
     /*
     const pool = await this.db.poolPromise();
     try {
