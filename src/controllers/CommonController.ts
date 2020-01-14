@@ -7,7 +7,6 @@ export class CommonController {
 
     protected db = new Db();
     protected user = new SystemUser();
-    protected rutUtils = new RutUtils();
 
     protected async getUser(rut: string) {
         const user: SystemUser | undefined = await SystemUser.findOne(rut);

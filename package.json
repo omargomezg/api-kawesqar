@@ -11,6 +11,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mssql": "^5.1.0",
+    "npm": "^6.13.4",
     "reflect-metadata": "^0.1.13",
     "router-express": "^1.5.2",
     "routing-controllers": "^0.8.0",
@@ -43,7 +44,7 @@
     "eslint": "^6.1.0",
     "eslint-plugin-import": "^2.18.2",
     "jsmin": "^1.0.1",
-    "nodemon": "^1.19.2",
+    "nodemon": "^1.19.4",
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
     "typescript": "^3.5.3"

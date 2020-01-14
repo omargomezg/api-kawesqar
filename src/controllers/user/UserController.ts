@@ -1,11 +1,11 @@
 import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
 import {SystemUser} from "../../entities/SystemUser";
+import {UndefinedArrayListError} from "../../models/error/UndefinedArrayListError";
 import {EnabledUserModel, UpdateUserModel} from "../../models/user.index";
 import {SystemUserRepository} from "../../repository/SystemUserRepository";
 import {UserService} from "../../service/user.service";
 import {RutUtils} from "../../Utils/RutUtils";
 import {CommonController} from "../CommonController";
-import {UndefinedArrayListError} from "../../models/error/UndefinedArrayListError";
 
 @JsonController("/user")
 export class UserController extends CommonController {
