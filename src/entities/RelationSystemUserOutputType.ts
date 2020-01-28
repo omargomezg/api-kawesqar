@@ -23,7 +23,7 @@ export class RelationSystemUserOutputType extends BaseEntity {
 
     @ManyToOne(
         (type: SystemUser) => SystemUser,
-        (systemUser: SystemUser) => systemUser.tipoEgresoUsuarios,
+        (systemUser: SystemUser) => systemUser.relationSystemUserOutputType,
         {nullable: false})
     @JoinColumn({name: "rutUsuario"})
     systemUser: SystemUser | null;

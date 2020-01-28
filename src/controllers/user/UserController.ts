@@ -1,7 +1,7 @@
 import {Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put} from "routing-controllers";
 import {SystemUser} from "../../entities/SystemUser";
 import {UndefinedArrayListError} from "../../models/error/UndefinedArrayListError";
-import {EnabledUserModel, UpdateUserModel} from "../../models/user.index";
+import {EnabledUserModel} from "../../models/user.index";
 import {SystemUserRepository} from "../../repository/SystemUserRepository";
 import {UserService} from "../../service/user.service";
 import {RutUtils} from "../../Utils/RutUtils";
@@ -30,7 +30,8 @@ export class UserController extends CommonController {
 
     @Put("/:rut")
     public updateUser(@Param("rut") rut: string, @Body() user: SystemUser) {
-        return this.uRep.update({rut: user.rut},
+
+        return this.uRep.updateUser(
             user);
     }
 

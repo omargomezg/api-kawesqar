@@ -1,6 +1,8 @@
 import {createQueryBuilder, EntityRepository, getConnection, getManager, Repository} from "typeorm";
 import {SystemUser} from "../entities/SystemUser";
 import {RutUtils} from "../Utils/RutUtils";
+import {RelationSystemUserRole} from "../entities/RelationSystemUserRole";
+import {RelationSystemUserOutputType} from "../entities/RelationSystemUserOutputType";
 
 @EntityRepository()
 export class SystemUserRepository extends Repository<SystemUser> {
@@ -18,6 +20,46 @@ export class SystemUserRepository extends Repository<SystemUser> {
             .where("UserMenu.systemUser = :rut", {rut: RutUtils.format(rut)})
             .andWhere(`Menu.parent = ${parent}`)
             .getMany();
+    }
+
+    public async updateUser(user: SystemUser) {
+        await createQueryBuilder()
+            .update(SystemUser)
+            .set({
+                firstName: user.firstName,
+                lastName: user.lastName,
+                secondLastName: user.secondLastName,
+                email: user.email,
+                telephone: user.telephone
+            })
+            .where("rut = :rut", {rut: user.rut})
+            .execute();
+        if (user.relationSystemUserRoles != null) {
+            for (const relation of user.relationSystemUserRoles) {
+                await createQueryBuilder()
+                    .update(RelationSystemUserRole)
+                    .set({
+                        isActive: relation.isActive,
+                        user: user,
+                        role: relation.role
+                    })
+                    .where("id = :id", {id: relation.id})
+                    .execute();
+            }
+        }
+        if (user.relationSystemUserOutputType != null) {
+            for (const relation of user.relationSystemUserOutputType) {
+                await createQueryBuilder()
+                    .update(RelationSystemUserOutputType)
+                    .set({
+                        isDefault: relation.isDefault,
+                        isActive: relation.isActive
+                    })
+                    .where(`id = ${relation.id}`)
+                    .execute();
+            }
+        }
+        return user;
     }
 
     public async createUser(user: SystemUser) {
@@ -45,6 +87,8 @@ export class SystemUserRepository extends Repository<SystemUser> {
         return await createQueryBuilder("SystemUser")
             .innerJoinAndSelect("SystemUser.relationSystemUserRoles", "RelationSystemUserRole")
             .innerJoinAndSelect("RelationSystemUserRole.role", "Role")
+            .innerJoinAndSelect("SystemUser.relationSystemUserOutputType", "RelationSystemUserOutputType")
+            .innerJoinAndSelect("RelationSystemUserOutputType.outputType", "OutputType")
             .where("SystemUser.rut = :rut", {rut: RutUtils.format(rut)})
             .getOne();
     }

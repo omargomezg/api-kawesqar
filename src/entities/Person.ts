@@ -1,4 +1,4 @@
-import { BaseEntity, Column, PrimaryColumn } from "typeorm";
+import {BaseEntity, Column, PrimaryColumn} from "typeorm";
 
 export abstract class Person extends BaseEntity {
     @PrimaryColumn("nvarchar", {
@@ -31,4 +31,9 @@ export abstract class Person extends BaseEntity {
         nullable: true,
     })
     email: string | null;
+
+    @Column({
+        name: "fono"
+    })
+    telephone: string;
 }
