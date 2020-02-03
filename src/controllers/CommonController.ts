@@ -1,7 +1,7 @@
 import { UnauthorizedError } from "routing-controllers";
 import { SystemUser } from "../entities/SystemUser";
 import { Db } from "../models/db";
-import { RutUtils } from "../utils/RutUtils";
+import {RutUtils} from "../Utils/RutUtils";
 
 export class CommonController {
   protected db = new Db();
