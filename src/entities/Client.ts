@@ -1,4 +1,4 @@
-import {Column, Entity, JoinColumn, ManyToOne, OneToMany} from "typeorm";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany} from "typeorm";
 import {Cartola} from "./Cartola";
 import {ClientType} from "./ClientType";
 import {Commune} from "./Commune";

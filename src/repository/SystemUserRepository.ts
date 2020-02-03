@@ -44,8 +44,8 @@ export class SystemUserRepository extends Repository<SystemUser> {
         await createQueryBuilder()
           .update(RelationSystemUserRole)
           .set({
-            role: relation.role,
             isActive: relation.isActive,
+            role: relation.role,
             user: user
           })
           .where("id = :id", { id: relation.id })
@@ -71,9 +71,8 @@ export class SystemUserRepository extends Repository<SystemUser> {
     const conn = getConnection();
     const query = `exec mantenedorUsuario '${RutUtils.format(user.rut)}',
                                            '${user.firstName}',
-                                           '${user.lastName}', '${
-      user.secondLastName
-    }',
+                                           '${user.lastName}',
+                                           '${user.secondLastName}',
                                            '${user.password}',
                                            '${user.userName}',
                                            '${user.email}'`;
