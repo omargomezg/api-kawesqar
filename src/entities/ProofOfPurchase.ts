@@ -11,6 +11,7 @@ import {Payment} from "./Payment";
 import {ProofOfPurchaseDetail} from "./ProofOfPurchaseDetail";
 import {TipoPago} from "./tipoPago";
 import {TurnoVenta} from "./TurnoVenta";
+import {SystemUser} from "./SystemUser";
 
 @Entity("comprobanteEgreso", {schema: "dbo"})
 export class ProofOfPurchase extends BaseEntity {
@@ -81,7 +82,7 @@ export class ProofOfPurchase extends BaseEntity {
         name: "rutUsuario",
         nullable: true
     })
-    rutUsuario: string | null;
+    systemUser: SystemUser;
 
     @Column("int", {
         name: "idIngresoContado",
@@ -151,7 +152,7 @@ export class ProofOfPurchase extends BaseEntity {
     histArticuloss: HistArticulos[];
 
     @OneToMany(
-        (type) => IngresoContado,
+        (type: IngresoContado) => IngresoContado,
         (ingresoContado: IngresoContado) => ingresoContado.proofOfPurchase)
     ingresoContados: IngresoContado[];
 
@@ -160,5 +161,13 @@ export class ProofOfPurchase extends BaseEntity {
         (payment: Payment) => payment.proofOfPurchase
     )
     payments: Payment[];
+
+    constructor() {
+        super();
+        this.isActive = true;
+        this.usoCredito = false;
+        this.estadoCredito = false;
+        this.notas = '';
+    }
 
 }
